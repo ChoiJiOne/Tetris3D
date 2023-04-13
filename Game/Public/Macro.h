@@ -34,3 +34,18 @@ CLASS& operator=(const CLASS&) = delete;
 	}\
 }
 #endif
+
+
+/**
+ * @brief 강제로 C++ 표준 예외를 던집니다.
+ *
+ * @param MESSAGE 예외가 발생했을 때의 메시지입니다.
+ *
+ * @throws C++ 표준 예외를 던집니다.
+ */
+#ifndef ENFORCE_THROW_EXCEPTION
+#define ENFORCE_THROW_EXCEPTION(MESSAGE)\
+{\
+	throw std::exception();\
+}
+#endif
