@@ -20,7 +20,7 @@
  * @return 포멧팅이 완료된 문자열을 반환합니다.
  */
 template<typename ... Args>
-inline std::string Format(const std::string& Text, Args ... Argument)
+inline std::string StringFormat(const std::string& Text, Args ... Argument)
 {
 	size_t Size = static_cast<size_t>(std::snprintf(nullptr, 0, Text.c_str(), Argument ...)) + 1;
 
@@ -42,7 +42,7 @@ inline std::string Format(const std::string& Text, Args ... Argument)
  * @return 포멧팅이 완료된 문자열을 반환합니다.
  */
 template<typename ... Args>
-inline std::wstring Format(const std::wstring& Text, Args ... Argument)
+inline std::wstring StringFormat(const std::wstring& Text, Args ... Argument)
 {
 	size_t Size = static_cast<size_t>(std::swprintf(nullptr, 0, Text.c_str(), Argument ...)) + 1;
 
