@@ -2,6 +2,7 @@
 
 #include <crtdbg.h>
 #include <cstdint>
+#include <memory>
 
 #include "Macro.h"
 
@@ -67,6 +68,22 @@ public:
 
 
 /**
+ * @brief 애플리케이션을 초기화하고 실행합니다.
+ *
+ * @throws
+ * - 초기화에 실패하면 표준 예외를 던집니다.
+ * - 실행에 실패하면 표준 예외를 던집니다.
+ */
+void RunApplication()
+{
+	auto GameApplication = std::make_unique<Tetris3D>();
+	GameApplication->Setup();
+	GameApplication->Run();
+	GameApplication->Cleanup();
+}
+
+
+/**
  * @brief 애플리케이션의 진입점입니다.
  *
  * @param Argc 명령행 인자의 수입니다.
@@ -79,6 +96,8 @@ int32_t main(int32_t Argc, char** Argv)
 #if defined(DEBUG) || defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
+
+	RunApplication();
 
 	return 0;
 }
