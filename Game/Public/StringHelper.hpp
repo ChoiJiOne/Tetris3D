@@ -151,4 +151,30 @@ public:
 
 		return ConvertText;
 	}
+
+
+	/**
+	 * @brief 문자열에 대응하는 해쉬 값을 추출합니다.
+	 *
+	 * @param Text 해쉬 값을 추출할 문자열입니다.
+	 *
+	 * @return 입력한 문자열로부터 추출한 해쉬값을 반환합니다.
+	 */
+	static inline std::size_t GetHash(const std::string& Text)
+	{
+		return std::hash<std::string>{}(Text);
+	}
+
+
+	/**
+	 * @brief 문자열에 대응하는 해쉬 값을 추출합니다.
+	 *
+	 * @param Text 해쉬 값을 추출할 문자열입니다.
+	 *
+	 * @return 입력한 문자열로부터 추출한 해쉬값을 반환합니다.
+	 */
+	static inline std::size_t GetHash(const std::wstring& Text)
+	{
+		return std::hash<std::wstring>{}(Text);
+	}
 };
