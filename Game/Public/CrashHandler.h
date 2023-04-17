@@ -50,6 +50,31 @@ public:
 
 private:
 	/**
+	 * @brief 크래시 정보를 기반으로 크래시 덤프 파일을 생성합니다.
+	 *
+	 * @param exceptionPointer 예외 정보에 대한 포인터 값입니다.
+	 */
+	static void GenerateCrashDumpFile(EXCEPTION_POINTERS* exceptionPointer);
+
+
+	/**
+	 * @brief 크래시 정보를 기반으로 콜스택을 기록합니다.
+	 *
+	 * @param exceptionPointer 예외 정보에 대한 포인터 값입니다.
+	 */
+	static void RecordCallStackFromCrash(EXCEPTION_POINTERS* exceptionPointer);
+
+
+	/**
+	 * @brief 현재의 머신 타입을 얻습니다.
+	 *
+	 * @return 머신 타입을 나타내는 정수 값을 반환합니다.
+	 */
+	static DWORD GetMachineType();
+
+
+private:
+	/**
 	 * @brief 크래시 덤프 파일이 저장될 경로입니다.
 	 */
 	static std::string crashDumpFilePath_;
