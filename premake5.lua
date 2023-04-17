@@ -56,7 +56,9 @@ workspace "Tetris3D"
             "%{game}/Public/*",
             "%{script}/*",
             "%{shader}/*",
+            
             "%{thirdparty}/miniaudio/*",
+            "%{thirdparty}/SDL2/*",
             "%{thirdparty}/stb/*",
         }
 
@@ -86,15 +88,33 @@ workspace "Tetris3D"
             runtime  "Debug"
             optimize "Off"
             symbols "On"
+            debugdir "%{thirdparty}/Debug"
+
+            links {
+                "%{thirdparty}/Debug/SDL2.lib",
+                "%{thirdparty}/Debug/SDL2main.lib",
+            }
 
         filter "configurations:Release"
             defines { "NDEBUG", "RELEASE" }
             runtime "Release"
             optimize "On"
             symbols "On"
+            debugdir "%{thirdparty}/Release"
+
+            links {
+                "%{thirdparty}/Release/SDL2.lib",
+                "%{thirdparty}/Release/SDL2main.lib",
+            }
 
         filter "configurations:Shipping"
             defines { "NDEBUG", "SHIPPING" }
             runtime "Release"
             optimize "Full"
             symbols "Off"
+            debugdir "%{thirdparty}/Release"
+
+            links {
+                "%{thirdparty}/Release/SDL2.lib",
+                "%{thirdparty}/Release/SDL2main.lib",
+            }
