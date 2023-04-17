@@ -22,20 +22,20 @@ public:
 	 *
 	 * @see https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
 	 *
-	 * @param Text 형식 문자열입니다.
-	 * @param ... Argument 포멧팅을 수행할 데이터를 지정하는 인수입니다.
+	 * @param formatString UTF-8 기반의 형식 문자열입니다.
+	 * @param ... argument 포멧팅을 수행할 데이터를 지정하는 인수입니다.
 	 *
 	 * @return 포멧팅이 완료된 문자열을 반환합니다.
 	 */
 	template<typename ... Args>
-	static inline std::string Format(const std::string& Text, Args ... Argument)
+	static inline std::string Format(const std::string& formatString, Args ... argument)
 	{
-		size_t Size = static_cast<size_t>(std::snprintf(nullptr, 0, Text.c_str(), Argument ...)) + 1;
+		size_t size = static_cast<size_t>(std::snprintf(nullptr, 0, formatString.c_str(), argument ...)) + 1;
 
-		auto Buffer = std::make_unique<char[]>(Size);
-		std::snprintf(Buffer.get(), Size, Text.c_str(), Argument ...);
+		auto buffer = std::make_unique<char[]>(size);
+		std::snprintf(buffer.get(), size, formatString.c_str(), argument ...);
 
-		return std::string(Buffer.get(), Buffer.get() + Size - 1);
+		return std::string(buffer.get(), buffer.get() + size - 1);
 	}
 
 
@@ -44,70 +44,70 @@ public:
 	 *
 	 * @see https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
 	 *
-	 * @param Text 형식 문자열입니다.
-	 * @param ... Argument 포멧팅을 수행할 데이터를 지정하는 인수입니다.
+	 * @param formatString UTF-16 기반의 형식 문자열입니다.
+	 * @param ... argument 포멧팅을 수행할 데이터를 지정하는 인수입니다.
 	 *
 	 * @return 포멧팅이 완료된 문자열을 반환합니다.
 	 */
 	template<typename ... Args>
-	static inline std::wstring Format(const std::wstring& Text, Args ... Argument)
+	static inline std::wstring Format(const std::wstring& formatString, Args ... argument)
 	{
-		size_t Size = static_cast<size_t>(std::swprintf(nullptr, 0, Text.c_str(), Argument ...)) + 1;
+		size_t size = static_cast<size_t>(std::swprintf(nullptr, 0, formatString.c_str(), argument ...)) + 1;
 
-		auto Buffer = std::make_unique<wchar_t[]>(Size);
-		std::swprintf(Buffer.get(), Size, Text.c_str(), Argument ...);
+		auto buffer = std::make_unique<wchar_t[]>(size);
+		std::swprintf(buffer.get(), size, formatString.c_str(), argument ...);
 
-		return std::wstring(Buffer.get(), Buffer.get() + Size - 1);
+		return std::wstring(buffer.get(), buffer.get() + size - 1);
 	}
 
 
 	/**
 	 * @brief 문자열을 특정 기준으로 나누어서 벡터로 만듭니다.
 	 *
-	 * @param Text 특정 기준으로 나누어서 벡터로 만들 문자열입니다.
-	 * @param Delimiter 문자열을 나눌 기준입니다.
+	 * @param textToSplit 특정 기준으로 나누어서 벡터로 만들 문자열입니다.
+	 * @param splitDelimiter 문자열을 나눌 기준입니다.
 	 *
 	 * @return 나누어진 문자열의 벡터를 반환합니다.
 	 */
-	static inline std::vector<std::string> Split(const std::string& Text, const std::string& Delimiter)
+	static inline std::vector<std::string> Split(const std::string& textToSplit, const std::string& splitDelimiter)
 	{
-		std::string SplitText = Text;
-		std::vector<std::string> Tokens;
-		std::size_t Position = 0;
+		std::string splitText = textToSplit;
+		std::vector<std::string> tokens;
+		std::size_t position = 0;
 
-		while ((Position = SplitText.find(Delimiter)) != std::string::npos)
+		while ((position = splitText.find(splitDelimiter)) != std::string::npos)
 		{
-			Tokens.push_back(SplitText.substr(0, Position));
-			SplitText.erase(0, Position + Delimiter.length());
+			tokens.push_back(splitText.substr(0, position));
+			splitText.erase(0, position + splitDelimiter.length());
 		}
 
-		Tokens.push_back(SplitText);
-		return Tokens;
+		tokens.push_back(splitText);
+		return tokens;
 	}
 
 
 	/**
 	 * @brief 문자열을 특정 기준으로 나누어서 벡터로 만듭니다.
 	 *
-	 * @param Text 특정 기준으로 나누어서 벡터로 만들 문자열입니다.
-	 * @param Delimiter 문자열을 나눌 기준입니다.
+	 * @param textToSplit 특정 기준으로 나누어서 벡터로 만들 문자열입니다.
+	 * @param splitDelimiter 문자열을 나눌 기준입니다.
 	 *
 	 * @return 나누어진 문자열의 벡터를 반환합니다.
 	 */
-	static inline std::vector<std::wstring> Split(const std::wstring& Text, const std::wstring& Delimiter)
+	static inline std::vector<std::wstring> Split(const std::wstring& textToSplit, const std::wstring& splitDelimiter)
 	{
-		std::wstring SplitText = Text;
-		std::vector<std::wstring> Tokens;
-		std::size_t Position = 0;
+		std::wstring splitText = textToSplit;
+		std::vector<std::wstring> tokens;
+		std::size_t position = 0;
 
-		while ((Position = SplitText.find(Delimiter)) != std::wstring::npos)
+		while ((position = splitText.find(splitDelimiter)) != std::wstring::npos)
 		{
-			Tokens.push_back(SplitText.substr(0, Position));
-			SplitText.erase(0, Position + Delimiter.length());
+			tokens.push_back(splitText.substr(0, position));
+			splitText.erase(0, position + splitDelimiter.length());
 		}
 
-		Tokens.push_back(SplitText);
-		return Tokens;
+		tokens.push_back(splitText);
+		return tokens;
 	}
 
 
@@ -116,19 +116,19 @@ public:
 	 *
 	 * @see https://learn.microsoft.com/ko-kr/windows/win32/api/stringapiset/nf-stringapiset-multibytetowidechar
 	 *
-	 * @param Text UTF-8 기반의 문자열입니다.
+	 * @param utf8String UTF-8 기반의 문자열입니다.
 	 *
 	 * @return 변환된 UTF-16 문자열을 반환합니다.
 	 */
-	static inline std::wstring Convert(const std::string& Text)
+	static inline std::wstring Convert(const std::string& utf8String)
 	{
-		int32_t Size = MultiByteToWideChar(CP_UTF8, 0, &Text[0], static_cast<int32_t>(Text.size()), nullptr, 0);
-		CHECK((Size != 0), "failed to convert UTF-8 to UTF-16");
+		int32_t size = MultiByteToWideChar(CP_UTF8, 0, &utf8String[0], static_cast<int32_t>(utf8String.size()), nullptr, 0);
+		CHECK((size != 0), "failed to convert UTF-8 to UTF-16");
 
-		std::wstring ConvertText(Size, 0);
-		CHECK((MultiByteToWideChar(CP_UTF8, 0, &Text[0], static_cast<int32_t>(Text.size()), &ConvertText[0], Size) != 0), "failed to convert UTF-8 to UTF-16");
+		std::wstring utf16String(size, 0);
+		CHECK((MultiByteToWideChar(CP_UTF8, 0, &utf8String[0], static_cast<int32_t>(utf8String.size()), &utf16String[0], size) != 0), "failed to convert UTF-8 to UTF-16");
 
-		return ConvertText;
+		return utf16String;
 	}
 
 
@@ -137,44 +137,44 @@ public:
 	 *
 	 * @see https://learn.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte
 	 *
-	 * @param Text UTF-16 기반의 문자열입니다.
+	 * @param utf16String UTF-16 기반의 문자열입니다.
 	 *
 	 * @return 변환된 UTF-8 문자열을 반환합니다.
 	 */
-	static inline std::string Convert(const std::wstring& Text)
+	static inline std::string Convert(const std::wstring& utf16String)
 	{
-		int32_t Size = WideCharToMultiByte(CP_ACP, 0, &Text[0], static_cast<int32_t>(Text.size()), nullptr, 0, nullptr, nullptr);
-		CHECK((Size != 0), "failed to convert UTF-16 to UTF-8");
+		int32_t size = WideCharToMultiByte(CP_ACP, 0, &utf16String[0], static_cast<int32_t>(utf16String.size()), nullptr, 0, nullptr, nullptr);
+		CHECK((size != 0), "failed to convert UTF-16 to UTF-8");
 
-		std::string ConvertText(Size, 0);
-		CHECK((WideCharToMultiByte(CP_UTF8, 0, &Text[0], static_cast<int32_t>(Text.size()), &ConvertText[0], Size, nullptr, nullptr) != 0), "failed to convert UTF-16 to UTF-8");
+		std::string utf8String(size, 0);
+		CHECK((WideCharToMultiByte(CP_UTF8, 0, &utf16String[0], static_cast<int32_t>(utf16String.size()), &utf8String[0], size, nullptr, nullptr) != 0), "failed to convert UTF-16 to UTF-8");
 
-		return ConvertText;
+		return utf8String;
 	}
 
 
 	/**
 	 * @brief 문자열에 대응하는 해쉬 값을 추출합니다.
 	 *
-	 * @param Text 해쉬 값을 추출할 문자열입니다.
+	 * @param utf8String 해쉬 값을 추출할 UTF-8 문자열입니다.
 	 *
 	 * @return 입력한 문자열로부터 추출한 해쉬값을 반환합니다.
 	 */
-	static inline std::size_t GetHash(const std::string& Text)
+	static inline std::size_t GetUTF8Hash(const std::string& utf8String)
 	{
-		return std::hash<std::string>{}(Text);
+		return std::hash<std::string>{}(utf8String);
 	}
 
 
 	/**
 	 * @brief 문자열에 대응하는 해쉬 값을 추출합니다.
 	 *
-	 * @param Text 해쉬 값을 추출할 문자열입니다.
+	 * @param utf16String 해쉬 값을 추출할 UTF-16 문자열입니다.
 	 *
 	 * @return 입력한 문자열로부터 추출한 해쉬값을 반환합니다.
 	 */
-	static inline std::size_t GetHash(const std::wstring& Text)
+	static inline std::size_t GetUTF16Hash(const std::wstring& utf16String)
 	{
-		return std::hash<std::wstring>{}(Text);
+		return std::hash<std::wstring>{}(utf16String);
 	}
 };
