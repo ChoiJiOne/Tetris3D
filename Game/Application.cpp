@@ -45,7 +45,7 @@ public:
 	 */
 	void Setup()
 	{
-
+		SDL_Init(SDL_INIT_EVERYTHING);
 	}
 
 
@@ -65,7 +65,7 @@ public:
 	 */
 	void Cleanup()
 	{
-
+		SDL_Quit();
 	}
 };
 
