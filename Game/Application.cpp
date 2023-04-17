@@ -46,6 +46,8 @@ public:
 	void Setup()
 	{
 		SDL_Init(SDL_INIT_EVERYTHING);
+		
+		window_ = SDL_CreateWindow("Tetris3D", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 800, SDL_WINDOW_SHOWN);
 	}
 
 
@@ -56,7 +58,19 @@ public:
 	 */
 	void Run()
 	{
+		bool quit = false;
+		SDL_Event event;
 
+		while (!quit)
+		{
+			while (SDL_PollEvent(&event)) 
+			{
+				if (event.type == SDL_QUIT) 
+				{
+					quit = true;
+				}
+			}
+		}
 	}
 
 
@@ -65,8 +79,18 @@ public:
 	 */
 	void Cleanup()
 	{
+		SDL_DestroyWindow(window_);
+		window_ = nullptr;
+
 		SDL_Quit();
 	}
+
+
+private:
+	/**
+	 * @brief SDL의 윈도우 포인터입니다.
+	 */
+	SDL_Window* window_ = nullptr;
 };
 
 
