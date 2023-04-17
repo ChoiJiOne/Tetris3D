@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <memory>
 
+#include "CrashHandler.h"
 #include "StringHelper.hpp"
 #include "Macro.h"
 
@@ -103,7 +104,8 @@ private:
  */
 void RunApplication()
 {
-	auto gameApplication = std::make_unique<Tetris3D>();
+	std::unique_ptr<Tetris3D> gameApplication = std::make_unique<Tetris3D>();
+
 	gameApplication->Setup();
 	gameApplication->Run();
 	gameApplication->Cleanup();
@@ -124,7 +126,13 @@ int32_t main(int32_t argc, char** argv)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-	RunApplication();
+	__try
+	{
+		RunApplication();
+	}
+	__except (CrashHandler::DetectApplicationCrash(GetExceptionInformation()))
+	{
+	}
 
 	return 0;
 }
