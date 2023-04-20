@@ -1,3 +1,6 @@
 @echo off
 
-Script\\Build.bat vs2019 Tetris3D %1
+SET visualstudio=%1
+SET option=%2
+
+Script\\Build.bat %visualstudio% Tetris3D %option%

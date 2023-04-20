@@ -1,3 +1,5 @@
 @echo off
 
-Script\\GenerateProjectFiles.bat vs2019 Tetris3D
+SET visualstudio=%1
+
+Script\\GenerateProjectFiles.bat %visualstudio% Tetris3D
