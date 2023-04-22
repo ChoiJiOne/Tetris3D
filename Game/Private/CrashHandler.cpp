@@ -1,9 +1,9 @@
-#include "CrashHandler.h"
-#include "StringHelper.hpp"
-
 // @third party code - BEGIN
 #include <SDL2/SDL.h>
 // @third party code - END
+
+#include "StringHelper.hpp"
+#include "CrashHandler.h"
 
 std::string CrashHandler::crashDumpFilePath_;
 std::vector<std::string> CrashHandler::crashCallStack_;
