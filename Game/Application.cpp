@@ -7,8 +7,7 @@
 #include <memory>
 
 #include "CrashHandler.h"
-#include "StringHelper.hpp"
-#include "Macro.h"
+#include "Window.h"
 
 
 /**
@@ -46,9 +45,9 @@ public:
 	 */
 	void Setup()
 	{
-		SDL_Init(SDL_INIT_EVERYTHING);
-		
-		window_ = SDL_CreateWindow("Tetris3D", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 800, SDL_WINDOW_SHOWN);
+		CHECK(SDL_Init(SDL_INIT_EVERYTHING) == 0, "failed to initialize SDL2...");
+
+		window_ = std::make_unique<Window>("Tetris3D", 200, 200, 1000, 800, EWindowFlags::SHOWN);
 	}
 
 
@@ -80,8 +79,7 @@ public:
 	 */
 	void Cleanup()
 	{
-		SDL_DestroyWindow(window_);
-		window_ = nullptr;
+		window_.reset();
 
 		SDL_Quit();
 	}
@@ -89,9 +87,9 @@ public:
 
 private:
 	/**
-	 * @brief SDL의 윈도우 포인터입니다.
+	 * @brief 게임 윈도우 입니다.
 	 */
-	SDL_Window* window_ = nullptr;
+	std::unique_ptr<Window> window_ = nullptr;
 };
 
 
