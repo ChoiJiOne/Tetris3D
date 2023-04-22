@@ -1,6 +1,10 @@
 #include "CrashHandler.h"
 #include "StringHelper.hpp"
 
+// @third party code - BEGIN
+#include <SDL2/SDL.h>
+// @third party code - END
+
 std::string CrashHandler::crashDumpFilePath_;
 std::vector<std::string> CrashHandler::crashCallStack_;
 std::string CrashHandler::lastCrashErrorMessage_;
@@ -13,6 +17,32 @@ LONG CrashHandler::DetectApplicationCrash(EXCEPTION_POINTERS* exceptionPointer)
 	GenerateCrashDumpFile(exceptionPointer);
 
 	return EXCEPTION_EXECUTE_HANDLER;
+}
+
+void CrashHandler::CrashErrorMessageBox()
+{
+	std::string crashErrorMessage = StringHelper::Format("Message : %s\n", lastCrashErrorMessage_.c_str());
+
+	for (const auto& stackElement : crashCallStack_)
+	{
+		crashErrorMessage += stackElement;
+		crashErrorMessage += "\n";
+	}
+
+	int32_t successed = SDL_ShowSimpleMessageBox(
+		SDL_MessageBoxFlags::SDL_MESSAGEBOX_ERROR,
+		"Detect Application Crash...",
+		crashErrorMessage.c_str(),
+		nullptr
+	);
+
+	if (successed)
+	{
+#if defined(DEBUG) || defined(_DEBUG)
+		OutputDebugStringA("failed to show crash error message box...");
+#endif
+		return;
+	}
 }
 
 void CrashHandler::GenerateCrashDumpFile(EXCEPTION_POINTERS* exceptionPointer)

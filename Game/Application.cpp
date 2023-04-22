@@ -132,6 +132,7 @@ int32_t main(int32_t argc, char** argv)
 	}
 	__except (CrashHandler::DetectApplicationCrash(GetExceptionInformation()))
 	{
+		CrashHandler::CrashErrorMessageBox();
 	}
 
 	return 0;

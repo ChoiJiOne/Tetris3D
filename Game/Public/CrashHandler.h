@@ -48,6 +48,12 @@ public:
 	static LONG DetectApplicationCrash(EXCEPTION_POINTERS* exceptionPointer);
 
 
+	/**
+	 * @brief 크래시 에러 정보를 나타내는 메시지 박스를 표시합니다.
+	 */
+	static void CrashErrorMessageBox();
+
+
 private:
 	/**
 	 * @brief 크래시 정보를 기반으로 크래시 덤프 파일을 생성합니다.
