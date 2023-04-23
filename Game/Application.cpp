@@ -3,9 +3,9 @@
 #include <SDL2/SDL.h>
 
 #include <crtdbg.h>
-#include <cstdint>
 #include <memory>
 
+#include "CommandLine.h"
 #include "CrashHandler.h"
 #include "Window.h"
 
@@ -95,13 +95,19 @@ private:
 
 /**
  * @brief 애플리케이션을 초기화하고 실행합니다.
+ * 
+ * @param argc 명령행 인자의 수입니다.
+ * @param argv 명령행 인자입니다.
  *
  * @throws
  * - 초기화에 실패하면 표준 예외를 던집니다.
  * - 실행에 실패하면 표준 예외를 던집니다.
  */
-void RunApplication()
+void RunApplication(int32_t argc, char** argv)
 {
+	CommandLine::Parse(argc, argv);
+	CrashHandler::SetCrashDumpFilePath(CommandLine::GetValue("Crash"));
+
 	std::unique_ptr<Tetris3D> gameApplication = std::make_unique<Tetris3D>();
 
 	gameApplication->Setup();
@@ -126,7 +132,7 @@ int32_t main(int32_t argc, char** argv)
 
 	__try
 	{
-		RunApplication();
+		RunApplication(argc, argv);
 	}
 	__except (CrashHandler::DetectApplicationCrash(GetExceptionInformation()))
 	{
