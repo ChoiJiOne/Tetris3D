@@ -9,6 +9,7 @@
 #include "CrashHandler.h"
 #include "Window.h"
 #include "InputManager.h"
+#include "RenderManager.h"
 
 
 /**
@@ -33,13 +34,19 @@ void RunApplication(int32_t argc, char** argv)
 	bool bIsDone = false;
 
 	InputManager::Get().Setup();
+	RenderManager::Get().Setup(window.get());
+
 	InputManager::Get().BindWindowEventAction(EWindowEvent::CLOSE, [&]() { bIsDone = true; });
 	
 	while (!bIsDone)
 	{
 		InputManager::Get().Tick();
+
+		RenderManager::Get().BeginFrame(1.0f, 0.0f, 0.0f, 1.0f);
+		RenderManager::Get().EndFrame();
 	}
 
+	RenderManager::Get().Cleanup();
 	InputManager::Get().Cleanup();
 
 	window.reset();
