@@ -29,7 +29,7 @@ void RunApplication(int32_t argc, char** argv)
 
 	CHECK(SDL_Init(SDL_INIT_EVERYTHING) == 0, "failed to initialize SDL2...");
 	
-	std::unique_ptr<Window> window = std::make_unique<Window>("Tetris3D", 200, 200, 1000, 800, EWindowFlags::SHOWN);
+	std::unique_ptr<Window> window = std::make_unique<Window>("Tetris3D", 200, 200, 1000, 800, EWindowFlags::SHOWN | EWindowFlags::RESIZABLE);
 
 	bool bIsDone = false;
 
@@ -37,12 +37,14 @@ void RunApplication(int32_t argc, char** argv)
 	RenderManager::Get().Setup(window.get());
 
 	InputManager::Get().BindWindowEventAction(EWindowEvent::CLOSE, [&]() { bIsDone = true; });
+	InputManager::Get().BindWindowEventAction(EWindowEvent::RESIZED, [&]() { RenderManager::Get().Resize(); });
 	
 	while (!bIsDone)
 	{
 		InputManager::Get().Tick();
 
 		RenderManager::Get().BeginFrame(1.0f, 0.0f, 0.0f, 1.0f);
+		RenderManager::Get().SetWindowViewport();
 		RenderManager::Get().EndFrame();
 	}
 
