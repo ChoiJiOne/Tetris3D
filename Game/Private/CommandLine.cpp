@@ -27,5 +27,6 @@ bool CommandLine::IsValid(const std::string& key)
 
 std::string CommandLine::GetValue(const std::string& key)
 {
-	return std::string();
+	CHECK(IsValid(key), "not valid key value...");
+	return arguments_.at(key);
 }
