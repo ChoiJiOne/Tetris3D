@@ -211,6 +211,18 @@ public:
 	SDL_Window* GetWindow() { return window_; }
 
 
+	/**
+	 * @brief SDL 윈도우가 관리하는 네이티브 윈도우 핸들을 얻습니다.
+	 * 
+	 * @return 네이티브 윈도우 핸들을 반환합니다.
+	 * 
+	 * @see
+	 * https://learn.microsoft.com/en-us/windows/win32/winprog/windows-data-types#:~:text=typedef%20HANDLE%20WINSTA%3B-,HWND,-A%20handle%20to
+	 * https://stackoverflow.com/questions/24117983/get-window-handle-of-sdl-2-application
+	 */
+	HWND GetNativeHandle();
+
+
 private:
 	/**
 	 * SDL 윈도우 포인터입니다.

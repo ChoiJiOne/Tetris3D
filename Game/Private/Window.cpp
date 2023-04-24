@@ -1,5 +1,6 @@
 // @third party code - BEGIN
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h>
 // @third party code - END
 
 #include "Window.h"
@@ -70,4 +71,14 @@ float Window::GetAspectRatio()
 	GetSize(width, height);
 
 	return static_cast<float>(width) / static_cast<float>(height);
+}
+
+HWND Window::GetNativeHandle()
+{
+	SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version);
+
+	CHECK(SDL_GetWindowWMInfo(window_, &wmInfo) == SDL_TRUE, "failed to get native window info...");
+
+	return wmInfo.info.win.window;
 }
