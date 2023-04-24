@@ -54,6 +54,22 @@ public:
 
 
 	/**
+	 * @brief 리소스를 만들고 디스플레이 어댑터의 기능을 열거하는 데 사용하는 디바이스를 얻습니다.
+	 *
+	 * @return 디바이스의 포인터를 반환합니다.
+	 */
+	ID3D11Device* GetDevice() { return device_; }
+
+
+	/**
+	 * @brief 디바이스가 소유한 리소스를 사용하여 파이프라인 상태를 설정하고 렌더링 명령을 생성하는 데 사용하는 컨텍스트를 얻습니다.
+	 *
+	 * @return 컨텍스트의 포인터를 반환합니다.
+	 */
+	ID3D11DeviceContext* GetContext() { return context_; }
+	
+
+	/**
 	 * @brief 프레임 렌더링을 시작하고 백버퍼를 초기화합니다.
 	 * 
 	 * @param red 색상 버퍼의 초기화 할 색상 중 R값입니다.
