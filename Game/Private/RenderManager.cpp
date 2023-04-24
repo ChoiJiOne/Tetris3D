@@ -162,18 +162,31 @@ HRESULT RenderManager::CreateSwapChain(HWND windowHandle)
 	HRESULT hr = S_OK;
 
 	IDXGIDevice* device = nullptr;
-	IDXGIAdapter* adapter = nullptr;
-	IDXGIFactory* factory = nullptr;
-
 	hr = device_->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&device));
-	if (SUCCEEDED(hr))
+	if (FAILED(hr))
 	{
-		hr = device->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&adapter));
-		if (SUCCEEDED(hr))
-		{
-			hr = adapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&factory));
-		}
+		return hr;
 	}
+
+	IDXGIAdapter* adapter = nullptr;
+	hr = device->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&adapter));
+	if (FAILED(hr))
+	{
+		SAFE_RELEASE(device);
+		return hr;
+	}
+
+	IDXGIFactory* dxgifactory = nullptr;
+	hr = adapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgifactory));
+	if (FAILED(hr))
+	{
+		SAFE_RELEASE(adapter);
+		SAFE_RELEASE(device);
+		return hr;
+	}
+
+	SAFE_RELEASE(adapter);
+	SAFE_RELEASE(device);
 
 	int32_t windowWidth = 0;
 	int32_t windowHeight = 0;
@@ -193,12 +206,10 @@ HRESULT RenderManager::CreateSwapChain(HWND windowHandle)
 	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	SwapChainDesc.Windowed = !renderTargetWindow_->IsFullscreen();
 
-	hr = factory->CreateSwapChain(device_, &SwapChainDesc, &swapChain_);
-	hr = factory->MakeWindowAssociation(windowHandle, DXGI_MWA_NO_ALT_ENTER);
+	hr = dxgifactory->CreateSwapChain(device_, &SwapChainDesc, &swapChain_);
+	hr = dxgifactory->MakeWindowAssociation(windowHandle, DXGI_MWA_NO_ALT_ENTER);
 
-	SAFE_RELEASE(factory);
-	SAFE_RELEASE(adapter);
-	SAFE_RELEASE(device);
+	SAFE_RELEASE(dxgifactory);
 
 	return hr;
 }
