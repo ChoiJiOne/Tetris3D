@@ -39,6 +39,8 @@ public:
 	 * @note 초기화 이후 Cleanup이 호출되지 않았다면 아무 동작도 수행하지 않습니다.
 	 * 
 	 * @param renderTargetWindow 렌더링 대상이 되는 윈도우입니다.
+	 * 
+	 * @throws 초기화에 실패하면 C++ 표준 예외를 던집니다.
 	 */
 	void Setup(Window* renderTargetWindow);
 
@@ -75,7 +77,37 @@ public:
 	 */
 	void EndFrame(bool bIsVSync = true);
 
-	
+
+	/**
+	 * @brief 내부 버퍼 리소스의 크기를 변경합니다.
+	 *
+	 * @throws 버퍼의 크기 변경에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void Resize();
+
+
+	/**
+	 * @brief 파이프라인의 뷰 포트를 설정합니다.
+	 *
+	 * @param topLeftX 뷰 포트 왼쪽 상단의 X좌표입니다.
+	 * @param topLeftY 뷰 포트 왼쪽 상단의 Y좌표입니다.
+	 * @param width 뷰 포트의 가로 크기입니다.
+	 * @param height 뷰 포트의 세로 크기입니다.
+	 * @param minDepth 뷰 포트의 최소 깊이입니다. 기본 값은 0.0 입니다.
+	 * @param maxDepth 뷰 포트의 최대 깊이입니다. 기본 값은 1.0 입니다.
+	 */
+	void SetViewport(float topLeftX, float topLeftY, float width, float height, float minDepth = 0.0f, float maxDepth = 1.0f);
+
+
+	/**
+	 * @brief 파이프라인에 윈도우 뷰 포트를 설정합니다.
+	 *
+	 * @param minDepth 뷰 포트의 최소 깊이입니다. 기본 값은 0.0 입니다.
+	 * @param maxDepth 뷰 포트의 최대 깊이입니다. 기본 값은 1.0 입니다.
+	 */
+	void SetWindowViewport(float minDepth = 0.0f, float maxDepth = 1.0f);
+
+
 private:
 	/**
 	 * @brief 렌더링 처리를 수행하는 클래스의 생성자입니다.

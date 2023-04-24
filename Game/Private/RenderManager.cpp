@@ -57,6 +57,48 @@ void RenderManager::EndFrame(bool bIsVSync)
 	CHECK_HR(swapChain_->Present(static_cast<uint32_t>(bIsVSync), 0), "failed to present backbuffer...");
 }
 
+void RenderManager::Resize()
+{
+	int32_t backBufferWidth = 0;
+	int32_t backBufferHeight = 0;
+	DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
+	uint32_t backBufferCount = 2;
+
+	SAFE_RELEASE(renderTargetView_);
+
+	renderTargetWindow_->GetSize(backBufferWidth, backBufferHeight);
+
+	CHECK_HR(
+		swapChain_->ResizeBuffers(backBufferCount, static_cast<uint32_t>(backBufferWidth), static_cast<uint32_t>(backBufferHeight), backBufferFormat, 0),
+		"failed to resize buffer..."
+	);
+	CHECK_HR(CreateRenderTargetView(), "failed to create render target view...");
+	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view...");
+}
+
+void RenderManager::SetViewport(float topLeftX, float topLeftY, float width, float height, float minDepth, float maxDepth)
+{
+	D3D11_VIEWPORT viewport = {};
+
+	viewport.TopLeftX = topLeftX;
+	viewport.TopLeftY = topLeftY;
+	viewport.Width = width;
+	viewport.Height = height;
+	viewport.MinDepth = minDepth;
+	viewport.MaxDepth = maxDepth;
+
+	context_->RSSetViewports(1, &viewport);
+}
+
+void RenderManager::SetWindowViewport(float minDepth, float maxDepth)
+{
+	int32_t windowWidth = 0;
+	int32_t windowHeight = 0;
+	renderTargetWindow_->GetSize(windowWidth, windowHeight);
+
+	SetViewport(0.0f, 0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), minDepth, maxDepth);
+}
+
 RenderManager::~RenderManager()
 {
 	Cleanup();
