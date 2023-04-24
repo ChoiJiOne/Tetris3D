@@ -132,22 +132,22 @@ HRESULT RenderManager::CreateDeviceAndContext()
 
 	HRESULT hr = S_OK;
 
-	for (auto driverType : driverTypes)
+	for (uint32_t driverTypeIndex = 0; driverTypeIndex < driverTypes.size(); ++driverTypeIndex)
 	{
-		driverType_ = driverType;
-
-		hr = D3D11CreateDevice(
-			nullptr,
-			driverType_,
-			nullptr,
-			createDeviceFlags,
-			&featureLevels[0],
-			static_cast<uint32_t>(std::size(featureLevels)),
-			D3D11_SDK_VERSION,
-			&device_,
-			&featureLevel_,
-			&context_
+		driverType_ = driverTypes[driverTypeIndex];
+		
+		hr = D3D11CreateDevice( 
+			nullptr, driverType_, nullptr, createDeviceFlags, &featureLevels[0], static_cast<uint32_t>(std::size(featureLevels)),
+			D3D11_SDK_VERSION, &device_, &featureLevel_, &context_
 		);
+
+		if (hr == E_INVALIDARG)
+		{
+			hr = D3D11CreateDevice(
+				nullptr, driverType_, nullptr, createDeviceFlags, &featureLevels[1], static_cast<uint32_t>(std::size(featureLevels)) - 1,
+				D3D11_SDK_VERSION, &device_, &featureLevel_, &context_
+			);
+		}
 
 		if (SUCCEEDED(hr)) break;
 	}
