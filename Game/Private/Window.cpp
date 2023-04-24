@@ -82,3 +82,9 @@ HWND Window::GetNativeHandle()
 
 	return wmInfo.info.win.window;
 }
+
+bool Window::IsFullscreen()
+{
+	uint32_t flags = SDL_GetWindowFlags(window_);
+	return (flags & static_cast<uint32_t>(EWindowFlags::FULLSCREEN));
+}
