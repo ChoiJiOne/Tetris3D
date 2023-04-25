@@ -12,13 +12,7 @@
 #include "InputManager.h"
 #include "StringHelper.hpp"
 #include "RenderManager.h"
-
-
-struct VertexType
-{
-	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT4 color;
-};
+#include "Vertex.h"
 
 
 /**
@@ -69,10 +63,10 @@ void RunApplication(int32_t argc, char** argv)
 	ID3D11Buffer* indexBuffer = nullptr;
 	int32_t indexCount = 3;
 
-	VertexType vertices[3] = {
-		{ DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+	Vertex::PositionColor vertices[3] = {
+		{ DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
 		{ DirectX::XMFLOAT3(+0.0f, +1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(+1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(+1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
 	};
 
 	unsigned int indices[3] = {
@@ -81,7 +75,7 @@ void RunApplication(int32_t argc, char** argv)
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexType) * vertexCount;
+	vertexBufferDesc.ByteWidth = sizeof(Vertex::PositionColor) * vertexCount;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -118,7 +112,7 @@ void RunApplication(int32_t argc, char** argv)
 
 		shaderEffect->Bind(RenderManager::Get().GetContext());
 
-		unsigned int stride = sizeof(VertexType);
+		unsigned int stride = sizeof(Vertex::PositionColor);
 		unsigned int offset = 0;
 
 		RenderManager::Get().GetContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
