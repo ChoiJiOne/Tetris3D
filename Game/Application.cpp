@@ -8,11 +8,13 @@
 #include "CommandLine.h"
 #include "CrashHandler.h"
 #include "ColorNoEffectShader.h"
+#include "TextureNoEffectShader.h"
 #include "Window.h"
 #include "InputManager.h"
 #include "StringHelper.hpp"
 #include "RenderManager.h"
 #include "StaticMesh.h"
+#include "Texture2D.h"
 #include "Vertex.h"
 
 
@@ -44,10 +46,10 @@ void RunApplication(int32_t argc, char** argv)
 	InputManager::Get().BindWindowEventAction(EWindowEvent::RESIZED, [&]() { RenderManager::Get().Resize(); });
 
 	std::wstring shaderSourcePath = StringHelper::Convert(CommandLine::GetValue("Shader"));
-	std::unique_ptr<ColorNoEffectShader> shaderEffect = std::make_unique<ColorNoEffectShader>(
+	std::unique_ptr<TextureNoEffectShader> shaderEffect = std::make_unique<TextureNoEffectShader>(
 		RenderManager::Get().GetDevice(),
-		shaderSourcePath + L"ColorNoEffectVS.hlsl",
-		shaderSourcePath + L"ColorNoEffectPS.hlsl"
+		shaderSourcePath + L"TextureNoEffectVS.hlsl",
+		shaderSourcePath + L"TextureNoEffectPS.hlsl"
 	);
 
 	DirectX::XMVECTOR eye = DirectX::XMVectorSet(6.0f, 6.0f, -6.0f, 0.0f);
@@ -58,30 +60,41 @@ void RunApplication(int32_t argc, char** argv)
 	shaderEffect->SetViewMatrix(DirectX::XMMatrixLookAtLH(eye, at, up));
 	shaderEffect->SetProjectionMatrix(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, window->GetAspectRatio(), 0.01f, 1000.0f));
 
-	std::vector<Vertex::PositionColor> vertices = {
-		Vertex::PositionColor(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)), // 0
-		Vertex::PositionColor(DirectX::XMFLOAT3(-1.0f,  1.0f, -1.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)), // 1
-		Vertex::PositionColor(DirectX::XMFLOAT3(+1.0f,  1.0f, -1.0f), DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)), // 2
-		Vertex::PositionColor(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)), // 3
-		Vertex::PositionColor(DirectX::XMFLOAT3(-1.0f, -1.0f,  1.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)), // 4
-		Vertex::PositionColor(DirectX::XMFLOAT3(-1.0f,  1.0f,  1.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)), // 5
-		Vertex::PositionColor(DirectX::XMFLOAT3( 1.0f,  1.0f,  1.0f), DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f)), // 6
-		Vertex::PositionColor(DirectX::XMFLOAT3( 1.0f, -1.0f,  1.0f), DirectX::XMFLOAT4(0.5f, 0.5f, 1.0f, 1.0f)), // 7
+	std::string texturePath = CommandLine::GetValue("Content");
+	std::unique_ptr<Texture2D> texture = std::make_unique<Texture2D>(
+		RenderManager::Get().GetDevice(),
+		texturePath + "RedBlock.png"
+	);
+
+	std::vector<Vertex::PositionUV> vertices = {
+		// 앞면
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)), // 0
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)), // 1
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)), // 2
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)), // 3
+
+		// 오른쪽
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)), // 4
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)), // 5
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)), // 6
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)), // 7
+
+		// 윗면
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)), // 8
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)), // 9
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)), // 10
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)), // 11
 	};
 
 	std::vector<uint32_t> indices = {
 		0, 1, 2,
 		0, 2, 3,
-		4, 6, 5,
-		4, 7, 6,
-		1, 5, 6,
-		1, 6, 2,
-		0, 4, 5,
-		0, 5, 1,
-		3, 2, 6,
-		3, 6, 7,
-		0, 3, 7,
-		0, 7, 4
+
+		4, 5, 6,
+		4, 6, 7,
+
+		8, 9, 10,
+		8, 10, 11,
 	};
 
 	std::unique_ptr<StaticMesh> mesh = std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices);
@@ -90,9 +103,10 @@ void RunApplication(int32_t argc, char** argv)
 	{
 		InputManager::Get().Tick();
 
-		RenderManager::Get().BeginFrame(0.0f, 0.0f, 0.0f, 1.0f);
+		RenderManager::Get().BeginFrame(1.0f, 1.0f, 1.0f, 1.0f);
 		RenderManager::Get().SetWindowViewport();
 
+		shaderEffect->SetTexture(texture.get());
 		shaderEffect->Bind(RenderManager::Get().GetContext());
 		mesh->Draw(RenderManager::Get().GetContext());
 
