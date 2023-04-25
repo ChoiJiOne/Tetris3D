@@ -11,23 +11,24 @@ namespace Vertex
 	/**
 	 * @brief 위치와 색상 정보를 포함한 정점입니다.
 	 */
-	struct PositionColor
+	class PositionColor
 	{
+	public:
 		/**
 		 * @brief 위치와 색상 정보를 포함한 정점의 기본 생성자입니다.
 		 */
-		PositionColor() : position(0.0f, 0.0f, 0.0f), color(0.0f, 0.0f, 0.0f, 0.0f) {}
+		PositionColor() : position_(0.0f, 0.0f, 0.0f), color_(0.0f, 0.0f, 0.0f, 0.0f) {}
 
 
 		/**
 		 * @brief 위치와 색상 정보를 포함한 정점의 생성자입니다.
 		 * 
-		 * @param p 정점의 위치입니다.
-		 * @param c 정점의 색상입니다.
+		 * @param position 정점의 위치입니다.
+		 * @param color 정점의 색상입니다.
 		 */
-		PositionColor(const DirectX::XMFLOAT3& p, const DirectX::XMFLOAT4& c)
-			: position(p)
-			, color(c) {}
+		PositionColor(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT4& color)
+			: position_(position)
+			, color_(color) {}
 
 
 		/**
@@ -36,8 +37,8 @@ namespace Vertex
 		 * @param instance 복사할 정점의 인스턴스입니다.
 		 */
 		PositionColor(PositionColor&& instance) noexcept
-			: position(instance.position)
-			, color(instance.color) {}
+			: position_(instance.position_)
+			, color_(instance.color_) {}
 
 
 		/**
@@ -46,8 +47,8 @@ namespace Vertex
 		 * @param instance 복사할 정점의 인스턴스입니다.
 		 */
 		PositionColor(const PositionColor& instance)
-			: position(instance.position)
-			, color(instance.color) {}
+			: position_(instance.position_)
+			, color_(instance.color_) {}
 
 
 		/**
@@ -61,8 +62,8 @@ namespace Vertex
 		{
 			if (this == &instance) return *this;
 
-			position = instance.position;
-			color = instance.color;
+			position_ = instance.position_;
+			color_ = instance.color_;
 
 			return *this;
 		}
@@ -79,22 +80,23 @@ namespace Vertex
 		{
 			if (this == &instance) return *this;
 
-			position = instance.position;
-			color = instance.color;
+			position_ = instance.position_;
+			color_ = instance.color_;
 
 			return *this;
 		}
 
 
+	private:
 		/** 
 		 * @brief 정점의 위치입니다. 
 		 */
-		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT3 position_;
 
 
 		/**
 		 * @brief 정점의 색상입니다.
 		 */
-		DirectX::XMFLOAT4 color;
+		DirectX::XMFLOAT4 color_;
 	};
 }
