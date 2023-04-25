@@ -20,6 +20,26 @@ StaticMesh::StaticMesh(ID3D11Device* device, const std::vector<Vertex::PositionC
 	), "failed to create index buffer...");
 }
 
+StaticMesh::StaticMesh(ID3D11Device* device, const std::vector<Vertex::PositionUV>& vertices, const std::vector<uint32_t>& indices)
+{
+	vertexByteSize_ = sizeof(Vertex::PositionUV);
+	countOfIndex_ = static_cast<uint32_t>(indices.size());
+
+	CHECK_HR(CreateVertexBuffer(
+		device,
+		vertexByteSize_ * static_cast<uint32_t>(vertices.size()),
+		reinterpret_cast<const void*>(&vertices[0]),
+		&vertexBuffer_
+	), "failed to create vertex buffer...");
+
+	CHECK_HR(CreateIndexBuffer(
+		device,
+		sizeof(uint32_t) * static_cast<uint32_t>(indices.size()),
+		reinterpret_cast<const void*>(&indices[0]),
+		&indexBuffer_
+	), "failed to create index buffer...");
+}
+
 StaticMesh::~StaticMesh()
 {
 	SAFE_RELEASE(indexBuffer_);

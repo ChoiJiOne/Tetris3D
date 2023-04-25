@@ -26,6 +26,18 @@ public:
 
 
 	/**
+	 * @brief 게임 월드 내의 정적 메시 클래스의 생성자입니다.
+	 *
+	 * @param device 버퍼를 생성할 때 사용할 디바이스입니다.
+	 * @param vertices 정적 메시의 정점 목록입니다.
+	 * @param indices 정적 메시의 인덱스 목록입니다.
+	 *
+	 * @throws 정점 생성에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	StaticMesh(ID3D11Device* device, const std::vector<Vertex::PositionUV>& vertices, const std::vector<uint32_t>& indices);
+
+
+	/**
 	 * @brief 게임 월드 내의 정적 메시 클래스의 가상 소멸자입니다.
 	 */
 	virtual ~StaticMesh();
