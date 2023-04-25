@@ -87,13 +87,13 @@ namespace Vertex
 
 
 		/** 
-		 * 정점의 위치입니다. 
+		 * @brief 정점의 위치입니다. 
 		 */
 		DirectX::XMFLOAT3 position;
 
 
 		/**
-		 * 정점의 색상입니다.
+		 * @brief 정점의 색상입니다.
 		 */
 		DirectX::XMFLOAT4 color;
 	};
