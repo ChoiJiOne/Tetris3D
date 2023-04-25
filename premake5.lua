@@ -56,7 +56,7 @@ workspace "Tetris3D"
             "%{game}/Public/*",
             "%{script}/*",
             "%{shader}/*",
-            
+            "%{thirdparty}/json/*",
             "%{thirdparty}/miniaudio/*",
             "%{thirdparty}/SDL2/*",
             "%{thirdparty}/stb/*",
