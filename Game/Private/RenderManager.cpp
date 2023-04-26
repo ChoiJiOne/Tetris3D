@@ -14,11 +14,11 @@ void RenderManager::Setup(Window* renderTargetWindow)
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view...");
 	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view...");
 
-	CHECK_HR(CreateDepthStencilState(&depthStencilStates_["EnableZ"], true, true), "failed to create enable z depth stencil state");
-	CHECK_HR(CreateDepthStencilState(&depthStencilStates_["DisableZ"], false, true), "failed to create disable z depth stencil state");
-	CHECK_HR(CreateBlendState(&blendStates_["Alpha"], true), "failed to create alpha blend state");
-	CHECK_HR(CreateRasterizerState(&rasterizerStates_["Fill"], false, true), "failed to create fill mode rasterizer state");
-	CHECK_HR(CreateRasterizerState(&rasterizerStates_["Wireframe"], false, false), "failed to create wireframe mode rasterizer state");
+	CHECK_HR(CreateDepthStencilState(&depthStencilStates_["EnableZ"], true, true), "failed to create enable z depth stencil state...");
+	CHECK_HR(CreateDepthStencilState(&depthStencilStates_["DisableZ"], false, true), "failed to create disable z depth stencil state...");
+	CHECK_HR(CreateBlendState(&blendStates_["Alpha"], true), "failed to create alpha blend state...");
+	CHECK_HR(CreateRasterizerState(&rasterizerStates_["Fill"], false, true), "failed to create fill mode rasterizer state...");
+	CHECK_HR(CreateRasterizerState(&rasterizerStates_["Wireframe"], false, false), "failed to create wireframe mode rasterizer state...");
 
 	bIsSetup_ = true;
 }
