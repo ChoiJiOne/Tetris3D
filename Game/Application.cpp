@@ -68,34 +68,55 @@ void RunApplication(int32_t argc, char** argv)
 	);
 
 	std::vector<Vertex::PositionUV> vertices = {
-		// 앞면
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)), // 0
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)), // 1
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)), // 2
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)), // 3
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
 
-		// 오른쪽
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)), // 4
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)), // 5
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)), // 6
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)), // 7
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
 
-		// 윗면
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)), // 8
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)), // 9
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)), // 10
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)), // 11
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
+
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
+
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
+
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
+		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
 	};
 
 	std::vector<uint32_t> indices = {
-		0, 1, 2,
-		0, 2, 3,
+		3,1,0,
+		2,1,3,
 
-		4, 5, 6,
-		4, 6, 7,
+		6,4,5,
+		7,4,6,
 
-		8, 9, 10,
-		8, 10, 11,
+		11,9,8,
+		10,9,11,
+
+		14,12,13,
+		15,12,14,
+
+		19,17,16,
+		18,17,19,
+
+		22,20,21,
+		23,20,22,
 	};
 
 	std::unique_ptr<StaticMesh> mesh = std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices);
@@ -103,12 +124,16 @@ void RunApplication(int32_t argc, char** argv)
 	GameTimer gameTimer;
 	gameTimer.Reset();
 
+	RenderManager::Get().SetAlphaBlend(true);
+	RenderManager::Get().SetDepthBuffer(true);
+	RenderManager::Get().SetFillMode(true);
+
 	while (!bIsDone)
 	{
 		InputManager::Get().Tick();
 		gameTimer.Tick();
 
-		RenderManager::Get().BeginFrame(0.0f, 0.0f, 0.0f, 1.0f);
+		RenderManager::Get().BeginFrame(1.0f, 1.0f, 1.0f, 1.0f);
 		RenderManager::Get().SetWindowViewport();
 
 		shaderEffect->SetTexture(texture.get());
@@ -117,7 +142,6 @@ void RunApplication(int32_t argc, char** argv)
 
 		RenderManager::Get().EndFrame();
 	}
-
 
 	mesh.reset();
 	shaderEffect.reset();
