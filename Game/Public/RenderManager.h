@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include <unordered_map>
 
 #include "Macro.h"
 
@@ -124,6 +125,32 @@ public:
 	void SetWindowViewport(float minDepth = 0.0f, float maxDepth = 1.0f);
 
 
+	/**
+	 * @brief Z 버퍼 활성화 여부를 설정합니다.
+	 *
+	 * @param bIsEnable Z 버퍼 활성화 여부입니다.
+	 */
+	void SetDepthBuffer(bool bIsEnable);
+
+
+	/**
+	 * @brief 알파 블랜딩 활성화 여부를 설정합니다.
+	 *
+	 * @param bIsEnable 알파 블랜딩 활성화 여부입니다.
+	 */
+	void SetAlphaBlend(bool bIsEnable);
+
+
+	/**
+	 * @brief 채움 모드 활성화 여부를 설정합니다.
+	 *
+	 * @note 비활성화 설정할 경우 와이어 프레임 모드로 설정됩니다.
+	 *
+	 * @brief bIsEnble 채움 모드 활성화 여부입니다.
+	 */
+	void SetFillMode(bool bIsEnable);
+
+
 private:
 	/**
 	 * @brief 렌더링 처리를 수행하는 클래스의 생성자입니다.
@@ -171,6 +198,41 @@ private:
 	 * @return 깊이 스텐실 버퍼 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
 	HRESULT CreateDepthStencilView();
+
+
+	/**
+	 * @brief 깊이 스텐실 상태를 생성합니다.
+	 *
+	 * @param depthStencilState 생성한 깊이 스텐실 상태를 저장할 포인터입니다.
+	 * @param bIsEnableDepth 깊이 버퍼 활성화 여부입니다.
+	 * @param bIsEnableStencil 스텐실 버퍼 활성화 여부입니다.
+	 *
+	 * @return 깊이 스텐실 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateDepthStencilState(ID3D11DepthStencilState** depthStencilState, bool bIsEnableDepth, bool bIsEnableStencil);
+
+
+	/**
+	 * @brief 블랜딩을 위한 블랜드 상태를 생성합니다.
+	 *
+	 * @param blendState 생성한 블랜드 상태를 저장할 포인터입니다.
+	 * @param bIsEnable 블랜드 상태 활성화 여부입니다.
+	 *
+	 * @return 블랜딩 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateBlendState(ID3D11BlendState** blendState, bool bIsEnable);
+
+
+	/**
+	 * @brief 레스터라이저 상태를 생성합니다.
+	 *
+	 * @param rasterizerState 생성한 레스터라이저 상태를 저장할 포인터입니다.
+	 * @param bIsEnableCull 컬링을 수행 여부입니다.
+	 * @param bIsEnableFill 렌더링 시 채움 모드 수행 여부입니다.
+	 *
+	 * @return 레스터라이저 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateRasterizerState(ID3D11RasterizerState** RasterizerState, bool bIsEnableCull, bool bIsEnableFill);
 
 
 private:
@@ -248,4 +310,22 @@ private:
 	 * @see https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11depthstencilview
 	 */
 	ID3D11DepthStencilView* depthStencilView_ = nullptr;
+
+
+	/**
+	 * @brief 렌더링 시 사용할 깊이 스텐실 상태입니다.
+	 */
+	std::unordered_map<std::string, ID3D11DepthStencilState*> depthStencilStates_;
+
+
+	/**
+	 * @brief 렌더링 시 사용할 블랜딩 상태입니다.
+	 */
+	std::unordered_map<std::string, ID3D11BlendState*> blendStates_;
+
+
+	/**
+	 * @brief 렌더링 시 사용할 레스터라이저 상태입니다.
+	 */
+	std::unordered_map<std::string, ID3D11RasterizerState*> rasterizerStates_;
 };

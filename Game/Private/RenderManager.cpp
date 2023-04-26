@@ -14,6 +14,12 @@ void RenderManager::Setup(Window* renderTargetWindow)
 	CHECK_HR(CreateRenderTargetView(), "failed to create render target view...");
 	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view...");
 
+	CHECK_HR(CreateDepthStencilState(&depthStencilStates_["EnableZ"], true, true), "failed to create enable z depth stencil state");
+	CHECK_HR(CreateDepthStencilState(&depthStencilStates_["DisableZ"], false, true), "failed to create disable z depth stencil state");
+	CHECK_HR(CreateBlendState(&blendStates_["Alpha"], true), "failed to create alpha blend state");
+	CHECK_HR(CreateRasterizerState(&rasterizerStates_["Fill"], false, true), "failed to create fill mode rasterizer state");
+	CHECK_HR(CreateRasterizerState(&rasterizerStates_["Wireframe"], false, false), "failed to create wireframe mode rasterizer state");
+
 	bIsSetup_ = true;
 }
 
@@ -24,6 +30,21 @@ void RenderManager::Cleanup()
 	if (renderTargetWindow_->IsFullscreen() && swapChain_)
 	{
 		CHECK_HR(swapChain_->SetFullscreenState(false, nullptr), "failed to set full screen state...");
+	}
+
+	for (auto& rasterizerState : rasterizerStates_)
+	{
+		SAFE_RELEASE(rasterizerState.second);
+	}
+
+	for (auto& blendState : blendStates_)
+	{
+		SAFE_RELEASE(blendState.second);
+	}
+
+	for (auto& depthStencilState : depthStencilStates_)
+	{
+		SAFE_RELEASE(depthStencilState.second);
 	}
 
 	SAFE_RELEASE(depthStencilView_);
@@ -97,6 +118,27 @@ void RenderManager::SetWindowViewport(float minDepth, float maxDepth)
 	renderTargetWindow_->GetSize(windowWidth, windowHeight);
 
 	SetViewport(0.0f, 0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), minDepth, maxDepth);
+}
+
+void RenderManager::SetDepthBuffer(bool bIsEnable)
+{
+	ID3D11DepthStencilState* depthStencilState = bIsEnable ? depthStencilStates_["EnableZ"] : depthStencilStates_["DisableZ"];
+
+	context_->OMSetDepthStencilState(depthStencilState, 1);
+}
+
+void RenderManager::SetAlphaBlend(bool bIsEnable)
+{
+	ID3D11BlendState* blendState = bIsEnable ? blendStates_["Alpha"] : nullptr;
+
+	context_->OMSetBlendState(blendState, nullptr, 0xFFFFFFFF);
+}
+
+void RenderManager::SetFillMode(bool bIsEnable)
+{
+	ID3D11RasterizerState* rasterizerState = bIsEnable ? rasterizerStates_["Fill"] : rasterizerStates_["Wireframe"];
+
+	context_->RSSetState(rasterizerState);
 }
 
 RenderManager::~RenderManager()
@@ -265,4 +307,63 @@ HRESULT RenderManager::CreateDepthStencilView()
 	}
 
 	return hr;
+}
+
+HRESULT RenderManager::CreateDepthStencilState(ID3D11DepthStencilState** depthStencilState, bool bIsEnableDepth, bool bIsEnableStencil)
+{
+	D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc = {};
+
+	depthStencilStateDesc.DepthEnable = static_cast<BOOL>(bIsEnableDepth);
+	depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	depthStencilStateDesc.StencilEnable = static_cast<BOOL>(bIsEnableStencil);
+	depthStencilStateDesc.StencilReadMask = 0xFF;
+	depthStencilStateDesc.StencilWriteMask = 0xFF;
+
+	depthStencilStateDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilStateDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthStencilStateDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilStateDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	depthStencilStateDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilStateDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthStencilStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilStateDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	return device_->CreateDepthStencilState(&depthStencilStateDesc, depthStencilState);
+}
+
+HRESULT RenderManager::CreateBlendState(ID3D11BlendState** blendState, bool bIsEnable)
+{
+	D3D11_BLEND_DESC blendStateDesc = {};
+
+	blendStateDesc.RenderTarget[0].BlendEnable = static_cast<BOOL>(bIsEnable);
+	blendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	return device_->CreateBlendState(&blendStateDesc, blendState);
+}
+
+HRESULT RenderManager::CreateRasterizerState(ID3D11RasterizerState** rasterizerState, bool bIsEnableCull, bool bIsEnableFill)
+{
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+
+	rasterizerDesc.AntialiasedLineEnable = false;
+	rasterizerDesc.CullMode = (bIsEnableCull ? D3D11_CULL_BACK : D3D11_CULL_NONE);
+	rasterizerDesc.DepthBias = 0;
+	rasterizerDesc.DepthBiasClamp = 0.0f;
+	rasterizerDesc.DepthClipEnable = true;
+	rasterizerDesc.FillMode = (bIsEnableFill ? D3D11_FILL_SOLID : D3D11_FILL_WIREFRAME);
+	rasterizerDesc.FrontCounterClockwise = false;
+	rasterizerDesc.MultisampleEnable = false;
+	rasterizerDesc.ScissorEnable = false;
+	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+
+	return device_->CreateRasterizerState(&rasterizerDesc, rasterizerState);
 }
