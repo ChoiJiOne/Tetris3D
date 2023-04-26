@@ -8,6 +8,7 @@
 #include "CommandLine.h"
 #include "CrashHandler.h"
 #include "ColorNoEffectShader.h"
+#include "GameTimer.h"
 #include "TextureNoEffectShader.h"
 #include "Window.h"
 #include "InputManager.h"
@@ -99,11 +100,15 @@ void RunApplication(int32_t argc, char** argv)
 
 	std::unique_ptr<StaticMesh> mesh = std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices);
 
+	GameTimer gameTimer;
+	gameTimer.Reset();
+
 	while (!bIsDone)
 	{
 		InputManager::Get().Tick();
+		gameTimer.Tick();
 
-		RenderManager::Get().BeginFrame(1.0f, 1.0f, 1.0f, 1.0f);
+		RenderManager::Get().BeginFrame(0.0f, 0.0f, 0.0f, 1.0f);
 		RenderManager::Get().SetWindowViewport();
 
 		shaderEffect->SetTexture(texture.get());
