@@ -21,8 +21,6 @@ void EffectShader::Bind(ID3D11DeviceContext* context)
 
 HRESULT EffectShader::CompileShaderFromFile(const std::wstring& sourcePath, const std::string& entryPoint, const std::string& shaderModel, ID3DBlob** blob)
 {
-	HRESULT hr = S_OK;
-
 	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -30,7 +28,7 @@ HRESULT EffectShader::CompileShaderFromFile(const std::wstring& sourcePath, cons
 	shaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	hr = D3DCompileFromFile(
+	return D3DCompileFromFile(
 		sourcePath.c_str(),
 		nullptr,
 		nullptr,
@@ -41,8 +39,6 @@ HRESULT EffectShader::CompileShaderFromFile(const std::wstring& sourcePath, cons
 		blob,
 		nullptr
 	);
-
-	return hr;
 }
 
 HRESULT EffectShader::CreateVertexShaderFromFile(ID3D11Device* device, const std::wstring& sourcePath, ID3DBlob** vertexShaderSource, ID3D11VertexShader** vertexShader)
