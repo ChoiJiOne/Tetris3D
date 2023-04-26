@@ -24,6 +24,8 @@ ColorNoEffectShader::ColorNoEffectShader(ID3D11Device* device, const std::wstrin
 	everyFrameBufferDesc.StructureByteStride = 0;
 
 	CHECK_HR(device->CreateBuffer(&everyFrameBufferDesc, nullptr, &everyFrameBuffer_), "failed to create constant buffer...");
+
+	everyFrameBufferBindSlot_ = 0;
 }
 
 ColorNoEffectShader::~ColorNoEffectShader()
@@ -53,8 +55,7 @@ void ColorNoEffectShader::Bind(ID3D11DeviceContext* context)
 		context->Unmap(everyFrameBuffer_, 0);
 	}
 
-	uint32_t bindSlot = 0;
-	context->VSSetConstantBuffers(bindSlot, 1, &everyFrameBuffer_);
+	context->VSSetConstantBuffers(everyFrameBufferBindSlot_, 1, &everyFrameBuffer_);
 }
 
 HRESULT ColorNoEffectShader::CompileShaderFromFile(const std::wstring& sourcePath, const std::string& entryPoint, const std::string& shaderModel, ID3DBlob** blob)
