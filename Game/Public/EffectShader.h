@@ -106,7 +106,7 @@ protected:
 	 * @param device 정점 데이터를 생성할 때 사용할 디바이스입니다.
 	 * @param vertexShaderSource 정점 데이터를 생성할 때 참고할 컴파일된 정점 셰이더의 소스입니다.
 	 * @param inputLayoutElements 정점 셰이더에 전달할 정점 데이터 정보입니다.
-	 * @param inputLayout[out] 생성된 정점 데이터 정보 리스소입니다.
+	 * @param inputLayout[out] 생성된 정점 데이터 정보 리소스입니다.
 	 *
 	 * @return 정점 데이터 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
@@ -117,6 +117,30 @@ protected:
 		ID3D11InputLayout** inputLayout
 	);
 
+
+	/**
+	 * @brief CPU에서 쓰기 가능한 동적 상수 버퍼를 생성합니다.
+	 * 
+	 * @param device 버퍼를 생성할 때 사용할 디바이스입니다.
+	 * @param outConstantBuffer[out] 생성한 동적 상수 버퍼입니다.
+	 * 
+	 * @return 동적 버퍼 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
+	 */
+	template <typename BufferType>
+	HRESULT CreateDynamicConstantBuffer(ID3D11Device* device, ID3D11Buffer** outConstantBuffer)
+	{
+		D3D11_BUFFER_DESC dynamicConstantBufferDesc = {};
+
+		dynamicConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		dynamicConstantBufferDesc.ByteWidth = sizeof(BufferType);
+		dynamicConstantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		dynamicConstantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		dynamicConstantBufferDesc.MiscFlags = 0;
+		dynamicConstantBufferDesc.StructureByteStride = 0;
+
+		return device->CreateBuffer(&dynamicConstantBufferDesc, nullptr, outConstantBuffer);
+	}
+	
 
 protected:
 	/**

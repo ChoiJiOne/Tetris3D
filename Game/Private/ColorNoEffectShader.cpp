@@ -10,17 +10,7 @@ ColorNoEffectShader::ColorNoEffectShader(ID3D11Device* device, const std::wstrin
 	CHECK_HR(CreateVertexShaderFromFile(device, vertexShaderSourcePath, &vertexShaderSource_, &vertexShader_), "failed to create vertex shader...");
 	CHECK_HR(CreatePixelShaderFromFile(device, pixelShaderSourcePath, &pixelShaderSource_, &pixelShader_), "failed to create pixel shader...");
 	CHECK_HR(CreateInputLayout(device, vertexShaderSource_, inputLayoutElements, &inputLayout_), "failed to create input layout...");
-
-	D3D11_BUFFER_DESC everyFrameBufferDesc = {};
-
-	everyFrameBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	everyFrameBufferDesc.ByteWidth = sizeof(EveryFrameConstantBuffer);
-	everyFrameBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	everyFrameBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	everyFrameBufferDesc.MiscFlags = 0;
-	everyFrameBufferDesc.StructureByteStride = 0;
-
-	CHECK_HR(device->CreateBuffer(&everyFrameBufferDesc, nullptr, &everyFrameBuffer_), "failed to create constant buffer...");
+	CHECK_HR(CreateDynamicConstantBuffer<EveryFrameConstantBuffer>(device, &everyFrameBuffer_), "failed to create constant buffer...");
 
 	everyFrameBufferBindSlot_ = 0;
 }
