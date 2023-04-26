@@ -1,6 +1,6 @@
 #include "GeometryGenerator.h"
 
-inline void GeometryGenerator::CreateBox(float width, float height, float depth, std::vector<Vertex::PositionUV>& outVertices, std::vector<uint32_t>& outIndices)
+void GeometryGenerator::CreateBox(float width, float height, float depth, std::vector<Vertex::PositionUV>& outVertices, std::vector<uint32_t>& outIndices)
 {
 	outVertices.resize(0);
 	outIndices.resize(0);

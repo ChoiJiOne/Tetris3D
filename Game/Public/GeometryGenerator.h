@@ -19,8 +19,8 @@ public:
 	 * @param width 박스의 가로 크기입니다.
 	 * @param height 박스의 세로 크기입니다.
 	 * @param depth 박스의 깊이 크기입니다.
-	 * @param outVertices[out]
-	 * @param outIndices[out]
+	 * @param outVertices[out] 생성된 박스의 정점 목록입니다.
+	 * @param outIndices[out] 생성된 박스 정점의 인덱스 목록입니다.
 	 */
-	inline static void CreateBox(float width, float height, float depth, std::vector<Vertex::PositionUV>& outVertices, std::vector<uint32_t>& outIndices);
+	static void CreateBox(float width, float height, float depth, std::vector<Vertex::PositionUV>& outVertices, std::vector<uint32_t>& outIndices);
 };
