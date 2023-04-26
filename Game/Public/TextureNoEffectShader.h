@@ -214,6 +214,12 @@ private:
 
 
 	/**
+	 * @brief 매 프레임 변경되는 셰이더 내 상수 버퍼의 바인딩 슬롯입니다.
+	 */
+	uint32_t everyFrameBufferBindSlot_ = 0;
+
+
+	/**
 	 * @brief 매 프레임 변경되는 셰이더 내의 리소스입니다.
 	 */
 	EveryFrameConstantBuffer everyFrameBufferResource_;
@@ -223,6 +229,12 @@ private:
 	 * @brief 매 프레임 변경되는 셰이더 내의 상수 버퍼입니다.
 	 */
 	ID3D11Buffer* everyFrameBuffer_ = nullptr;
+
+
+	/**
+	 * @brief 텍스처 샘플러의 바인딩 슬롯입니다.
+	 */
+	uint32_t samplerStateBindSlot_ = 0;
 
 
 	/**
@@ -240,5 +252,5 @@ private:
 	/**
 	 * @brief 텍스처 리소스의 바인딩 위치입니다.
 	 */
-	uint32_t bindSlot_ = 0;
+	uint32_t textureResourcebindSlot_ = 0;
 };

@@ -26,6 +26,8 @@ TextureNoEffectShader::TextureNoEffectShader(ID3D11Device* device, const std::ws
 
 	CHECK_HR(device->CreateBuffer(&everyFrameBufferDesc, nullptr, &everyFrameBuffer_), "failed to create constant buffer...");
 
+	everyFrameBufferBindSlot_ = 0;
+
 	D3D11_SAMPLER_DESC linearSamplerDesc;
 	linearSamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	linearSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -42,6 +44,8 @@ TextureNoEffectShader::TextureNoEffectShader(ID3D11Device* device, const std::ws
 	linearSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	CHECK_HR(device->CreateSamplerState(&linearSamplerDesc, &linearSamplerState_), "failed to create texture sampler...");
+
+	samplerStateBindSlot_ = 0;
 }
 
 TextureNoEffectShader::~TextureNoEffectShader()
@@ -58,6 +62,7 @@ TextureNoEffectShader::~TextureNoEffectShader()
 void TextureNoEffectShader::SetTexture(Texture2D* texture)
 {
 	textureResource_ = texture->GetTextureView();
+	textureResourcebindSlot_ = 0;
 }
 
 void TextureNoEffectShader::Bind(ID3D11DeviceContext* context)
@@ -77,10 +82,10 @@ void TextureNoEffectShader::Bind(ID3D11DeviceContext* context)
 		context->Unmap(everyFrameBuffer_, 0);
 	}
 
-	context->VSSetConstantBuffers(bindSlot_, 1, &everyFrameBuffer_);
+	context->VSSetConstantBuffers(everyFrameBufferBindSlot_, 1, &everyFrameBuffer_);
 
-	context->PSSetShaderResources(bindSlot_, 1, &textureResource_);
-	context->PSSetSamplers(bindSlot_, 1, &linearSamplerState_);
+	context->PSSetShaderResources(textureResourcebindSlot_, 1, &textureResource_);
+	context->PSSetSamplers(samplerStateBindSlot_, 1, &linearSamplerState_);
 }
 
 HRESULT TextureNoEffectShader::CompileShaderFromFile(const std::wstring& sourcePath, const std::string& entryPoint, const std::string& shaderModel, ID3DBlob** blob)
