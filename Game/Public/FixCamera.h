@@ -47,6 +47,8 @@ public:
 	
 	/**
 	 * @brief 고정 카메라 오브젝트를 업데이트합니다.
+	 * 
+	 * @param deltaSeconds 초단위 델타 시간값입니다.
 	 */
 	virtual void Tick(float deltaSeconds) override;
 
