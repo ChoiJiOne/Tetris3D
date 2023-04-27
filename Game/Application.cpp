@@ -7,8 +7,10 @@
 
 #include "CommandLine.h"
 #include "CrashHandler.h"
+#include "ContentManager.h"
 #include "ColorNoEffectShader.h"
 #include "GameTimer.h"
+#include "GeometryGenerator.h"
 #include "TextureNoEffectShader.h"
 #include "Window.h"
 #include "InputManager.h"
@@ -47,19 +49,22 @@ void RunApplication(int32_t argc, char** argv)
 	InputManager::Get().BindWindowEventAction(EWindowEvent::RESIZED, [&]() { RenderManager::Get().Resize(); });
 
 	std::wstring shaderSourcePath = StringHelper::Convert(CommandLine::GetValue("Shader"));
-	std::unique_ptr<TextureNoEffectShader> shaderEffect = std::make_unique<TextureNoEffectShader>(
-		RenderManager::Get().GetDevice(),
-		shaderSourcePath + L"TextureNoEffectVS.hlsl",
-		shaderSourcePath + L"TextureNoEffectPS.hlsl"
-	);
+	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().AddEffectShader(
+		"TextureNoEffectShader", 
+		std::make_unique<TextureNoEffectShader>(
+			RenderManager::Get().GetDevice(),
+			shaderSourcePath + L"TextureNoEffectVS.hlsl",
+			shaderSourcePath + L"TextureNoEffectPS.hlsl"
+		)
+	));
 
 	DirectX::XMVECTOR eye = DirectX::XMVectorSet(6.0f, 6.0f, -6.0f, 0.0f);
 	DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	shaderEffect->SetWorldMatrix(DirectX::XMMatrixIdentity());
-	shaderEffect->SetViewMatrix(DirectX::XMMatrixLookAtLH(eye, at, up));
-	shaderEffect->SetProjectionMatrix(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, window->GetAspectRatio(), 0.01f, 1000.0f));
+	effectShader->SetWorldMatrix(DirectX::XMMatrixIdentity());
+	effectShader->SetViewMatrix(DirectX::XMMatrixLookAtLH(eye, at, up));
+	effectShader->SetProjectionMatrix(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, window->GetAspectRatio(), 0.01f, 1000.0f));
 
 	std::string texturePath = CommandLine::GetValue("Content");
 	std::unique_ptr<Texture2D> texture = std::make_unique<Texture2D>(
@@ -67,57 +72,9 @@ void RunApplication(int32_t argc, char** argv)
 		texturePath + "RedBlock.png"
 	);
 
-	std::vector<Vertex::PositionUV> vertices = {
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
-
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
-
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
-
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
-
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, -1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
-
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, -1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 1.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(+1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(0.0f, 0.0f)),
-		Vertex::PositionUV(DirectX::XMFLOAT3(-1.0f, +1.0f, +1.0f), DirectX::XMFLOAT2(1.0f, 0.0f)),
-	};
-
-	std::vector<uint32_t> indices = {
-		3,1,0,
-		2,1,3,
-
-		6,4,5,
-		7,4,6,
-
-		11,9,8,
-		10,9,11,
-
-		14,12,13,
-		15,12,14,
-
-		19,17,16,
-		18,17,19,
-
-		22,20,21,
-		23,20,22,
-	};
+	std::vector<Vertex::PositionUV> vertices;
+	std::vector<uint32_t> indices;
+	GeometryGenerator::CreateBox(2.0f, 2.0f, 2.0f, vertices, indices);
 
 	std::unique_ptr<StaticMesh> mesh = std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices);
 
@@ -136,15 +93,14 @@ void RunApplication(int32_t argc, char** argv)
 		RenderManager::Get().BeginFrame(1.0f, 1.0f, 1.0f, 1.0f);
 		RenderManager::Get().SetWindowViewport();
 
-		shaderEffect->SetTexture(texture.get());
-		shaderEffect->Bind(RenderManager::Get().GetContext());
+		effectShader->SetTexture(texture.get());
+		effectShader->Bind(RenderManager::Get().GetContext());
 		mesh->Draw(RenderManager::Get().GetContext());
 
 		RenderManager::Get().EndFrame();
 	}
 
 	mesh.reset();
-	shaderEffect.reset();
 
 	RenderManager::Get().Cleanup();
 	InputManager::Get().Cleanup();
