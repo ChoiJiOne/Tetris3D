@@ -1,3 +1,6 @@
+#include <vector>
+#include <algorithm>
+
 #include "GameObject.h"
 #include "WorldManager.h"
 
@@ -17,6 +20,7 @@ void WorldManager::Cleanup()
 		gameObject.second.reset();
 	}
 
+	gameObjectUpdates_.clear();
 	gameObjects_.clear();
 
 	bIsSetup_ = false;
@@ -26,7 +30,15 @@ void WorldManager::AddGameObject(const std::string& signature, std::unique_ptr<G
 {
 	CHECK((gameObjects_.find(signature) == gameObjects_.end()), "collision game object signature key...");
 
-	gameObjects_[signature] = std::move(gameObject);
+	gameObjects_.insert({ signature , std::move(gameObject) });
+	gameObjectUpdates_.push_back(gameObjects_[signature].get());
+
+	gameObjectUpdates_.sort(
+		[](GameObject* lhs, GameObject* rhs) -> bool
+		{
+			return lhs->GetUpdateOrder() < rhs->GetUpdateOrder();
+		}
+	);
 }
 
 GameObject* WorldManager::GetGameObject(const std::string& signature)
@@ -45,19 +57,28 @@ void WorldManager::RemoveGameObject(const std::string& signature)
 {
 	if (gameObjects_.find(signature) != gameObjects_.end())
 	{
+		GameObject* removeGameObject = gameObjects_[signature].get();
+
+		for (GameObject* gameObjectUpdate : gameObjectUpdates_)
+		{
+			if (gameObjectUpdate == removeGameObject)
+			{
+				gameObjectUpdates_.remove(gameObjectUpdate);
+				break;
+			}
+		}
+
 		gameObjects_.erase(signature);
 	}
 }
 
 void WorldManager::Tick(float deltaSeconds)
 {
-	for (auto& gameObject : gameObjects_)
+	for (auto& gameObject : gameObjectUpdates_)
 	{
-		GameObject* currentGameObject = gameObject.second.get();
-
-		if (currentGameObject->IsActive())
+		if (gameObject->IsActive())
 		{
-			currentGameObject->Tick(deltaSeconds);
+			gameObject->Tick(deltaSeconds);
 		}
 	}
 }

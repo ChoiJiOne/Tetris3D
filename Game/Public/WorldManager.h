@@ -1,7 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <map>
+#include <unordered_map>
+#include <list>
 
 #include "Macro.h"
 
@@ -15,26 +16,6 @@ class GameObject;
  */
 class WorldManager
 {
-public:
-	/**
-	 * @brief 게임 오브젝트를 우선순위 기준으로 정렬하기 위한 객체입니다.
-	 */
-	struct CompareGameObjectOrder
-	{
-		/**
-		 * @brief 두 피연산자를 비교하여 우선순위를 비교합니다.
-		 * 
-		 * @return 왼쪽 피연산자의 우선순위가 더 크면 true, 그렇지 않으면 false를 반환합니다.
-		 */
-		bool operator()(
-			const std::pair<std::string, std::unique_ptr<GameObject>>& lhs,
-			const std::pair<std::string, std::unique_ptr<GameObject>>& rhs
-			)
-		{
-			return lhs.second->GetUpdateOrder() < rhs.second->GetUpdateOrder();
-		}
-	};
-
 public:
 	/**
 	 * @biref 복사 생성자와 대입 연산자를 명시적으로 삭제합니다.
@@ -130,7 +111,13 @@ private:
 
 
 	/**
-	 * @brief 우선 순위 기준으로 정렬된 게임 오브젝트들입니다.
+	 * @brief 게임 오브젝트들입니다.
 	 */
-	std::map<std::string, std::unique_ptr<GameObject>, CompareGameObjectOrder> gameObjects_;
+	std::unordered_map<std::string, std::unique_ptr<GameObject>> gameObjects_;
+
+
+	/**
+	 * @brief 업데이트할 게임 오브젝트 목록입니다.
+	 */
+	std::list<GameObject*> gameObjectUpdates_;
 };
