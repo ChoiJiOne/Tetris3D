@@ -67,16 +67,22 @@ void RunApplication(int32_t argc, char** argv)
 	effectShader->SetProjectionMatrix(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV4, window->GetAspectRatio(), 0.01f, 1000.0f));
 
 	std::string texturePath = CommandLine::GetValue("Content");
-	std::unique_ptr<Texture2D> texture = std::make_unique<Texture2D>(
-		RenderManager::Get().GetDevice(),
-		texturePath + "RedBlock.png"
+	Texture2D* texture = ContentManager::Get().AddTexture2D(
+		"RedBlock", 
+		std::make_unique<Texture2D>(
+			RenderManager::Get().GetDevice(),
+			texturePath + "RedBlock.png"
+		)
 	);
 
 	std::vector<Vertex::PositionUV> vertices;
 	std::vector<uint32_t> indices;
 	GeometryGenerator::CreateBox(2.0f, 2.0f, 2.0f, vertices, indices);
 
-	std::unique_ptr<StaticMesh> mesh = std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices);
+	StaticMesh* mesh = ContentManager::Get().AddStaticMesh(
+		"Block",
+		std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices)
+	);
 
 	GameTimer gameTimer;
 	gameTimer.Reset();
@@ -93,14 +99,12 @@ void RunApplication(int32_t argc, char** argv)
 		RenderManager::Get().BeginFrame(1.0f, 1.0f, 1.0f, 1.0f);
 		RenderManager::Get().SetWindowViewport();
 
-		effectShader->SetTexture(texture.get());
+		effectShader->SetTexture(texture);
 		effectShader->Bind(RenderManager::Get().GetContext());
 		mesh->Draw(RenderManager::Get().GetContext());
 
 		RenderManager::Get().EndFrame();
 	}
-
-	mesh.reset();
 
 	RenderManager::Get().Cleanup();
 	InputManager::Get().Cleanup();
