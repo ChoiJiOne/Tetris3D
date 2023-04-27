@@ -64,6 +64,62 @@ void ContentManager::RemoveEffectShader(const std::string& signature)
 	}
 }
 
+Texture2D* ContentManager::AddTexture2D(const std::string& signature, std::unique_ptr<Texture2D> texture)
+{
+	CHECK((textures_.find(signature) == textures_.end()), "collision texture signature key...");
+
+	textures_[signature] = std::move(texture);
+	return textures_[signature].get();
+}
+
+Texture2D* ContentManager::GetTexture2D(const std::string& signature)
+{
+	Texture2D* texture = nullptr;
+
+	if (textures_.find(signature) != textures_.end())
+	{
+		texture = textures_[signature].get();
+	}
+
+	return texture;
+}
+
+void ContentManager::RemoveTexture2D(const std::string& signature)
+{
+	if (textures_.find(signature) != textures_.end())
+	{
+		textures_.erase(signature);
+	}
+}
+
+StaticMesh* ContentManager::AddStaticMesh(const std::string& signature, std::unique_ptr<StaticMesh> staticMesh)
+{
+	CHECK((staticMeshs_.find(signature) == staticMeshs_.end()), "collision static mesh signature key...");
+
+	staticMeshs_[signature] = std::move(staticMesh);
+	return staticMeshs_[signature].get();
+}
+
+StaticMesh* ContentManager::GetStaticMesh(const std::string& signature)
+{
+	StaticMesh* staticMesh = nullptr;
+
+	if (staticMeshs_.find(signature) != staticMeshs_.end())
+	{
+		staticMesh = staticMeshs_[signature].get();
+	}
+
+	return staticMesh;
+}
+
+void ContentManager::RemoveStaticMesh(const std::string& signature)
+{
+	if (staticMeshs_.find(signature) != staticMeshs_.end())
+	{
+		staticMeshs_.erase(signature);
+	}
+}
+
 ContentManager::~ContentManager()
 {
 	Cleanup();

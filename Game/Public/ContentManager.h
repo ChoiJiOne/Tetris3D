@@ -82,6 +82,68 @@ public:
 	 */
 	void RemoveEffectShader(const std::string& signature);
 
+
+	/**
+	 * @brief 컨텐츠 관리자에 텍스처를 추가합니다.
+	 *
+	 * @param signature 텍스처의 시그니처 값입니다.
+	 * @param texture 관리자에 추가할 텍스처입니다.
+	 *
+	 * @throws 시그니처 값에 대응하는 텍스처가 이미 존재하면 C++ 표준 예외를 던집니다.
+	 */
+	Texture2D* AddTexture2D(const std::string& signature, std::unique_ptr<Texture2D> texture);
+
+
+	/**
+	 * @brief 관리 중인 텍스처를 얻습니다.
+	 *
+	 * @param signature 텍스처의 시그니처 값입니다.
+	 *
+	 * @return 시그니처 값에 대응하는 텍스처가 존재하면 포인터 를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
+	 */
+	Texture2D* GetTexture2D(const std::string& signature);
+
+
+	/**
+	 * @brief 관리 중인 텍스처를 삭제합니다.
+	 *
+	 * @note 시그니처 값에 대응하는 텍스처가 존재하지 않으면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param signature 텍스처의 시그니처 값입니다.
+	 */
+	void RemoveTexture2D(const std::string& signature);
+
+
+	/**
+	 * @brief 컨텐츠 관리자에 정적 메시를 추가합니다.
+	 *
+	 * @param signature 정적 메시의 시그니처 값입니다.
+	 * @param staticMesh 관리자에 추가할 정적 메시입니다.
+	 *
+	 * @throws 시그니처 값에 대응하는 정적 메시가 이미 존재하면 C++ 표준 예외를 던집니다.
+	 */
+	StaticMesh* AddStaticMesh(const std::string& signature, std::unique_ptr<StaticMesh> staticMesh);
+
+
+	/**
+	 * @brief 관리 중인 정적 메시를 얻습니다.
+	 *
+	 * @param signature 정적 메시의 시그니처 값입니다.
+	 *
+	 * @return 시그니처 값에 대응하는 정적 메시가 존재하면 포인터 를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
+	 */
+	StaticMesh* GetStaticMesh(const std::string& signature);
+
+
+	/**
+	 * @brief 관리 중인 정적 메시를 삭제합니다.
+	 *
+	 * @note 시그니처 값에 대응하는 정적 메시가 존재하지 않으면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param signature 정적 메시의 시그니처 값입니다.
+	 */
+	void RemoveStaticMesh(const std::string& signature);
+
 	
 private:
 	/**
