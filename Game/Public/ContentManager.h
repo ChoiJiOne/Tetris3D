@@ -68,7 +68,7 @@ public:
 	 * 
 	 * @param signature 효과 셰이더의 시그니처 값입니다.
 	 * 
-	 * @return 시그니처 값에 대응하는 효과 셰이더가 존재하면 포인터 를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
+	 * @return 시그니처 값에 대응하는 효과 셰이더가 존재하면 포인터를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
 	 */
 	EffectShader* GetEffectShader(const std::string& signature);
 
@@ -99,7 +99,7 @@ public:
 	 *
 	 * @param signature 텍스처의 시그니처 값입니다.
 	 *
-	 * @return 시그니처 값에 대응하는 텍스처가 존재하면 포인터 를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
+	 * @return 시그니처 값에 대응하는 텍스처가 존재하면 포인터를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
 	 */
 	Texture2D* GetTexture2D(const std::string& signature);
 
@@ -130,7 +130,7 @@ public:
 	 *
 	 * @param signature 정적 메시의 시그니처 값입니다.
 	 *
-	 * @return 시그니처 값에 대응하는 정적 메시가 존재하면 포인터 를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
+	 * @return 시그니처 값에 대응하는 정적 메시가 존재하면 포인터를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
 	 */
 	StaticMesh* GetStaticMesh(const std::string& signature);
 
