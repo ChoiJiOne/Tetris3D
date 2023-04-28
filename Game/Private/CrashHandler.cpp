@@ -47,18 +47,18 @@ void CrashHandler::CrashErrorMessageBox()
 
 void CrashHandler::GenerateCrashDumpFile(EXCEPTION_POINTERS* exceptionPointer)
 {
-	SYSTEMTIME CurrentSystemTime;
-	GetLocalTime(&CurrentSystemTime);
+	SYSTEMTIME currentSystemTime;
+	GetLocalTime(&currentSystemTime);
 
 	std::string crashDumpFilePath = StringHelper::Format(
 		"%sWindows-%d-%d-%d-%d-%d-%d.dmp",
 		crashDumpFilePath_.c_str(),
-		static_cast<int32_t>(CurrentSystemTime.wYear),
-		static_cast<int32_t>(CurrentSystemTime.wMonth),
-		static_cast<int32_t>(CurrentSystemTime.wDay),
-		static_cast<int32_t>(CurrentSystemTime.wHour),
-		static_cast<int32_t>(CurrentSystemTime.wMinute),
-		static_cast<int32_t>(CurrentSystemTime.wSecond)
+		static_cast<int32_t>(currentSystemTime.wYear),
+		static_cast<int32_t>(currentSystemTime.wMonth),
+		static_cast<int32_t>(currentSystemTime.wDay),
+		static_cast<int32_t>(currentSystemTime.wHour),
+		static_cast<int32_t>(currentSystemTime.wMinute),
+		static_cast<int32_t>(currentSystemTime.wSecond)
 	);
 
 	HANDLE  crashDumpFileHandle = CreateFileA(
@@ -88,7 +88,7 @@ void CrashHandler::GenerateCrashDumpFile(EXCEPTION_POINTERS* exceptionPointer)
 		GetCurrentProcess(), 
 		GetCurrentProcessId(), 
 		crashDumpFileHandle, 
-		MiniDumpNormal, 
+		MiniDumpWithFullMemory,
 		&exception,
 		nullptr, 
 		nullptr
