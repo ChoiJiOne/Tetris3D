@@ -33,7 +33,7 @@ void WorldManager::AddGameObject(const std::string& signature, std::unique_ptr<G
 	gameObjectUpdates_.push_back(gameObjects_[signature].get());
 
 	gameObjectUpdates_.sort(
-		[](GameObject* lhs, GameObject* rhs) -> bool
+		[](const GameObject* lhs, const GameObject* rhs) -> bool
 		{
 			return lhs->GetUpdateOrder() < rhs->GetUpdateOrder();
 		}
