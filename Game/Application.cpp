@@ -116,19 +116,62 @@ void LoadGameObject()
 	WorldManager::Get().AddGameObject(
 		"FixCamera", 
 		std::make_unique<FixCamera>(
-		DirectX::XMFLOAT3(+6.0f, +6.0f, -6.0f),
+		DirectX::XMFLOAT3(+0.0f, +0.0f, -60.0f),
 		DirectX::XMFLOAT3(+0.0f, +0.0f, +0.0f),
 		DirectX::XMFLOAT3(+0.0f, +1.0f, +0.0f),
 		DirectX::XM_PIDIV4,
 		aspectRatio
 	));
 
-	WorldManager::Get().AddGameObject(
-		"Block", 
-		std::make_unique<Block>(
-		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
-		Block::EColor::PURPLE
-	));
+	int32_t countBlock = 0;
+	for (float x = -12.0f; x <= 12.0f; x += 2.0f)
+	{
+		for (float y = -22.0f; y <= 22.0f; y += 2.0f)
+		{
+			WorldManager::Get().AddGameObject(
+				StringHelper::Format("Block%d", countBlock++),
+				std::make_unique<Block>(
+					DirectX::XMFLOAT3(x, y, 2.0f),
+					Block::EColor::PURPLE
+				)
+			);
+		}
+	}
+
+	for (float y = -22.0f; y <= 22.0f; y += 2.0f)
+	{
+		if (y == -22.0f || y == 22.0f)
+		{
+			for (float x = -12.0f; x <= 12.0f; x += 2.0f)
+			{
+				WorldManager::Get().AddGameObject(
+					StringHelper::Format("Block%d", countBlock++),
+					std::make_unique<Block>(
+						DirectX::XMFLOAT3(x, y, 0.0f),
+						Block::EColor::GRAY
+					)
+				);
+			}
+		}
+		else
+		{
+			WorldManager::Get().AddGameObject(
+				StringHelper::Format("Block%d", countBlock++),
+				std::make_unique<Block>(
+					DirectX::XMFLOAT3(-12.0f, y, 0.0f),
+					Block::EColor::GRAY
+				)
+			);
+
+			WorldManager::Get().AddGameObject(
+				StringHelper::Format("Block%d", countBlock++),
+				std::make_unique<Block>(
+					DirectX::XMFLOAT3(+12.0f, y, 0.0f),
+					Block::EColor::GRAY
+				)
+			);
+		}
+	}
 }
 
 
