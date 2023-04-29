@@ -43,8 +43,8 @@
 
 프로젝트의 기대 수준은 다음과 같습니다.  
 
-- 아래의 이미지와 같은 블럭을 3차원으로 쌓는 것이 아니라, 블럭 위에만 쌓아가면서 플레이
-![](2023-04-29-11-12-56.png)
+- 아래의 이미지의 수준으로 구현 예정
+![](2023-04-29-11-31-05.png)
 <br><br>
 
 
@@ -54,4 +54,4 @@
 
 
 ## 참고
-- [Tetris Image](https://www.sharecg.com/v/77000/view/5/3D-Model/TETRIS)
+- [Tetris 3D Unity Sample](https://www.youtube.com/watch?v=Q_ciD2T-J0AS)
