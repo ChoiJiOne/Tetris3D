@@ -26,6 +26,8 @@ Block::Block(const DirectX::XMFLOAT3 position, const EColor& color)
 {
 	staticMesh_ = ContentManager::Get().GetStaticMesh("Block");
 	texture_ = ContentManager::Get().GetTexture2D(colorSignatureMappings[color_]);
+
+	boundingBox_ = DirectX::BoundingBox(position_, DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
 }
 
 Block::~Block()
@@ -34,6 +36,28 @@ Block::~Block()
 
 void Block::Tick(float deltaSeconds)
 {
+	if (this == WorldManager::Get().GetGameObject("LEFT"))
+	{
+		const DirectX::BoundingBox& rightBoundingBox = reinterpret_cast<Block*>(WorldManager::Get().GetGameObject("RIGHT"))->boundingBox_;
+
+		if (!boundingBox_.Intersects(rightBoundingBox))
+		{
+			position_.x += (deltaSeconds * 10.0f);
+			boundingBox_.Center = position_;
+		}
+	}
+
+	if (this == WorldManager::Get().GetGameObject("RIGHT"))
+	{
+		const DirectX::BoundingBox& leftBoundingBox = reinterpret_cast<Block*>(WorldManager::Get().GetGameObject("LEFT"))->boundingBox_;
+
+		if (!boundingBox_.Intersects(leftBoundingBox))
+		{
+			position_.x -= (deltaSeconds * 10.0f);
+			boundingBox_.Center = position_;
+		}
+	}
+
 	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
 	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
 
