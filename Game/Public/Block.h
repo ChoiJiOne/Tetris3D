@@ -1,6 +1,7 @@
 #pragma once
 
 #include <directxmath.h>
+#include <directxcollision.h>
 
 #include "GameObject.h"
 
@@ -62,12 +63,18 @@ public:
 	 */
 	virtual void Tick(float deltaSeconds) override;
 
-
+	
 private:
 	/**
 	 * @brief 블럭의 월드 상 위치입니다.
 	 */
 	DirectX::XMFLOAT3 position_;
+
+
+	/**
+	 * @brief 블럭의 경계 상자입니다.
+	 */
+	DirectX::BoundingBox boundingBox_;
 
 
 	/**
