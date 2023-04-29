@@ -5,23 +5,23 @@
 #include <crtdbg.h>
 #include <memory>
 
-#include "CommandLine.h"
-#include "CrashHandler.h"
-#include "ContentManager.h"
+#include "Block.h"
 #include "ColorNoEffectShader.h"
+#include "CommandLine.h"
+#include "ContentManager.h"
+#include "CrashHandler.h"
+#include "FixCamera.h"
 #include "GameTimer.h"
 #include "GeometryGenerator.h"
-#include "TextureNoEffectShader.h"
-#include "Block.h"
-#include "FixCamera.h"
-#include "Window.h"
 #include "InputManager.h"
-#include "WorldManager.h"
-#include "StringHelper.hpp"
 #include "RenderManager.h"
 #include "StaticMesh.h"
+#include "StringHelper.hpp"
 #include "Texture2D.h"
+#include "TextureNoEffectShader.h"
 #include "Vertex.h"
+#include "Window.h"
+#include "WorldManager.h"
 
 
 /**
