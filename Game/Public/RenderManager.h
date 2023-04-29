@@ -241,7 +241,7 @@ private:
 	 *
 	 * @return 레스터라이저 상태 생성 결과를 반환합니다. 성공했다면 S_OK, 그렇지 않다면 그 이외의 값을 반환합니다.
 	 */
-	HRESULT CreateRasterizerState(ID3D11RasterizerState** RasterizerState, bool bIsEnableCull, bool bIsEnableFill);
+	HRESULT CreateRasterizerState(ID3D11RasterizerState** rasterizerState, bool bIsEnableCull, bool bIsEnableFill);
 
 
 private:
