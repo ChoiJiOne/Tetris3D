@@ -97,6 +97,17 @@ void RenderManager::Resize()
 	CHECK_HR(CreateDepthStencilView(), "failed to create depth stencil view...");
 }
 
+void RenderManager::GetBackbufferSize(float& outWidth, float& outHeight)
+{
+	int32_t windowWidth = 0;
+	int32_t windowHeight = 0;
+
+	renderTargetWindow_->GetSize(windowWidth, windowHeight);
+
+	outWidth = static_cast<float>(windowWidth);
+	outHeight = static_cast<float>(windowHeight);
+}
+
 void RenderManager::SetViewport(float topLeftX, float topLeftY, float width, float height, float minDepth, float maxDepth)
 {
 	D3D11_VIEWPORT viewport = {};
