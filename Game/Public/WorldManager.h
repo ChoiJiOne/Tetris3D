@@ -81,6 +81,12 @@ public:
 
 
 	/**
+	 * @brief 관리 중인 게임 오브젝트들을 업데이트 우선순위를 기준으로 정렬합니다.
+	 */
+	void SortGameObjects();
+
+
+	/**
 	 * @brief 관리 중인 게임 오브젝트를 우선 순위 기반으로 일괄 업데이트합니다.
 	 * 
 	 * @param deltaSeconds 초단위 델타 시간값입니다.

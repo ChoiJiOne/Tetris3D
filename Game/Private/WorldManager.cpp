@@ -32,12 +32,7 @@ void WorldManager::AddGameObject(const std::string& signature, std::unique_ptr<G
 	gameObjects_.insert({ signature , std::move(gameObject) });
 	gameObjectUpdates_.push_back(gameObjects_[signature].get());
 
-	gameObjectUpdates_.sort(
-		[](const GameObject* lhs, const GameObject* rhs) -> bool
-		{
-			return lhs->GetUpdateOrder() < rhs->GetUpdateOrder();
-		}
-	);
+	SortGameObjects();
 }
 
 GameObject* WorldManager::GetGameObject(const std::string& signature)
@@ -69,6 +64,16 @@ void WorldManager::RemoveGameObject(const std::string& signature)
 
 		gameObjects_.erase(signature);
 	}
+}
+
+void WorldManager::SortGameObjects()
+{
+	gameObjectUpdates_.sort(
+		[](const GameObject* lhs, const GameObject* rhs) -> bool
+		{
+			return lhs->GetUpdateOrder() < rhs->GetUpdateOrder();
+		}
+	);
 }
 
 void WorldManager::Tick(float deltaSeconds)
