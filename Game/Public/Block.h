@@ -40,6 +40,30 @@ public:
 
 	
 	/**
+	 * @brief 게임 내 블럭의 복사 생성자입니다.
+	 *
+	 * @param instance 복사할 블럭 인스턴스입니다.
+	 */
+	Block(Block&& instance) noexcept
+		: position_(instance.position_)
+		, size_(instance.size_)
+		, boundingBox_(instance.boundingBox_)
+		, color_(instance.color_) {}
+
+
+	/**
+	 * @brief 게임 내 블럭의 복사 생성자입니다.
+	 * 
+	 * @param instance 복사할 블럭 인스턴스입니다.
+	 */
+	Block(const Block& instance)
+		: position_(instance.position_)
+		, size_(instance.size_)
+		, boundingBox_(instance.boundingBox_)
+		, color_(instance.color_) {}
+
+	
+	/**
 	 * @brief 게임 내 블럭 생성자입니다.
 	 * 
 	 * @note 게임 내 블럭은 한 변의 길이가 모두 같은 정육면체입니다.
@@ -55,6 +79,46 @@ public:
 	 * @brief 게임 내 블럭 오브젝트의 가상 소멸자입니다.
 	 */
 	virtual ~Block();
+
+
+	/**
+	 * @brief 게임 내 블럭의 대입 연산자입니다.
+	 * 
+	 * @param instance 대입할 블럭 인스턴스입니다.
+	 * 
+	 * @return 대입한 블럭 객체의 참조자를 반환합니다.
+	 */
+	Block& operator=(Block&& instance) noexcept
+	{
+		if (this == &instance) return *this;
+
+		position_ = instance.position_;
+		size_ = instance.size_;
+		boundingBox_ = instance.boundingBox_;
+		color_ = instance.color_;
+		
+		return *this;
+	}
+
+
+	/**
+	 * @brief 게임 내 블럭의 대입 연산자입니다.
+	 *
+	 * @param instance 대입할 블럭 인스턴스입니다.
+	 *
+	 * @return 대입한 블럭 객체의 참조자를 반환합니다.
+	 */
+	Block& operator=(const Block& instance)
+	{
+		if (this == &instance) return *this;
+
+		position_ = instance.position_;
+		size_ = instance.size_;
+		boundingBox_ = instance.boundingBox_;
+		color_ = instance.color_;
+
+		return *this;
+	}
 
 	
 	/**
