@@ -2,6 +2,7 @@
 
 #include <directxmath.h>
 #include <directxcollision.h>
+#include <string>
 
 
 /**
