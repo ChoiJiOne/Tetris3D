@@ -37,12 +37,12 @@ void Block::SetPosition(const DirectX::XMFLOAT3& position)
 	boundingBox_.Center = position_;
 }
 
-const std::string& Block::GetColorTextureSignature()
-{
-	return colorSignatureMappings[color_];
-}
-
 bool Block::IsCollision(const Block& otherBlock)
 {
 	return boundingBox_.Intersects(otherBlock.boundingBox_);
+}
+
+const std::string& Block::GetColorTextureSignature(const EColor& color)
+{
+	return colorSignatureMappings[color];
 }

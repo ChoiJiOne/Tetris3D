@@ -138,14 +138,6 @@ public:
 
 
 	/**
-	 * @brief 블럭의 색상 타입에 대응하는 텍스처의 시그니처 값을 얻습니다.
-	 * 
-	 * @return 블럭의 색상 타입에 대응하는 텍스처의 시그니처 값을 반환합니다.
-	 */
-	const std::string& GetColorTextureSignature();
-
-
-	/**
 	 * @brief 다른 블럭과 충돌을 검사합니다.
 	 * 
 	 * @param otherBlock 충돌을 검사할 다른 블럭입니다.
@@ -155,6 +147,16 @@ public:
 	bool IsCollision(const Block& otherBlock);
 
 
+	/**
+	 * @brief 블럭의 색상 타입에 대응하는 텍스처의 시그니처 값을 얻습니다.
+	 *
+	 * @param color 블럭의 색상 형식입니다.
+	 * 
+	 * @return 블럭의 색상 타입에 대응하는 텍스처의 시그니처 값을 반환합니다.
+	 */
+	static const std::string& GetColorTextureSignature(const EColor& color);
+
+	
 private:
 	/**
 	 * @brief 블럭의 월드 상 위치입니다.
