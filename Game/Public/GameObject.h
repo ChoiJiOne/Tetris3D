@@ -19,9 +19,9 @@ public:
 	 * @brief 게임 내 오브젝트의 생성자입니다.
 	 * 
 	 * @param updateOrder 게임 오브젝트의 업데이트 순위입니다.
-	 * @param bIsActive 게임 오브젝트의 활성화 여부입니다. 기본 값은 false(비활성화)입니다.
+	 * @param bIsActive 게임 오브젝트의 활성화 여부입니다.
 	 */
-	GameObject(int32_t updateOrder, bool bIsActive = false)
+	GameObject(int32_t updateOrder, bool bIsActive)
 		: updateOrder_(updateOrder)
 		, bIsActive_(bIsActive) {}
 
