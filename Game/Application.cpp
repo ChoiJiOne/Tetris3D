@@ -25,121 +25,242 @@
 
 
 /**
- * @brief 셰이더 파일을 로딩합니다.
- * 
- * @throws 셰이더 파일 로딩에 실패하면 C++ 표준 예외를 던집니다.
+ * @brief 3D 테트리스 게임을 초기화하고 실행합니다.
  */
-void LoadShader()
+class Tetris3D
 {
-	std::wstring shaderSourcePath = StringHelper::Convert(CommandLine::GetValue("Shader"));
-
-	ContentManager::Get().AddEffectShader(
-		"ColorNoEffectShader",
-		std::make_unique<ColorNoEffectShader>(
-			RenderManager::Get().GetDevice(),
-			shaderSourcePath + L"ColorNoEffectVS.hlsl",
-			shaderSourcePath + L"ColorNoEffectPS.hlsl"
-		)
-	);
-
-	ContentManager::Get().AddEffectShader(
-		"TextureNoEffectShader",
-		std::make_unique<TextureNoEffectShader>(
-			RenderManager::Get().GetDevice(),
-			shaderSourcePath + L"TextureNoEffectVS.hlsl",
-			shaderSourcePath + L"TextureNoEffectPS.hlsl"
-		)
-	);
-}
+public:
+	/**
+	 * @brief 3D 테트리스 게임의 기본 생성자입니다.
+	 * 
+	 * @note 생성자에서는 아무런 초기화도 수행하지 않습니다.
+	 */
+	Tetris3D() = default;
 
 
-/**
- * @brief 텍스처 파일을 로딩합니다.
- * 
- * @throws 텍스처 파일 로딩에 실패하면 C++ 표준 예외를 던집니다.
- */
-void LoadTexture()
-{
-	std::array<std::string, 9> textures = {
-		"BlueBlock",
-		"CyanBlock",
-		"GrayBlock",
-		"GreenBlock",
-		"MagentaBlock",
-		"OrangeBlock",
-		"PurpleBlock",
-		"RedBlock",
-		"YellowBlock",
-	};
+	/**
+	 * @brief 3D 테트리스 게임의 가상 소멸자입니다.
+	 */
+	virtual ~Tetris3D() {}
 
-	std::string texturePath = CommandLine::GetValue("Content");
-	for (const auto& texture : textures)
+
+	/**
+	 * @brief 복사 생성자와 대입 연산자를 명시적으로 삭제합니다.
+	 */
+	DISALLOW_COPY_AND_ASSIGN(Tetris3D);
+
+
+	/**
+	 * @brief 3D 테트리스 게임을 초기화합니다.
+	 * 
+	 * @throws 초기화에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void Setup()
 	{
-		ContentManager::Get().AddTexture2D(
-			texture,
-			std::make_unique<Texture2D>(
+		CHECK(SDL_Init(SDL_INIT_EVERYTHING) == 0, "failed to initialize SDL2...");
+
+		window_ = std::make_unique<Window>("Tetris3D", 200, 200, 1000, 800, EWindowFlags::SHOWN | EWindowFlags::RESIZABLE);
+
+		InputManager::Get().Setup();
+		RenderManager::Get().Setup(window_.get());
+		ContentManager::Get().Setup();
+		WorldManager::Get().Setup();
+
+		LoadShader();
+		LoadTexture();
+		LoadStaticMesh();
+		LoadGameObject();
+
+		InputManager::Get().BindWindowEventAction(EWindowEvent::CLOSE, [&]() { bIsDone_ = true; });
+		InputManager::Get().BindWindowEventAction(EWindowEvent::RESIZED, [&]() {
+			RenderManager::Get().Resize();
+
+			FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
+			fixCamera->SetAspectRatio(window_->GetAspectRatio());
+		});
+
+		RenderManager::Get().SetAlphaBlend(true);
+		RenderManager::Get().SetDepthBuffer(true);
+		RenderManager::Get().SetFillMode(true);
+	}
+	
+
+	/**
+	 * @brief 3D 테트리스 게임을 실행합니다.
+	 * 
+	 * @throws 게임 실행에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void Run()
+	{
+		gameTimer_.Reset();
+
+		while (!bIsDone_)
+		{
+			InputManager::Get().Tick();
+			gameTimer_.Tick();
+
+			RenderManager::Get().BeginFrame(0.5294f, 0.8078f, 0.9216f, 1.0f);
+			RenderManager::Get().SetWindowViewport();
+
+			WorldManager::Get().Tick(gameTimer_.GetDeltaSeconds());
+
+			RenderManager::Get().EndFrame();
+		}
+	}
+
+
+	/**
+	 * @brief 3D 테트리스 게임의 리소스를 정리합니다.
+	 */
+	void Cleanup()
+	{
+		WorldManager::Get().Cleanup();
+		ContentManager::Get().Cleanup();
+		RenderManager::Get().Cleanup();
+		InputManager::Get().Cleanup();
+
+		window_.reset();
+
+		SDL_Quit();
+	}
+
+
+private:
+	/**
+	 * @brief 셰이더 파일을 로딩합니다.
+	 *
+	 * @throws 셰이더 파일 로딩에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadShader()
+	{
+		std::wstring shaderSourcePath = StringHelper::Convert(CommandLine::GetValue("Shader"));
+
+		ContentManager::Get().AddEffectShader(
+			"ColorNoEffectShader",
+			std::make_unique<ColorNoEffectShader>(
 				RenderManager::Get().GetDevice(),
-				StringHelper::Format("%s%s%s", texturePath.c_str(), texture.c_str(), ".png")
+				shaderSourcePath + L"ColorNoEffectVS.hlsl",
+				shaderSourcePath + L"ColorNoEffectPS.hlsl"
+			)
+		);
+
+		ContentManager::Get().AddEffectShader(
+			"TextureNoEffectShader",
+			std::make_unique<TextureNoEffectShader>(
+				RenderManager::Get().GetDevice(),
+				shaderSourcePath + L"TextureNoEffectVS.hlsl",
+				shaderSourcePath + L"TextureNoEffectPS.hlsl"
+				)
+		);
+	}
+
+
+	/**
+	 * @brief 텍스처 파일을 로딩합니다.
+	 *
+	 * @throws 텍스처 파일 로딩에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadTexture()
+	{
+		std::array<std::string, 9> textures = {
+			"BlueBlock",
+			"CyanBlock",
+			"GrayBlock",
+			"GreenBlock",
+			"MagentaBlock",
+			"OrangeBlock",
+			"PurpleBlock",
+			"RedBlock",
+			"YellowBlock",
+		};
+
+		std::string texturePath = CommandLine::GetValue("Content");
+		for (const auto& texture : textures)
+		{
+			ContentManager::Get().AddTexture2D(
+				texture,
+				std::make_unique<Texture2D>(
+					RenderManager::Get().GetDevice(),
+					StringHelper::Format("%s%s%s", texturePath.c_str(), texture.c_str(), ".png")
+					)
+			);
+		}
+	}
+
+
+	/**
+	 * @brief 정적 메시를 로딩합니다.
+	 *
+	 * @throws 정적 메시 로딩에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadStaticMesh()
+	{
+		std::vector<Vertex::PositionUV> vertices;
+		std::vector<uint32_t> indices;
+		GeometryGenerator::CreateBox(2.0f, 2.0f, 2.0f, vertices, indices);
+
+		ContentManager::Get().AddStaticMesh(
+			"Block",
+			std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices)
+		);
+	}
+
+
+	/**
+	 * @brief 게임 오브젝트를 로딩합니다.
+	 *
+	 * @throws 게임 오브젝트 로딩에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadGameObject()
+	{
+		WorldManager::Get().AddGameObject(
+			"FixCamera",
+			std::make_unique<FixCamera>(
+				DirectX::XMFLOAT3(+0.0f, +10.0f, -60.0f),
+				DirectX::XMFLOAT3(+0.0f, +0.0f, +0.0f),
+				DirectX::XMFLOAT3(+0.0f, +1.0f, +0.0f),
+				DirectX::XM_PIDIV4,
+				window_->GetAspectRatio()
+			)
+		);
+
+		WorldManager::Get().AddGameObject(
+			"LEFT",
+			std::make_unique<Block>(
+				DirectX::XMFLOAT3(-20.0f, 0.0f, 0.0f),
+				Block::EColor::BLUE
+			)
+		);
+
+		WorldManager::Get().AddGameObject(
+			"RIGHT",
+			std::make_unique<Block>(
+				DirectX::XMFLOAT3(+20.0f, 0.0f, 0.0f),
+				Block::EColor::RED
 			)
 		);
 	}
-}
 
 
-/**
- * @brief 정적 메시를 로딩합니다.
- *
- * @throws 정적 메시 로딩에 실패하면 C++ 표준 예외를 던집니다.
- */
-void LoadStaticMesh()
-{
-	std::vector<Vertex::PositionUV> vertices;
-	std::vector<uint32_t> indices;
-	GeometryGenerator::CreateBox(2.0f, 2.0f, 2.0f, vertices, indices);
-
-	ContentManager::Get().AddStaticMesh(
-		"Block",
-		std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices)
-	);
-}
+private:
+	/**
+	 * @brief 게임이 종료되었는지 확인합니다.
+	 */
+	bool bIsDone_ = false;
 
 
-/**
- * @brief 게임 오브젝트를 로딩합니다.
- * 
- * @throws 게임 오브젝트 로딩에 실패하면 C++ 표준 예외를 던집니다.
- */
-void LoadGameObject()
-{
-	float aspectRatio = 1000.0f / 800.0f;
+	/**
+	 * @brief 게임 내 시간을 기록할 타이머입니다.
+	 */
+	GameTimer gameTimer_;
 
-	WorldManager::Get().AddGameObject(
-		"FixCamera", 
-		std::make_unique<FixCamera>(
-		DirectX::XMFLOAT3(+0.0f, +10.0f, -60.0f),
-		DirectX::XMFLOAT3(+0.0f, +0.0f, +0.0f),
-		DirectX::XMFLOAT3(+0.0f, +1.0f, +0.0f),
-		DirectX::XM_PIDIV4,
-		aspectRatio
-	));
 
-	int32_t countBlock = 0;
-	WorldManager::Get().AddGameObject(
-		"LEFT",
-		std::make_unique<Block>(
-			DirectX::XMFLOAT3(-20.0f, 0.0f, 0.0f),
-			Block::EColor::BLUE
-		)
-	);
+	/**
+	 * @brief 윈도우 창입니다.
+	 */
+	std::unique_ptr<Window> window_ = nullptr;
+};
 
-	WorldManager::Get().AddGameObject(
-		"RIGHT",
-		std::make_unique<Block>(
-			DirectX::XMFLOAT3(+20.0f, 0.0f, 0.0f),
-			Block::EColor::RED
-		)
-	);
-}
 
 
 /**
@@ -157,62 +278,10 @@ void RunApplication(int32_t argc, char** argv)
 	CommandLine::Parse(argc, argv);
 	CrashHandler::SetCrashDumpFilePath(CommandLine::GetValue("Crash"));
 
-	CHECK(SDL_Init(SDL_INIT_EVERYTHING) == 0, "failed to initialize SDL2...");
-	
-	std::unique_ptr<Window> window = std::make_unique<Window>(
-		"Tetris3D", 
-		200, 200, 
-		1000, 800, 
-		EWindowFlags::SHOWN | EWindowFlags::RESIZABLE
-	);
-
-	InputManager::Get().Setup();
-	RenderManager::Get().Setup(window.get());
-	ContentManager::Get().Setup();
-	WorldManager::Get().Setup();
-
-	LoadShader();
-	LoadTexture();
-	LoadStaticMesh();
-	LoadGameObject();
-
-	GameTimer gameTimer;
-	gameTimer.Reset();
-
-	RenderManager::Get().SetAlphaBlend(true);
-	RenderManager::Get().SetDepthBuffer(true);
-	RenderManager::Get().SetFillMode(true);
-
-	bool bIsDone = false;
-
-	InputManager::Get().BindWindowEventAction(EWindowEvent::CLOSE, [&]() { bIsDone = true; });
-	InputManager::Get().BindWindowEventAction(EWindowEvent::RESIZED, [&]() {
-		RenderManager::Get().Resize();
-	
-		FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
-		fixCamera->SetAspectRatio(window->GetAspectRatio());
-	});
-
-	while (!bIsDone)
-	{
-		InputManager::Get().Tick();
-		gameTimer.Tick();
-
-		RenderManager::Get().BeginFrame(1.0f, 1.0f, 1.0f, 1.0f);
-		RenderManager::Get().SetWindowViewport();
-
-		WorldManager::Get().Tick(gameTimer.GetDeltaSeconds());
-
-		RenderManager::Get().EndFrame();
-	}
-
-	WorldManager::Get().Cleanup();
-	ContentManager::Get().Cleanup();
-	RenderManager::Get().Cleanup();
-	InputManager::Get().Cleanup();
-
-	window.reset();
-	SDL_Quit();
+	std::unique_ptr<Tetris3D> game = std::make_unique<Tetris3D>();
+	game->Setup();
+	game->Run();
+	game->Cleanup();
 }
 
 
