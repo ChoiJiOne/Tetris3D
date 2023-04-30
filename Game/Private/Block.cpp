@@ -14,6 +14,7 @@ std::unordered_map<Block::EColor, std::string> colorSignatureMappings = {
 	{ Block::EColor::GREEN,   "GreenBlock"   },
 	{ Block::EColor::MAGENTA, "MagentaBlock" },
 	{ Block::EColor::ORANGE,  "OrangeBlock"  },
+	{ Block::EColor::PINK,    "PinkBlock"   },
 	{ Block::EColor::PURPLE,  "PurpleBlock"  },
 	{ Block::EColor::RED,     "RedBlock"     },
 	{ Block::EColor::YELLOW,  "YellowBlock"  },
