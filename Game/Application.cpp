@@ -223,22 +223,6 @@ private:
 				window_->GetAspectRatio()
 			)
 		);
-
-		WorldManager::Get().AddGameObject(
-			"LEFT",
-			std::make_unique<Block>(
-				DirectX::XMFLOAT3(-20.0f, 0.0f, 0.0f),
-				Block::EColor::BLUE
-			)
-		);
-
-		WorldManager::Get().AddGameObject(
-			"RIGHT",
-			std::make_unique<Block>(
-				DirectX::XMFLOAT3(+20.0f, 0.0f, 0.0f),
-				Block::EColor::RED
-			)
-		);
 	}
 
 
