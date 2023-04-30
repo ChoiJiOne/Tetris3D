@@ -18,6 +18,7 @@
 #include "StaticMesh.h"
 #include "StringHelper.hpp"
 #include "Texture2D.h"
+#include "Tetromino.h"
 #include "TextureNoEffectShader.h"
 #include "Vertex.h"
 #include "Window.h"
@@ -183,7 +184,7 @@ private:
 				std::make_unique<Texture2D>(
 					RenderManager::Get().GetDevice(),
 					StringHelper::Format("%s%s%s", texturePath.c_str(), texture.c_str(), ".png")
-					)
+				)
 			);
 		}
 	}
@@ -222,6 +223,14 @@ private:
 				DirectX::XMFLOAT3(+0.0f, +1.0f, +0.0f),
 				DirectX::XM_PIDIV4,
 				window_->GetAspectRatio()
+			)
+		);
+
+		WorldManager::Get().AddGameObject(
+			"Tetromino",
+			std::make_unique<Tetromino>(
+				2, true,
+				2.0f, Block::EColor::PINK
 			)
 		);
 	}
