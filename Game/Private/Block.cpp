@@ -19,54 +19,30 @@ std::unordered_map<Block::EColor, std::string> colorSignatureMappings = {
 	{ Block::EColor::YELLOW,  "YellowBlock"  },
 };
 
-Block::Block(const DirectX::XMFLOAT3 position, const EColor& color)
-	: GameObject(2, true)
-	, position_(position)
+Block::Block(const DirectX::XMFLOAT3& position, float size, const EColor& color)
+	: position_(position)
+	, size_(size)
 	, color_(color)
 {
-	staticMesh_ = ContentManager::Get().GetStaticMesh("Block");
-	texture_ = ContentManager::Get().GetTexture2D(colorSignatureMappings[color_]);
-
-	boundingBox_ = DirectX::BoundingBox(position_, DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+	boundingBox_ = DirectX::BoundingBox(position_, DirectX::XMFLOAT3(size_ / 2.0f, size_ / 2.0f, size_ / 2.0f));
 }
 
 Block::~Block()
 {
 }
 
-void Block::Tick(float deltaSeconds)
+void Block::SetPosition(const DirectX::XMFLOAT3& position)
 {
-	if (this == WorldManager::Get().GetGameObject("LEFT"))
-	{
-		const DirectX::BoundingBox& rightBoundingBox = reinterpret_cast<Block*>(WorldManager::Get().GetGameObject("RIGHT"))->boundingBox_;
+	position_ = position;
+	boundingBox_.Center = position_;
+}
 
-		if (!boundingBox_.Intersects(rightBoundingBox))
-		{
-			position_.x += (deltaSeconds * 10.0f);
-			boundingBox_.Center = position_;
-		}
-	}
+const std::string& Block::GetColorTextureSignature()
+{
+	return colorSignatureMappings[color_];
+}
 
-	if (this == WorldManager::Get().GetGameObject("RIGHT"))
-	{
-		const DirectX::BoundingBox& leftBoundingBox = reinterpret_cast<Block*>(WorldManager::Get().GetGameObject("LEFT"))->boundingBox_;
-
-		if (!boundingBox_.Intersects(leftBoundingBox))
-		{
-			position_.x -= (deltaSeconds * 10.0f);
-			boundingBox_.Center = position_;
-		}
-	}
-
-	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
-	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
-
-	effectShader->SetWorldMatrix(DirectX::XMMatrixTranslation(position_.x, position_.y, position_.z));
-	effectShader->SetViewMatrix(fixCamera->GetViewMatrix());
-	effectShader->SetProjectionMatrix(fixCamera->GetProjectionMatrix());
-
-	effectShader->SetTexture(texture_);
-	effectShader->Bind(RenderManager::Get().GetContext());
-
-	staticMesh_->Draw(RenderManager::Get().GetContext());
+bool Block::IsCollision(const Block& otherBlock)
+{
+	return boundingBox_.Intersects(otherBlock.boundingBox_);
 }

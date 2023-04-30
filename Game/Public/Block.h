@@ -3,16 +3,11 @@
 #include <directxmath.h>
 #include <directxcollision.h>
 
-#include "GameObject.h"
-
-class Texture2D;
-class StaticMesh;
-
 
 /**
- * @brief 게임 내 블럭 오브젝트입니다.
+ * @brief 게임 내 블럭입니다.
  */
-class Block : public GameObject
+class Block
 {
 public:
 	/**
@@ -36,12 +31,23 @@ public:
 
 public:
 	/**
-	 * @brief 게임 내 블럭 오브젝트의 생성자입니다.
+	 * @brief 게임 내 블럭의 기본 생성자입니다.
+	 * 
+	 * @note 이 생성자를 통해 객체가 생성되면 내부 요소의 적절한 초기화를 수행한 뒤에 사용해야 합니다.
+	 */
+	Block() = default;
+
+	
+	/**
+	 * @brief 게임 내 블럭 생성자입니다.
+	 * 
+	 * @note 게임 내 블럭은 한 변의 길이가 모두 같은 정육면체입니다.
 	 * 
 	 * @param position 월드 상 블럭의 위치입니다.
+	 * @param size 블럭의 크기입니다.
 	 * @param color 월드 상 블럭의 텍스처 색상 타입입니다.
 	 */
-	Block(const DirectX::XMFLOAT3 position, const EColor& color);
+	Block(const DirectX::XMFLOAT3& position, float size, const EColor& color);
 
 
 	/**
@@ -49,26 +55,52 @@ public:
 	 */
 	virtual ~Block();
 
-
-	/**
-	 * @brief 복사 생성자 및 대입 연산자를 명시적으로 삭제합니다.
-	 */
-	DISALLOW_COPY_AND_ASSIGN(Block);
-
-
-	/**
-	 * @brief 블럭 오브젝트를 업데이트합니다.
-	 * 
-	 * @param deltaSeconds 초단위 델타 시간값입니다.
-	 */
-	virtual void Tick(float deltaSeconds) override;
-
 	
+	/**
+	 * @brief 블럭의 월드 상 위치를 얻습니다.
+	 * 
+	 * @return 블럭의 월드 상 위치를 반환합니다.
+	 */
+	DirectX::XMFLOAT3 GetPosition() { return position_; }
+
+
+	/**
+	 * @brief 블럭의 월드 상 위치를 설정합니다.
+	 * 
+	 * @param position 설정할 월드 상 위치입니다.
+	 */
+	void SetPosition(const DirectX::XMFLOAT3& position);
+
+
+	/**
+	 * @brief 블럭의 색상 타입에 대응하는 텍스처의 시그니처 값을 얻습니다.
+	 * 
+	 * @return 블럭의 색상 타입에 대응하는 텍스처의 시그니처 값을 반환합니다.
+	 */
+	const std::string& GetColorTextureSignature();
+
+
+	/**
+	 * @brief 다른 블럭과 충돌을 검사합니다.
+	 * 
+	 * @param otherBlock 충돌을 검사할 다른 블럭입니다.
+	 * 
+	 * @return 다른 블럭과 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsCollision(const Block& otherBlock);
+
+
 private:
 	/**
 	 * @brief 블럭의 월드 상 위치입니다.
 	 */
 	DirectX::XMFLOAT3 position_;
+
+
+	/**
+	 * @brief 블럭의 크기입니다.
+	 */
+	float size_ = 0.0f;
 
 
 	/**
@@ -78,19 +110,7 @@ private:
 
 
 	/**
-	 * @brief 블럭의 텍스처 색상 타입입니다.
+	 * @brief 블럭의 색상 타입입니다.
 	 */
 	EColor color_ = EColor::NONE;
-
-
-	/**
-	 * @brief 블럭의 정적 메시입니다.
-	 */
-	StaticMesh* staticMesh_ = nullptr;
-
-	
-	/**
-	 * @brief 블럭의 텍스처입니다.
-	 */
-	Texture2D* texture_ = nullptr;
 };
