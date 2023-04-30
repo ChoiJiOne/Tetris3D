@@ -162,13 +162,14 @@ private:
 	 */
 	void LoadTexture()
 	{
-		std::array<std::string, 9> textures = {
+		std::array<std::string, 10> textures = {
 			"BlueBlock",
 			"CyanBlock",
 			"GrayBlock",
 			"GreenBlock",
 			"MagentaBlock",
 			"OrangeBlock",
+			"PinkBlock",
 			"PurpleBlock",
 			"RedBlock",
 			"YellowBlock",
