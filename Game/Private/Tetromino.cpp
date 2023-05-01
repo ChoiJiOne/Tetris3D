@@ -46,6 +46,34 @@ void Tetromino::Tick(float deltaSeconds)
 	Draw();
 }
 
+void Tetromino::Teleport(const DirectX::XMFLOAT3& basePosition)
+{
+	rotatePosition_.x -= basePosition_.x;
+	rotatePosition_.y -= basePosition_.y;
+	rotatePosition_.z -= basePosition_.z;
+
+	rotatePosition_.x += basePosition.x;
+	rotatePosition_.y += basePosition.y;
+	rotatePosition_.z += basePosition.z;
+
+	for (Block& block : blocks_)
+	{
+		DirectX::XMFLOAT3 blockPosition = block.GetPosition();
+
+		blockPosition.x -= basePosition_.x;
+		blockPosition.y -= basePosition_.y;
+		blockPosition.z -= basePosition_.z;
+
+		blockPosition.x += basePosition.x;
+		blockPosition.y += basePosition.y;
+		blockPosition.z += basePosition.z;
+
+		block.SetPosition(blockPosition);
+	}
+
+	basePosition_ = basePosition;
+}
+
 void Tetromino::GenerateShapeBlocks(
 	const EShape& shape, 
 	const DirectX::XMFLOAT3& basePosition, 
@@ -215,32 +243,4 @@ void Tetromino::Move(const EMovement& movement)
 		rotatePosition_.x += (biasX * blockSize);
 		rotatePosition_.y += (biasY * blockSize);
 	}
-}
-
-void Tetromino::Teleport(const DirectX::XMFLOAT3& basePosition)
-{
-	rotatePosition_.x -= basePosition_.x;
-	rotatePosition_.y -= basePosition_.y;
-	rotatePosition_.z -= basePosition_.z;	
-	
-	rotatePosition_.x += basePosition.x;
-	rotatePosition_.y += basePosition.y;
-	rotatePosition_.z += basePosition.z;
-
-	for (Block& block : blocks_)
-	{
-		DirectX::XMFLOAT3 blockPosition = block.GetPosition();
-
-		blockPosition.x -= basePosition_.x;
-		blockPosition.y -= basePosition_.y;
-		blockPosition.z -= basePosition_.z;
-
-		blockPosition.x += basePosition.x;
-		blockPosition.y += basePosition.y;
-		blockPosition.z += basePosition.z;
-
-		block.SetPosition(blockPosition);
-	}
-
-	basePosition_ = basePosition;
 }
