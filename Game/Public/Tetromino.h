@@ -86,6 +86,14 @@ public:
 	virtual void Tick(float deltaSeconds) override;
 
 
+	/**
+	 * @brief 테트로미노의 블럭들을 얻습니다.
+	 * 
+	 * @return 테트로미노의 블럭들을 저장한 벡터의 참조자를 반환합니다.
+	 */
+	const std::vector<Block>& GetBlocks() const { return blocks_; }
+
+
 private:
 	/**
 	 * @brief 테트로미노 모양에 대응하는 블럭들을 생성합니다.
