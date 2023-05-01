@@ -233,10 +233,10 @@ private:
 			std::make_unique<Tetromino>(
 				2,
 				true,
-				DirectX::XMFLOAT3(10.0f, 0.0f, 0.0f),
+				DirectX::XMFLOAT3(-10.0f, 0.0f, 0.0f),
 				Tetromino::EShape::Z,
 				2.0f, 
-				Block::EColor::PINK
+				Block::EColor::BLUE
 			)
 		);
 	}
