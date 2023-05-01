@@ -8,6 +8,17 @@
 #include "WorldManager.h"
 #include "Tetromino.h"
 
+
+/**
+ * @brief 키 값에 대응하는 테트로미노의 이동 방향입니다.
+ */
+static std::unordered_map<EVirtualKey, Tetromino::EMovement> mappingVirtualKeyToMovements = {
+	{ EVirtualKey::CODE_LEFT,  Tetromino::EMovement::LEFT  },
+	{ EVirtualKey::CODE_RIGHT, Tetromino::EMovement::RIGHT },
+	{ EVirtualKey::CODE_UP,    Tetromino::EMovement::CW    },
+	{ EVirtualKey::CODE_DOWN,  Tetromino::EMovement::DOWN  },
+};
+
 Tetromino::Tetromino(
 	int32_t updateOrder,
 	bool bIsActive,
@@ -119,29 +130,15 @@ void Tetromino::GenerateShapeBlocks(
 
 void Tetromino::Update()
 {
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_LEFT) == EPressState::PRESSED)
+	for (auto& mappingVirtualKeyToMovement : mappingVirtualKeyToMovements)
 	{
-		Move(EMovement::LEFT);
-	}
+		EVirtualKey virtualKey = mappingVirtualKeyToMovement.first;
+		EMovement movement = mappingVirtualKeyToMovement.second;
 
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_RIGHT) == EPressState::PRESSED)
-	{
-		Move(EMovement::RIGHT);
-	}
-
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_UP) == EPressState::PRESSED)
-	{
-		Move(EMovement::UP);
-	}
-
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_DOWN) == EPressState::PRESSED)
-	{
-		Move(EMovement::DOWN);
-	}
-
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_SPACE) == EPressState::PRESSED)
-	{
-		Move(EMovement::CW);
+		if (InputManager::Get().GetKeyPressState(virtualKey) == EPressState::PRESSED)
+		{
+			Move(movement);
+		}
 	}
 }
 
