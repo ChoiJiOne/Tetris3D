@@ -379,6 +379,16 @@ public:
 
 
 	/**
+	 * @brief 키의 입력 상태를 확인합니다.
+	 * 
+	 * @param keyCode 입력 상태를 확인할 키의 코드값입니다.
+	 * 
+	 * @return 키의 입력 상태를 반환합니다.
+	 */
+	EPressState GetKeyPressState(const EVirtualKey& keyCode) const;
+
+	
+	/**
 	 * @brief 윈도우 이벤트에 동작할 액션을 바인딩합니다.
 	 * 
 	 * @param windowEvent 동작할 액션에 대응하는 윈도우 이벤트입니다.
@@ -410,11 +420,34 @@ private:
 	virtual ~InputManager();
 
 
+	/**
+	 * @brief 특정 키가 눌렸는지 확인합니다.
+	 * 
+	 * @param keyboardState 검사를 수행할 키보드 상태입니다.
+	 * @param keyCode 눌렸는지 확인할 키의 코드값입니다.
+	 * 
+	 * @return 키가 눌렸다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsPressKey(const std::vector<uint8_t>& keyboardState, const EVirtualKey& keyCode) const;
+
+
 private:
 	/**
 	 * @brief 초기화된 적이 있는지 확인합니다.
 	 */
 	bool bIsSetup_ = false;
+
+
+	/**
+	 * @brief Tick 호출 이전의 키보드 상태입니다.
+	 */
+	std::vector<uint8_t> prevKeyboardState_;
+
+
+	/**
+	 * @brief Tick 호출 이후의 키보드 상태입니다.
+	 */
+	std::vector<uint8_t> currKeyboardState_;
 
 
 	/**
