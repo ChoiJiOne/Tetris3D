@@ -138,6 +138,14 @@ public:
 
 
 	/**
+	 * @brief 블럭의 색상을 얻습니다.
+	 * 
+	 * @return 블럭의 색상을 반환합니다.
+	 */
+	EColor GetColor() const { return color_; }
+
+
+	/**
 	 * @brief 블럭의 월드 상 위치를 설정합니다.
 	 * 
 	 * @param position 설정할 월드 상 위치입니다.
