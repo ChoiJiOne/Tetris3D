@@ -108,9 +108,9 @@ private:
 
 
 	/**
-	 * @brief 입력 상태에 따른 처리를 수행합니다.
+	 * @brief 테트로미노를 업데이트합니다.
 	 */
-	void ProcessInput();
+	void Update();
 
 
 	/**

@@ -31,7 +31,7 @@ Tetromino::~Tetromino()
 
 void Tetromino::Tick(float deltaSeconds)
 {
-	ProcessInput();
+	Update();
 	Draw();
 }
 
@@ -117,7 +117,7 @@ void Tetromino::GenerateShapeBlocks(
 	}
 }
 
-void Tetromino::ProcessInput()
+void Tetromino::Update()
 {
 	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_LEFT) == EPressState::PRESSED)
 	{
