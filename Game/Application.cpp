@@ -218,8 +218,9 @@ private:
 		WorldManager::Get().AddGameObject(
 			"FixCamera",
 			std::make_unique<FixCamera>(
-				1, true,
-				DirectX::XMFLOAT3(+0.0f, +10.0f, -60.0f),
+				1, 
+				true,
+				DirectX::XMFLOAT3(+0.0f, +10.0f, -50.0f),
 				DirectX::XMFLOAT3(+0.0f, +0.0f, +0.0f),
 				DirectX::XMFLOAT3(+0.0f, +1.0f, +0.0f),
 				DirectX::XM_PIDIV4,
@@ -230,8 +231,12 @@ private:
 		WorldManager::Get().AddGameObject(
 			"Tetromino",
 			std::make_unique<Tetromino>(
-				2, true,
-				2.0f, Block::EColor::PINK
+				2,
+				true,
+				DirectX::XMFLOAT3(10.0f, 0.0f, 0.0f),
+				Tetromino::EShape::Z,
+				2.0f, 
+				Block::EColor::PINK
 			)
 		);
 	}
