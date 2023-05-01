@@ -63,7 +63,7 @@ int32_t main(int32_t argc, char** argv)
 	return 0;
 }
 ```
-이렇게 main 함수의 `__except` 에서 받은 예외는 `CrashHandler`의 `DetectApplicationCrash`를 실행하게 되는데, 이 메서드에서 에러가 발생한 시점을 기준올 이름으로 한 크래시 덤프 파일을 생성하게 됩니다. 이때, 크래시 덤프 파일 경로는 `Application.cpp`의 `RunApplication` 함수에서 설정하게 되는데, 설정하는 코드는 다음과 같습니다. 
+이렇게 main 함수의 `__except` 에서 받은 예외는 `CrashHandler`의 `DetectApplicationCrash`를 실행하게 되는데, 이 메서드에서 에러가 발생한 시점을 이름으로 한 크래시 덤프 파일을 생성하게 됩니다. 이때, 크래시 덤프 파일 경로는 `Application.cpp`의 `RunApplication` 함수에서 설정하게 되는데, 설정하는 코드는 다음과 같습니다. 
 ```
 void RunApplication(int32_t argc, char** argv)
 {
@@ -87,8 +87,26 @@ Game.exe Crash=${SolutionDir}..\\Crash\\ Content=${SolutionDir}..\\Content\\ Sha
 <br><br>
 
 
+## 크래시 덤프 파일 실행
+
+해당 크래시 덤프 파일을 더블클릭하면 다음과 같은 화면을 볼 수 있습니다.
+![](2023-05-01-21-38-57.png)
+
+이때, `Debug With Native Only`을 클릭하면 에러가 발생한 시점을 바로 확인할 수 있습니다.
+콜스택, 레지스터 상태 등 많은 것들을 확인할 수 있습니다. 
+![](2023-05-01-21-40-20.png)
+<br><br>
+
+
+## 정리
+
+사실 Google의 `Crashpad`나 Epic Games의 `CrashReportClient`에 비해서는 많이 부족하지만, 단순 로그 수집이 아닌 덤프 파일을 활용해서 에러를 분석할 수 있다는 데에 의의가 있는거 같습니다.
+<br><br>
+
+
 ## 참고
 - [MSDN : 크래시 덤프 분석](https://learn.microsoft.com/ko-kr/windows/win32/dxtecharts/crash-dump-analysis)
 - [MSDN : Visual Studio 디버거의 덤프 파일](https://learn.microsoft.com/ko-kr/visualstudio/debugger/using-dump-files?view=vs-2022)
 - [MSDN : 예외 및 오류 처리에 대한 최신 C++ 모범 사례](https://learn.microsoft.com/ko-kr/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-170)
 - [MSDN : RaiseException 함수(errhandlingapi.h)](https://learn.microsoft.com/ko-kr/windows/win32/api/errhandlingapi/nf-errhandlingapi-raiseexception)
+- Windows via C/C++ 5판 25장 처리되지 않은 예외, 벡터화된 예외 처리, 그리고 C++ 예외
