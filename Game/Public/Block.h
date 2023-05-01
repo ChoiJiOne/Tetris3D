@@ -130,6 +130,14 @@ public:
 
 
 	/**
+	 * @brief 블럭의 크기를 얻습니다.
+	 * 
+	 * @return 블럭의 크기를 반환합니다.
+	 */
+	float GetSize() const { return size_; }
+
+
+	/**
 	 * @brief 블럭의 월드 상 위치를 설정합니다.
 	 * 
 	 * @param position 설정할 월드 상 위치입니다.
