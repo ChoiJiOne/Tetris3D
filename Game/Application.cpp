@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "Block.h"
+#include "Board.h"
 #include "ColorNoEffectShader.h"
 #include "CommandLine.h"
 #include "ContentManager.h"
@@ -151,7 +152,7 @@ private:
 				RenderManager::Get().GetDevice(),
 				shaderSourcePath + L"TextureNoEffectVS.hlsl",
 				shaderSourcePath + L"TextureNoEffectPS.hlsl"
-				)
+			)
 		);
 	}
 
@@ -220,7 +221,7 @@ private:
 			std::make_unique<FixCamera>(
 				1, 
 				true,
-				DirectX::XMFLOAT3(+0.0f, +10.0f, -50.0f),
+				DirectX::XMFLOAT3(+0.0f, +15.0f, -60.0f),
 				DirectX::XMFLOAT3(+0.0f, +0.0f, +0.0f),
 				DirectX::XMFLOAT3(+0.0f, +1.0f, +0.0f),
 				DirectX::XM_PIDIV4,
@@ -233,10 +234,23 @@ private:
 			std::make_unique<Tetromino>(
 				2,
 				true,
-				DirectX::XMFLOAT3(-10.0f, 0.0f, 0.0f),
+				DirectX::XMFLOAT3(-4.0f, 20.0f, 0.0f),
 				Tetromino::EShape::Z,
 				2.0f, 
 				Block::EColor::BLUE
+			)
+		);
+
+		WorldManager::Get().AddGameObject(
+			"Board",
+			std::make_unique<Board>(
+				3,
+				true,
+				DirectX::XMFLOAT3(-12.0f, 22.0f, 0.0f),
+				2.0f,
+				Block::EColor::GRAY,
+				22,
+				12
 			)
 		);
 	}
