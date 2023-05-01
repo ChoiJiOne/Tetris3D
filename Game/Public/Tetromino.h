@@ -37,12 +37,17 @@ public:
 	 * 
 	 * @param updateOrder 테트로미노의 업데이트 순위입니다.
 	 * @param bIsActive 테트로미노의 활성화 여부입니다.
+	 * @param basePosition 테트로미노의 기준 좌표입니다.
 	 * @param blockSize 테트로미노 블럭의 크기입니다.
 	 * @param blockColor 테트로미노 블럭의 색상입니다.
 	 */
 	Tetromino(
-		int32_t updateOrder, bool bIsActive,
-		float blockSize, const Block::EColor& blockColor
+		int32_t updateOrder, 
+		bool bIsActive,
+		const DirectX::XMFLOAT3& basePosition,
+		const EShape& shape,
+		float blockSize, 
+		const Block::EColor& blockColor
 	);
 
 
@@ -68,9 +73,42 @@ public:
 
 private:
 	/**
+	 * @brief 테트로미노 모양에 대응하는 블럭들을 생성합니다.
+	 * 
+	 * @param shape 테트로미노의 모양입니다.
+	 * @param basePosition 테트로미노의 기준 좌표입니다.
+	 * @param blockSize 테트로미노 블럭의 크기입니다.
+	 * @param blockColor 테트로미노 블럭의 색상입니다.
+	 * @parma outRotatePosition[out] 테트로미노의 회전 중심 좌표입니다.
+	 * @param outBlocks[out] 테트로미노의 블럭들입니다.
+	 */
+	void GenerateShapeBlocks(
+		const EShape& shape, 
+		const DirectX::XMFLOAT3& basePosition, 
+		float blockSize, 
+		const Block::EColor& blockColor,
+		DirectX::XMFLOAT3& outRotatePosition, 
+		std::vector<Block>& outBlocks
+	);
+
+
+private:
+	/**
 	 * @brief 테트로미노의 모양입니다.
 	 */
 	EShape shape_ = EShape::NONE;
+
+
+	/**
+	 * @brief 테트로미노의 기준 좌표입니다.
+	 */
+	DirectX::XMFLOAT3 basePosition_;
+
+
+	/**
+	 * @brief 테트로미노의 회전시 기준 좌표입니다.
+	 */
+	DirectX::XMFLOAT3 rotatePosition_;
 
 
 	/**

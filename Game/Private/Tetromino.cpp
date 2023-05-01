@@ -7,8 +7,16 @@
 #include "WorldManager.h"
 #include "Tetromino.h"
 
-Tetromino::Tetromino(int32_t updateOrder, bool bIsActive, float blockSize, const Block::EColor& blockColor)
-	: GameObject(updateOrder, bIsActive)
+Tetromino::Tetromino(
+	int32_t updateOrder,
+	bool bIsActive,
+	const DirectX::XMFLOAT3& basePosition,
+	const EShape& shape,
+	float blockSize, 
+	const Block::EColor& blockColor
+) : GameObject(updateOrder, bIsActive)
+, shape_(shape)
+, basePosition_(basePosition)
 {
 	blockStaticMesh_ =  ContentManager::Get().GetStaticMesh("Block");
 	blockTexture_ = ContentManager::Get().GetTexture2D(Block::GetColorTextureSignature(blockColor));
@@ -43,4 +51,50 @@ void Tetromino::Tick(float deltaSeconds)
 
 		blockStaticMesh_->Draw(RenderManager::Get().GetContext());
 	}
+}
+
+void Tetromino::GenerateShapeBlocks(
+	const EShape& shape, 
+	const DirectX::XMFLOAT3& basePosition, 
+	float blockSize, 
+	const Block::EColor& blockColor, 
+	DirectX::XMFLOAT3& outRotatePosition, 
+	std::vector<Block>& outBlocks
+)
+{
+	outBlocks.clear();
+	outBlocks.resize(4);
+
+	switch (shape)
+	{
+	case EShape::I:
+		outBlocks[0];
+		outBlocks[1];
+		outBlocks[2];
+		outBlocks[3];
+		break;
+
+	case EShape::O:
+		break;
+
+	case EShape::T:
+		break;
+
+	case EShape::J:
+		break;
+
+	case EShape::L:
+		break;
+
+	case EShape::S:
+		break;
+
+	case EShape::Z:
+		break;
+
+	default:
+		ENFORCE_THROW_EXCEPTION("undefined tetromino shape type...");
+	}
+	
+
 }
