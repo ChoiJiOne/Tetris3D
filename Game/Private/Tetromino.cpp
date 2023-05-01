@@ -31,47 +31,8 @@ Tetromino::~Tetromino()
 
 void Tetromino::Tick(float deltaSeconds)
 {
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_LEFT) == EPressState::PRESSED)
-	{
-		Move(EMovement::LEFT);
-	}
-
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_RIGHT) == EPressState::PRESSED)
-	{
-		Move(EMovement::RIGHT);
-	}
-
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_UP) == EPressState::PRESSED)
-	{
-		Move(EMovement::UP);
-	}
-
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_DOWN) == EPressState::PRESSED)
-	{
-		Move(EMovement::DOWN);
-	}
-
-	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_SPACE) == EPressState::PRESSED)
-	{
-		Move(EMovement::CW);
-	}
-
-	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
-	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
-	
-	for (const Block& block : blocks_)
-	{
-		DirectX::XMFLOAT3 position = block.GetPosition();
-
-		effectShader->SetWorldMatrix(DirectX::XMMatrixTranslation(position.x, position.y, position.z));
-		effectShader->SetViewMatrix(fixCamera->GetViewMatrix());
-		effectShader->SetProjectionMatrix(fixCamera->GetProjectionMatrix());
-
-		effectShader->SetTexture(blockTexture_);
-		effectShader->Bind(RenderManager::Get().GetContext());
-
-		blockStaticMesh_->Draw(RenderManager::Get().GetContext());
-	}
+	ProcessInput();
+	Draw();
 }
 
 void Tetromino::GenerateShapeBlocks(
@@ -153,6 +114,54 @@ void Tetromino::GenerateShapeBlocks(
 
 	default:
 		ENFORCE_THROW_EXCEPTION("undefined tetromino shape type...");
+	}
+}
+
+void Tetromino::ProcessInput()
+{
+	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_LEFT) == EPressState::PRESSED)
+	{
+		Move(EMovement::LEFT);
+	}
+
+	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_RIGHT) == EPressState::PRESSED)
+	{
+		Move(EMovement::RIGHT);
+	}
+
+	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_UP) == EPressState::PRESSED)
+	{
+		Move(EMovement::UP);
+	}
+
+	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_DOWN) == EPressState::PRESSED)
+	{
+		Move(EMovement::DOWN);
+	}
+
+	if (InputManager::Get().GetKeyPressState(EVirtualKey::CODE_SPACE) == EPressState::PRESSED)
+	{
+		Move(EMovement::CW);
+	}
+}
+
+void Tetromino::Draw()
+{
+	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
+	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
+
+	for (const Block& block : blocks_)
+	{
+		DirectX::XMFLOAT3 position = block.GetPosition();
+
+		effectShader->SetWorldMatrix(DirectX::XMMatrixTranslation(position.x, position.y, position.z));
+		effectShader->SetViewMatrix(fixCamera->GetViewMatrix());
+		effectShader->SetProjectionMatrix(fixCamera->GetProjectionMatrix());
+
+		effectShader->SetTexture(blockTexture_);
+		effectShader->Bind(RenderManager::Get().GetContext());
+
+		blockStaticMesh_->Draw(RenderManager::Get().GetContext());
 	}
 }
 

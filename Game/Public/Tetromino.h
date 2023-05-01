@@ -108,6 +108,18 @@ private:
 
 
 	/**
+	 * @brief 입력 상태에 따른 처리를 수행합니다.
+	 */
+	void ProcessInput();
+
+
+	/**
+	 * @brief 테트로미노를 백버퍼에 렌더링을 수행합니다.
+	 */
+	void Draw();
+
+
+	/**
 	 * @brief 테트로미노를 이동시킵니다.
 	 * 
 	 * @param movement 테트로미노를 이동시킬 방향입니다.
