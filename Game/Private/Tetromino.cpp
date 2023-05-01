@@ -20,13 +20,8 @@ Tetromino::Tetromino(
 {
 	blockStaticMesh_ =  ContentManager::Get().GetStaticMesh("Block");
 	blockTexture_ = ContentManager::Get().GetTexture2D(Block::GetColorTextureSignature(blockColor));
-
-	blocks_ = {
-		Block(DirectX::XMFLOAT3(-3.0f, 0.0f, 0.0f), blockSize, blockColor),
-		Block(DirectX::XMFLOAT3(-1.0f, 0.0f, 0.0f), blockSize, blockColor),
-		Block(DirectX::XMFLOAT3(+1.0f, 0.0f, 0.0f), blockSize, blockColor),
-		Block(DirectX::XMFLOAT3(+3.0f, 0.0f, 0.0f), blockSize, blockColor),
-	};
+	
+	GenerateShapeBlocks(shape_, basePosition_, blockSize, blockColor, rotatePosition_, blocks_);
 }
 
 Tetromino::~Tetromino()
@@ -68,33 +63,69 @@ void Tetromino::GenerateShapeBlocks(
 	switch (shape)
 	{
 	case EShape::I:
-		outBlocks[0];
-		outBlocks[1];
-		outBlocks[2];
-		outBlocks[3];
+		outBlocks[0] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[1] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[2] = Block(DirectX::XMFLOAT3(basePosition.x + 2.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[3] = Block(DirectX::XMFLOAT3(basePosition.x + 3.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+
+		outRotatePosition = DirectX::XMFLOAT3(basePosition.x + 1.5f * blockSize, basePosition.y - 1.5f * blockSize, basePosition.z);
 		break;
 
 	case EShape::O:
+		outBlocks[0] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 0.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[1] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 0.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[2] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[3] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+
+		outRotatePosition = DirectX::XMFLOAT3(basePosition.x + 0.5f * blockSize, basePosition.y - 0.5f * blockSize, basePosition.z);
 		break;
 
 	case EShape::T:
+		outBlocks[0] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 0.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[1] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[2] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[3] = Block(DirectX::XMFLOAT3(basePosition.x + 2.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+
+		outRotatePosition = DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z);
 		break;
 
 	case EShape::J:
+		outBlocks[0] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[1] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[2] = Block(DirectX::XMFLOAT3(basePosition.x + 2.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[3] = Block(DirectX::XMFLOAT3(basePosition.x + 2.0f * blockSize, basePosition.y - 2.0f * blockSize, basePosition.z), blockSize, blockColor);
+
+		outRotatePosition = DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z);
 		break;
 
 	case EShape::L:
+		outBlocks[0] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[1] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[2] = Block(DirectX::XMFLOAT3(basePosition.x + 2.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[3] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 2.0f * blockSize, basePosition.z), blockSize, blockColor);
+
+		outRotatePosition = DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z);
 		break;
 
 	case EShape::S:
+		outBlocks[0] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 0.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[1] = Block(DirectX::XMFLOAT3(basePosition.x + 2.0f * blockSize, basePosition.y - 0.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[2] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[3] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+
+		outRotatePosition = DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z);
 		break;
 
 	case EShape::Z:
+		outBlocks[0] = Block(DirectX::XMFLOAT3(basePosition.x + 0.0f * blockSize, basePosition.y - 0.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[1] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 0.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[2] = Block(DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+		outBlocks[3] = Block(DirectX::XMFLOAT3(basePosition.x + 2.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z), blockSize, blockColor);
+
+		outRotatePosition = DirectX::XMFLOAT3(basePosition.x + 1.0f * blockSize, basePosition.y - 1.0f * blockSize, basePosition.z);
 		break;
 
 	default:
 		ENFORCE_THROW_EXCEPTION("undefined tetromino shape type...");
 	}
-	
-
 }
