@@ -126,7 +126,7 @@ public:
 	 * 
 	 * @return 블럭의 월드 상 위치를 반환합니다.
 	 */
-	DirectX::XMFLOAT3 GetPosition() { return position_; }
+	DirectX::XMFLOAT3 GetPosition() const { return position_; }
 
 
 	/**

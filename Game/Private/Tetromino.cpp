@@ -33,7 +33,7 @@ void Tetromino::Tick(float deltaSeconds)
 	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
 	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
 	
-	for (Block& block : blocks_)
+	for (const Block& block : blocks_)
 	{
 		DirectX::XMFLOAT3 position = block.GetPosition();
 
