@@ -14,6 +14,8 @@ public:
 	/**
 	 * @brief 게임 내 고정 카메라 오브젝트의 생성자입니다.
 	 * 
+	 * @param updateOrder 고정 카메라의 업데이트 순위입니다.
+	 * @param bIsActive 고정 카메라의 활성화 여부입니다.
 	 * @param eyePosition 월드 상의 카메라 위치입니다.
 	 * @param focusPosition 월드 상의 카메라가 바라보고 있는 위치입니다.
 	 * @param upDirection 월드 상 카메라의 위쪽 방향입니다.
@@ -23,6 +25,8 @@ public:
 	 * @param farZ 원거리 클리핑 평면까지의 거리입니다. 기본 값은 1000.0입니다.
 	 */
 	FixCamera(
+		int32_t updateOrder, 
+		bool bIsActive,
 		const DirectX::XMFLOAT3& eyePosition,
 		const DirectX::XMFLOAT3& focusPosition,
 		const DirectX::XMFLOAT3& upDirection,

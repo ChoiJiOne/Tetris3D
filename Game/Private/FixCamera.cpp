@@ -1,6 +1,8 @@
 #include "FixCamera.h"
 
 FixCamera::FixCamera(
+	int32_t updateOrder,
+	bool bIsActive,
 	const DirectX::XMFLOAT3& eyePosition, 
 	const DirectX::XMFLOAT3& focusPosition, 
 	const DirectX::XMFLOAT3& upDirection, 
@@ -8,7 +10,7 @@ FixCamera::FixCamera(
 	float aspectRatio, 
 	float nearZ, 
 	float farZ
-) : GameObject(1, true)
+) : GameObject(updateOrder, bIsActive)
 , fovAngleY_(fovAngleY)
 , aspectRatio_(aspectRatio)
 , nearZ_(nearZ)
