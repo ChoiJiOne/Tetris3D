@@ -115,6 +115,14 @@ private:
 	void Move(const EMovement& movement);
 
 
+	/**
+	 * @brief 테트로미노의 기준 좌표를 특정 위치로 이동시킵니다.
+	 * 
+	 * @param basePosition 테트로미노를 이동 시킬 특정 기준 좌표입니다.
+	 */
+	void Teleport(const DirectX::XMFLOAT3& basePosition);
+
+
 private:
 	/**
 	 * @brief 테트로미노의 모양입니다.
