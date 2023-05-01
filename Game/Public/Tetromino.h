@@ -31,6 +31,21 @@ public:
 	};
 
 
+	/**
+	 * @brief 테트로미노의 이동 방향입니다.
+	 */
+	enum class EMovement : int32_t
+	{
+		NONE     = 0x00,
+		LEFT     = 0x01,
+		RIGHT    = 0x02,
+		UP       = 0x03,
+		DOWN     = 0x04,
+		CCW      = 0x05,
+		CW       = 0x06,
+	};
+
+
 public:
 	/**
 	 * @brief 테트로미노의 생성자입니다.
@@ -90,6 +105,14 @@ private:
 		DirectX::XMFLOAT3& outRotatePosition, 
 		std::vector<Block>& outBlocks
 	);
+
+
+	/**
+	 * @brief 테트로미노를 이동시킵니다.
+	 * 
+	 * @param movement 테트로미노를 이동시킬 방향입니다.
+	 */
+	void Move(const EMovement& movement);
 
 
 private:
