@@ -164,6 +164,16 @@ public:
 
 
 	/**
+	 * @brief 다른 블럭과 겹치는지 검사합니다.
+	 * 
+	 * @param otherBlock 겹치는지 검사할 다른 블럭입니다.
+	 * 
+	 * @return 다른 블럭과 겹친다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsOverlap(const Block& otherBlock) const;
+
+
+	/**
 	 * @brief 블럭의 색상 타입에 대응하는 텍스처의 시그니처 값을 얻습니다.
 	 *
 	 * @param color 블럭의 색상 형식입니다.
