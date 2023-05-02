@@ -50,4 +50,55 @@ public:
 	{
 		return std::abs(value) < epsilon;
 	}
+
+
+	/**
+	 * @brief 2차원 부동 소수점 벡터의 원소들을 반올림합니다.
+	 * 
+	 * @param float2 모든 원소를 반올림할 벡터입니다.
+	 * 
+	 * @return 모든 원소가 반올림된 새로운 벡터를 반환합니다.
+	 */
+	static inline DirectX::XMFLOAT2 Round(const DirectX::XMFLOAT2& float2)
+	{
+		return DirectX::XMFLOAT2(
+			std::round(float2.x),
+			std::round(float2.y)
+		);
+	}
+
+
+	/**
+	 * @brief 3차원 부동 소수점 벡터의 원소들을 반올림합니다.
+	 *
+	 * @param float3 모든 원소를 반올림할 벡터입니다.
+	 *
+	 * @return 모든 원소가 반올림된 새로운 벡터를 반환합니다.
+	 */
+	static inline DirectX::XMFLOAT3 Round(const DirectX::XMFLOAT3& float3)
+	{
+		return DirectX::XMFLOAT3(
+			std::round(float3.x),
+			std::round(float3.y),
+			std::round(float3.z)
+		);
+	}
+
+
+	/**
+	 * @brief 4차원 부동 소수점 벡터의 원소들을 반올림합니다.
+	 *
+	 * @param float4 모든 원소를 반올림할 벡터입니다.
+	 *
+	 * @return 모든 원소가 반올림된 새로운 벡터를 반환합니다.
+	 */
+	static inline DirectX::XMFLOAT4 Round(const DirectX::XMFLOAT4& float4)
+	{
+		return DirectX::XMFLOAT4(
+			std::round(float4.x),
+			std::round(float4.y),
+			std::round(float4.z),
+			std::round(float4.w)
+		);
+	}
 };
