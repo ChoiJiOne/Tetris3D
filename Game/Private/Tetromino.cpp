@@ -27,10 +27,12 @@ Tetromino::Tetromino(
 	const DirectX::XMFLOAT3& basePosition,
 	const EShape& shape,
 	float blockSize,
-	const Block::EColor& blockColor
+	const Block::EColor& blockColor,
+	float maxAccumulatedTime
 ) : GameObject(updateOrder, bIsActive)
 , shape_(shape)
 , basePosition_(basePosition)
+, maxAccumulatedTime_(maxAccumulatedTime)
 {
 	blockStaticMesh_ = ContentManager::Get().GetStaticMesh("Block");
 	blockTexture_ = ContentManager::Get().GetTexture2D(Block::GetColorTextureSignature(blockColor));
@@ -44,6 +46,8 @@ Tetromino::~Tetromino()
 
 void Tetromino::Tick(float deltaSeconds)
 {
+	accumulatedTime_ += deltaSeconds;
+
 	Update();
 	DrawBlocks(blocks_);
 }
@@ -175,6 +179,19 @@ void Tetromino::Update()
 			{
 				Move(GetCountMovement(movement));
 			}
+		}
+	}
+
+	if (accumulatedTime_ > maxAccumulatedTime_)
+	{
+		accumulatedTime_ = 0.0f;
+
+		EMovement moveDown = EMovement::DOWN;
+		Move(moveDown);
+
+		if (IsCollisionBlocks(board->GetOutlineBlocks()))
+		{
+			Move(GetCountMovement(moveDown));
 		}
 	}
 }

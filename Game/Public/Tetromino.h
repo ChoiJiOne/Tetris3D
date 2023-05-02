@@ -55,6 +55,7 @@ public:
 	 * @param basePosition 테트로미노의 기준 좌표입니다.
 	 * @param blockSize 테트로미노 블럭의 크기입니다.
 	 * @param blockColor 테트로미노 블럭의 색상입니다.
+	 * @param maxAccumulatedTime 테트로미노의 최대 누적 시간입니다.
 	 */
 	Tetromino(
 		int32_t updateOrder, 
@@ -62,7 +63,8 @@ public:
 		const DirectX::XMFLOAT3& basePosition,
 		const EShape& shape,
 		float blockSize, 
-		const Block::EColor& blockColor
+		const Block::EColor& blockColor,
+		float maxAccumulatedTime
 	);
 
 
@@ -188,6 +190,18 @@ private:
 	 * @brief 테트로미노 내의 블럭입니다.
 	 */
 	std::vector<Block> blocks_;
+
+
+	/**
+	 * @brief 테트로미노의 누적 시간입니다.
+	 */
+	float accumulatedTime_ = 0.0f;
+
+
+	/**
+	 * @brief 테트로미노의 최대 누적 시간입니다.
+	 */
+	float maxAccumulatedTime_ = 0.0f;
 
 
 	/**
