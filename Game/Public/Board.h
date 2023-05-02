@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <list>
 #include <unordered_map>
 
 #include "Block.h"
@@ -59,11 +60,39 @@ public:
 
 
 	/**
-	 * @brief 보드의 외곽 라인 블럭을 얻습니다.
+	 * @brief 외곽 라인 내에 블럭들을 추가합니다.
 	 * 
-	 * @return 외곽 라인 블럭의 목록을 반환합니다.
+	 * @note 추가할 수 없다면 아무 동작도 수행하지 않습니다.
+	 * 
+	 * @param addBlocks 추가할 블럭들입니다.
+	 */
+	void AddBlocks(const std::vector<Block>& addBlocks);
+
+
+	/**
+	 * @brief 외곽 라인 내에 블럭들을 추가할 수 있는지 확인합니다.
+	 * 
+	 * @param addBlocks 추가할 수 있는지 확인할 블럭들입니다.
+	 * 
+	 * @return 모두 추가할 수 있다면 true, 그렇지 않다면 false를 반환합니다.
+	 */
+	bool IsAddBlocks(const std::vector<Block>& addBlocks);
+	
+
+	/**
+	 * @brief 보드의 외곽 라인 블럭들을 얻습니다.
+	 * 
+	 * @return 외곽 라인 블럭의 벡터를 반환합니다.
 	 */
 	const std::vector<Block>& GetOutlineBlocks() const { return outlineBlocks_; }
+
+
+	/**
+	 * @brief 보드의 외곽 라인 내의 블럭들을 얻습니다.
+	 * 
+	 * @return 외곽 라인 내 블럭의 벡터를 반환합니다.
+	 */
+	const std::list<Block>& GetInnerBlocks() const { return innerBlocks_; }
 
 
 private:
@@ -115,6 +144,14 @@ private:
 	void DrawBlocks(const std::vector<Block>& blocks);
 
 
+	/**
+	 * @brief 내부 블럭들을 백버퍼에 그립니다.
+	 * 
+	 * @param blocks 백버퍼에 그릴 블럭들입니다.
+	 */
+	void DrawInnerBlocks(const std::list<Block>& blocks);
+
+
 private:
 	/**
 	 * @brief 보드의 기준 좌표입니다.
@@ -144,6 +181,12 @@ private:
 	 * @brief 보드 내의 외곽선 블럭입니다.
 	 */
 	std::vector<Block> outlineBlocks_;
+
+
+	/**
+	 * @brief 외곽선 블럭 내에 존재하는 블럭들입니다.
+	 */
+	std::list<Block> innerBlocks_;
 
 
 	/**
