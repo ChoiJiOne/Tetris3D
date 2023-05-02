@@ -160,7 +160,7 @@ public:
 	 * 
 	 * @return 다른 블럭과 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool IsCollision(const Block& otherBlock);
+	bool IsCollision(const Block& otherBlock) const;
 
 
 	/**

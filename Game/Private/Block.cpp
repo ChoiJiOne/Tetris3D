@@ -38,7 +38,7 @@ void Block::SetPosition(const DirectX::XMFLOAT3& position)
 	boundingBox_.Center = position_;
 }
 
-bool Block::IsCollision(const Block& otherBlock)
+bool Block::IsCollision(const Block& otherBlock) const
 {
 	return boundingBox_.Intersects(otherBlock.boundingBox_);
 }
