@@ -58,6 +58,14 @@ public:
 	virtual void Tick(float deltaSeconds) override;
 
 
+	/**
+	 * @brief 보드의 외곽 라인 블럭을 얻습니다.
+	 * 
+	 * @return 외곽 라인 블럭의 목록을 반환합니다.
+	 */
+	const std::vector<Block>& GetOutlineBlocks() const { return outlineBlocks_; }
+
+
 private:
 	/**
 	 * @brief 보드의 외곽선 블럭들을 생성합니다.
