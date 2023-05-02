@@ -159,6 +159,8 @@ void Tetromino::GenerateShapeBlocks(
 
 void Tetromino::Update()
 {
+	Board* board = reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"));
+
 	for (auto& mappingVirtualKeyToMovement : mappingVirtualKeyToMovements)
 	{
 		EVirtualKey virtualKey = mappingVirtualKeyToMovement.first;
@@ -167,6 +169,11 @@ void Tetromino::Update()
 		if (InputManager::Get().GetKeyPressState(virtualKey) == EPressState::PRESSED)
 		{
 			Move(movement);
+
+			if (IsCollisionBlocks(board->GetOutlineBlocks()))
+			{
+				Move(GetCountMovement(movement));
+			}
 		}
 	}
 }
