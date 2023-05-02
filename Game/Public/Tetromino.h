@@ -145,6 +145,26 @@ private:
 	void Move(const EMovement& movement);
 
 
+	/**
+	 * @brief 테트로미노가 특정 블럭들과 충돌하는지 확인합니다.
+	 * 
+	 * @param checkBlocks 충돌하는지 확인할 블럭들입니다.
+	 * 
+	 * @return 특정 블럭들 중 하나라도 충돌이 감지된다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsCollisionBlocks(const std::vector<Block>& checkBlocks) const;
+
+
+	/**
+	 * @brief 테트로미가 움직일 방향의 반대 방향을 얻습니다.
+	 * 
+	 * @param movement 반대 방향을 얻을 테트로미노 이동 방향입니다.
+	 * 
+	 * @return 테트로미노 이동 방향의 반대 방향을 반환합니다.
+	 */
+	EMovement GetCountMovement(const EMovement& movement) const;
+	
+
 private:
 	/**
 	 * @brief 테트로미노의 모양입니다.

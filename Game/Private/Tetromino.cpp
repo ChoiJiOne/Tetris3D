@@ -1,3 +1,4 @@
+#include "Board.h"
 #include "ContentManager.h"
 #include "FixCamera.h"
 #include "RenderManager.h"
@@ -243,4 +244,58 @@ void Tetromino::Move(const EMovement& movement)
 		rotatePosition_.x += (biasX * blockSize);
 		rotatePosition_.y += (biasY * blockSize);
 	}
+}
+
+Tetromino::EMovement Tetromino::GetCountMovement(const EMovement& movement) const
+{
+	EMovement countMovement = EMovement::NONE;
+
+	switch (movement)
+	{
+	case EMovement::LEFT:
+		countMovement = EMovement::RIGHT;
+		break;
+
+	case EMovement::RIGHT:
+		countMovement = EMovement::LEFT;
+		break;
+
+	case EMovement::UP:
+		countMovement = EMovement::DOWN;
+		break;
+
+	case EMovement::DOWN:
+		countMovement = EMovement::UP;
+		break;
+
+	case EMovement::CW:
+		countMovement = EMovement::CCW;
+		break;
+
+	case EMovement::CCW:
+		countMovement = EMovement::CW;
+		break;
+
+	default:
+		countMovement = EMovement::NONE;
+		break;
+	}
+
+	return countMovement;
+}
+
+bool Tetromino::IsCollisionBlocks(const std::vector<Block>& checkBlocks) const
+{
+	for (const Block& checkBlock : checkBlocks)
+	{
+		for (const Block& block : blocks_)
+		{
+			if (checkBlock.IsCollision(block))
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
 }
