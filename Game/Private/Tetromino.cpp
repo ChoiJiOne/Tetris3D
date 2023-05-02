@@ -1,6 +1,7 @@
 #include "Board.h"
 #include "ContentManager.h"
 #include "FixCamera.h"
+#include "MathHelper.hpp"
 #include "RenderManager.h"
 #include "InputManager.h"
 #include "StaticMesh.h"
@@ -251,6 +252,14 @@ void Tetromino::Move(const EMovement& movement)
 		rotatePosition_.x += (biasX * blockSize);
 		rotatePosition_.y += (biasY * blockSize);
 	}
+
+	basePosition_ = MathHelper::Round(basePosition_);
+	rotatePosition_ = MathHelper::Round(rotatePosition_);
+
+	for (Block& block : blocks_)
+	{
+		block.SetPosition(MathHelper::Round(block.GetPosition()));
+	}
 }
 
 Tetromino::EMovement Tetromino::GetCountMovement(const EMovement& movement) const
@@ -297,7 +306,7 @@ bool Tetromino::IsCollisionBlocks(const std::vector<Block>& checkBlocks) const
 	{
 		for (const Block& block : blocks_)
 		{
-			if (checkBlock.IsCollision(block))
+			if (checkBlock.IsOverlap(block))
 			{
 				return true;
 			}
