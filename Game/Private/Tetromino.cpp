@@ -166,7 +166,7 @@ void Tetromino::Update()
 {
 	Board* board = reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"));
 
-	for (auto& mappingVirtualKeyToMovement : mappingVirtualKeyToMovements)
+	for (const auto& mappingVirtualKeyToMovement : mappingVirtualKeyToMovements)
 	{
 		EVirtualKey virtualKey = mappingVirtualKeyToMovement.first;
 		EMovement movement = mappingVirtualKeyToMovement.second;
