@@ -234,7 +234,7 @@ private:
 			std::make_unique<Tetromino>(
 				2,
 				true,
-				DirectX::XMFLOAT3(-4.0f, 20.0f, 0.0f),
+				DirectX::XMFLOAT3(-1.0f, 19.0f, 0.0f),
 				Tetromino::EShape::Z,
 				2.0f, 
 				Block::EColor::BLUE
@@ -246,7 +246,7 @@ private:
 			std::make_unique<Board>(
 				3,
 				true,
-				DirectX::XMFLOAT3(-12.0f, 22.0f, 0.0f),
+				DirectX::XMFLOAT3(-11.0f, 21.0f, 0.0f),
 				2.0f,
 				Block::EColor::GRAY,
 				22,
