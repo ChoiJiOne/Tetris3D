@@ -237,7 +237,8 @@ private:
 				DirectX::XMFLOAT3(-1.0f, 19.0f, 0.0f),
 				Tetromino::EShape::Z,
 				2.0f, 
-				Block::EColor::BLUE
+				Block::EColor::BLUE,
+				1.0f
 			)
 		);
 
