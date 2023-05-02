@@ -244,6 +244,7 @@ void Tetromino::Move(const EMovement& movement)
 			blockPosition.y += rotatePosition_.y;
 			blockPosition.z += rotatePosition_.z;
 
+			blockPosition = MathHelper::Round(blockPosition);
 			block.SetPosition(blockPosition);
 		}
 	}
@@ -260,22 +261,17 @@ void Tetromino::Move(const EMovement& movement)
 			position.x += (biasX * blockSize);
 			position.y += (biasY * blockSize);
 
+			position = MathHelper::Round(position);
 			block.SetPosition(position);
 		}
 
 		basePosition_.x += (biasX * blockSize);
 		basePosition_.y += (biasY * blockSize);
+		basePosition_ = MathHelper::Round(basePosition_);
 
 		rotatePosition_.x += (biasX * blockSize);
 		rotatePosition_.y += (biasY * blockSize);
-	}
-
-	basePosition_ = MathHelper::Round(basePosition_);
-	rotatePosition_ = MathHelper::Round(rotatePosition_);
-
-	for (Block& block : blocks_)
-	{
-		block.SetPosition(MathHelper::Round(block.GetPosition()));
+		rotatePosition_ = MathHelper::Round(rotatePosition_);
 	}
 }
 
