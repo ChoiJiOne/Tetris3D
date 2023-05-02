@@ -17,7 +17,7 @@
 7. 부울(Boolean) 변수의 접두사는 b
 8. 그 외의 대부분의 클래스의 접두사는 F, 일부 서브 시스템에서는 다른 글자 사용
 
-1번, 5번, 6번, 7번을 지키는 데는 문제가 없으나 그 외를 지키는 것은 생각보다 문제가 되어 지키지 않았습니다. 하지만 해당 규칙을 지키지 않으면 다음과 같은 문제가 발생합니다.
+1번, 5번, 6번, 7번을 지키는 데는 문제가 없으나 그 외를 지키는 것은 생각보다 문제가 되어 지키지 않았습니다. 하지만 규칙을 지켰을 때 다음과 같은 문제가 발생합니다.
 
 ```
 // 이전의 Tetris2D 프로젝트의 테트로미노입니다.
@@ -50,10 +50,27 @@ std::unique_ptr<Tetromino> TetrominoObject = std::make_unique<Tetromino>(...);
     ```
 - **지역 변수**, **멤버 변수**, **함수의 매개 변수**와 같이 변수 이름은 모두 `캐멀 형식`을 사용합니다.
     ```
-    void DoSomething(int value)
+    class Player
     {
-        int some = value + 10;
         ...
+        void DoSomething(int value)
+        {
+            int some = value + 10;
+            ...
+        }
+        ...
+
+        int area_;
+    }
+    ```
+- 클래스의 멤버 변수 이름 뒤에 언더바(_)를 붙입니다.
+    ```
+    class Rect
+    {
+        ...
+        int width_;
+        int height_;
+        int area_;
     }
     ```
 - 부울 변수(boolean) 이름은 앞에 b 접두사를 붙입니다.
