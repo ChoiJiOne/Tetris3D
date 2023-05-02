@@ -33,7 +33,7 @@ public:
 	 * 
 	 * @return 부동 소수점 값이 0으로 판정되면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool IsZero(float value, float epsilon = EPSILON_F)
+	static inline bool IsZero(float value, float epsilon = EPSILON_F)
 	{
 		return std::fabs(value) < epsilon;
 	}
@@ -46,7 +46,7 @@ public:
 	 *
 	 * @return 부동 소수점 값이 0으로 판정되면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool IsZero(double value, double epsilon = EPSILON_D)
+	static inline bool IsZero(double value, double epsilon = EPSILON_D)
 	{
 		return std::abs(value) < epsilon;
 	}
