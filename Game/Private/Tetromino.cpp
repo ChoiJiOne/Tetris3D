@@ -43,7 +43,7 @@ Tetromino::~Tetromino()
 void Tetromino::Tick(float deltaSeconds)
 {
 	Update();
-	Draw();
+	DrawBlocks(blocks_);
 }
 
 void Tetromino::Teleport(const DirectX::XMFLOAT3& basePosition)
@@ -170,12 +170,12 @@ void Tetromino::Update()
 	}
 }
 
-void Tetromino::Draw()
+void Tetromino::DrawBlocks(const std::vector<Block>& blocks)
 {
 	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
 	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
 
-	for (const Block& block : blocks_)
+	for (const Block& block : blocks)
 	{
 		DirectX::XMFLOAT3 position = block.GetPosition();
 
