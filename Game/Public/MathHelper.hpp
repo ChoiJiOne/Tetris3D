@@ -1,9 +1,11 @@
 #pragma once
 
 #include <cmath>
+#include <chrono>
 #include <directxcollision.h>
 #include <directxmath.h>
 #include <numeric>
+#include <random>
 
 
 /**
@@ -49,6 +51,42 @@ public:
 	static inline bool IsZero(double value, double epsilon = EPSILON_D)
 	{
 		return std::abs(value) < epsilon;
+	}
+
+
+	/**
+	 * @brief 임의의 정수를 생성합니다.
+	 *
+	 * @param minValue 생성할 난수 범위의 최솟값입니다.
+	 * @param maxValue 생성할 난수 범위의 최댓값입니다.
+	 *
+	 * @return 생성된 임의의 정수를 반환합니다.
+	 */
+	static inline int32_t GenerateRandomInt(int32_t minValue, int32_t maxValue)
+	{
+		std::random_device randomDevice;
+		std::mt19937 generator(randomDevice());
+		std::uniform_int_distribution<int32_t> distribution(std::min<int32_t>(minValue, maxValue), std::max<int32_t>(minValue, maxValue));
+
+		return distribution(generator);
+	}
+
+
+	/**
+	 * @brief 임의의 실수를 생성합니다.
+	 *
+	 * @param minValue 생성할 난수 범위의 최솟값입니다.
+	 * @param maxValue 생성할 난수 범위의 최댓값입니다.
+	 *
+	 * @return 생성된 임의의 실수를 반환합니다.
+	 */
+	static inline float GenerateRandomFloat(float minValue, float maxValue)
+	{
+		std::random_device randomDevice;
+		std::mt19937 generator(randomDevice());
+		std::uniform_real_distribution<float> distribution(std::min<float>(minValue, maxValue), std::max<float>(minValue, maxValue));
+
+		return distribution(generator);
 	}
 
 
