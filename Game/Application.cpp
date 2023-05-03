@@ -20,6 +20,7 @@
 #include "StringHelper.hpp"
 #include "Texture2D.h"
 #include "Tetromino.h"
+#include "TetrominoTracker.h"
 #include "TextureNoEffectShader.h"
 #include "Vertex.h"
 #include "Window.h"
@@ -230,19 +231,6 @@ private:
 		);
 
 		WorldManager::Get().AddGameObject(
-			"Tetromino",
-			std::make_unique<Tetromino>(
-				2,
-				true,
-				DirectX::XMFLOAT3(-1.0f, 19.0f, 0.0f),
-				Tetromino::EShape::Z,
-				2.0f, 
-				Block::EColor::BLUE,
-				1.0f
-			)
-		);
-
-		WorldManager::Get().AddGameObject(
 			"Board",
 			std::make_unique<Board>(
 				3,
@@ -252,6 +240,19 @@ private:
 				Block::EColor::GRAY,
 				22,
 				12
+			)
+		);
+
+		WorldManager::Get().AddGameObject(
+			"TetrominoTracker",
+			std::make_unique<TetrominoTracker>(
+				4,
+				true,
+				2,
+				2.0f,
+				1.0f,
+				DirectX::XMFLOAT3(-1.0f, 19.0f, 0.0f),
+				DirectX::XMFLOAT3(15.0f, 11.0f, 0.0f)
 			)
 		);
 	}
