@@ -46,9 +46,12 @@ Tetromino::~Tetromino()
 
 void Tetromino::Tick(float deltaSeconds)
 {
-	accumulatedTime_ += deltaSeconds;
+	if (state_ == EState::ACTIVE)
+	{
+		accumulatedTime_ += deltaSeconds;
+		Update();
+	}
 
-	Update();
 	DrawBlocks(blocks_);
 }
 

@@ -46,6 +46,17 @@ public:
 	};
 
 
+	/**
+	 * @brief 테트로미노의 상태입니다.
+	 */
+	enum class EState : int32_t
+	{
+		WAIT   = 0x00,
+		ACTIVE = 0x01,
+		DONE   = 0x02,
+	};
+
+
 public:
 	/**
 	 * @brief 테트로미노의 생성자입니다.
@@ -102,6 +113,22 @@ public:
 	 * @return 테트로미노의 블럭들을 저장한 벡터의 참조자를 반환합니다.
 	 */
 	const std::vector<Block>& GetBlocks() const { return blocks_; }
+
+
+	/**
+	 * @brief 테트로미노의 상태를 얻습니다.
+	 * 
+	 * @return 테트로미노의 상태를 반환합니다.
+	 */
+	EState GetState() const { return state_; }
+
+
+	/**
+	 * @brief 테트로미노의 상태를 설정합니다.
+	 * 
+	 * @param state 설정할 테트로미노 상태입니다.
+	 */
+	void SetState(const EState& state) { state_ = state; }
 
 
 private:
@@ -172,6 +199,14 @@ private:
 	 * @brief 테트로미노의 모양입니다.
 	 */
 	EShape shape_ = EShape::NONE;
+
+
+	/**
+	 * @brief 테트로미노의 상태입니다.
+	 * 
+	 * @note 기본 값은 대기 상태입니다.
+	 */
+	EState state_ = EState::WAIT;
 
 
 	/**
