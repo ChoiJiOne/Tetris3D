@@ -197,6 +197,21 @@ void Tetromino::Update()
 			Move(GetCountMovement(moveDown));
 		}
 	}
+
+	EMovement moveDown = EMovement::DOWN;
+	Move(moveDown);
+
+	if (IsCollisionBlocks(board->GetOutlineBlocks()) || IsCollisionBlocks(board->GetInnerBlocks()))
+	{
+		state_ = EState::DONE;
+
+		Move(GetCountMovement(moveDown));
+		board->AddBlocks(blocks_);
+	}
+	else
+	{
+		Move(GetCountMovement(moveDown));
+	}
 }
 
 void Tetromino::DrawBlocks(const std::vector<Block>& blocks)
@@ -329,5 +344,21 @@ bool Tetromino::IsCollisionBlocks(const std::vector<Block>& checkBlocks) const
 		}
 	}
 	
+	return false;
+}
+
+bool Tetromino::IsCollisionBlocks(const std::list<Block>& checkBlocks) const
+{
+	for (const Block& checkBlock : checkBlocks)
+	{
+		for (const Block& block : blocks_)
+		{
+			if (checkBlock.IsOverlap(block))
+			{
+				return true;
+			}
+		}
+	}
+
 	return false;
 }
