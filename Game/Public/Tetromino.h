@@ -77,7 +77,7 @@ public:
 	/**
 	 * @brief 테트로미노의 생성자입니다.
 	 *
-	 * @param constructorParam 테트로미노의 생성 파라미터입니다.
+	 * @param constructorParam 테트로미노의 생성자 파라미터입니다.
 	 */
 	Tetromino(ConstructorParam&& constructorParam);
 
@@ -85,7 +85,7 @@ public:
 	/**
 	 * @brief 테트로미노의 생성자입니다.
 	 * 
-	 * @param constructorParam 테트로미노의 생성 파라미터입니다.
+	 * @param constructorParam 테트로미노의 생성자 파라미터입니다.
 	 */
 	Tetromino(const ConstructorParam& constructorParam);
 
