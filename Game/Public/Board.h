@@ -26,7 +26,7 @@ public:
 		bool bIsActive;
 		DirectX::XMFLOAT3 basePosition;
 		float blockSize;
-		Block::EColor& blockColor;
+		Block::EColor blockColor;
 		int32_t countRowBlock;
 		int32_t countColBlock;
 	};
