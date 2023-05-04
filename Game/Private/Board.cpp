@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "ContentManager.h"
 #include "FixCamera.h"
 #include "MathHelper.hpp"
@@ -74,6 +76,24 @@ Board::~Board()
 
 void Board::Tick(float deltaSeconds)
 {
+	if (bIsDetectAddBlocks_)
+	{
+		std::vector<float> fillLines = FindFillLines();
+
+		if (fillLines.empty())
+		{
+			FillEmptyLine();
+			bIsDetectAddBlocks_ = false;
+		}
+		else
+		{
+			for (float fileLine : fillLines)
+			{
+				RemoveLine(fileLine);
+			}
+		}
+	}
+	
 	DrawBlocks(backgroundBlocks_);
 	DrawBlocks(outlineBlocks_);
 	DrawInnerBlocks(innerBlocks_);
@@ -187,6 +207,135 @@ std::vector<Block> Board::GenerateBackgroundBlocks(
 	}
 
 	return blocks;
+}
+
+bool Board::IsFillLine(float y)
+{
+	int32_t countBlock = 0;
+
+	for (const Block& innerBlock : innerBlocks_)
+	{
+		if (MathHelper::IsZero(y - innerBlock.GetPosition().y))
+		{
+			countBlock++;
+		}
+	}
+	
+	return countBlock == (countColBlock_ - 2);
+}
+
+bool Board::IsEmptyLine(float y)
+{
+	for (const Block& innerBlock : innerBlocks_)
+	{
+		if (MathHelper::IsZero(y - innerBlock.GetPosition().y))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void Board::RemoveLine(float y)
+{
+	for (std::list<Block>::iterator blockIter = innerBlocks_.begin(); blockIter != innerBlocks_.end(); )
+	{
+		if (MathHelper::IsZero(y - blockIter->GetPosition().y))
+		{
+			blockIter = innerBlocks_.erase(blockIter);
+		}
+		else
+		{
+			blockIter++;
+		}
+	}
+}
+
+std::vector<float> Board::FindFillLines()
+{
+	float blockSize = outlineBlocks_.front().GetSize();
+	float yMax = +basePosition_.y - blockSize;
+	float yMin = -basePosition_.y + blockSize;
+
+	std::vector<float> fillLines;
+
+	for (float y = yMin; y <= yMax; y += blockSize)
+	{
+		if (IsFillLine(y))
+		{
+			fillLines.push_back(y);
+		}
+	}
+
+	return fillLines;
+}
+
+std::vector<float> Board::FindEmptyLines()
+{
+	float blockSize = outlineBlocks_.front().GetSize();
+	float yMax = +basePosition_.y - blockSize;
+	float yMin = -basePosition_.y + blockSize;
+
+	std::vector<float> emptyLines;
+
+	for (float y = yMin; y <= yMax; y += blockSize)
+	{
+		if (IsEmptyLine(y))
+		{
+			emptyLines.push_back(y);
+		}
+	}
+
+	return emptyLines;
+}
+
+std::vector<float> Board::FindExistLines()
+{
+	float blockSize = outlineBlocks_.front().GetSize();
+	float yMax = +basePosition_.y - blockSize;
+	float yMin = -basePosition_.y + blockSize;
+
+	std::vector<float> existLines;
+
+	for (float y = yMin; y <= yMax; y += blockSize)
+	{
+		if (!IsEmptyLine(y) && !IsFillLine(y))
+		{
+			existLines.push_back(y);
+		}
+	}
+
+	return existLines;
+}
+
+void Board::MoveLine(float fromY, float toY)
+{
+	for (Block& innerBlock : innerBlocks_)
+	{
+		DirectX::XMFLOAT3 blockPosition = innerBlock.GetPosition();
+
+		if (MathHelper::IsZero(fromY - blockPosition.y))
+		{
+			blockPosition.y = toY;
+			innerBlock.SetPosition(blockPosition);
+		}
+	}
+}
+
+void Board::FillEmptyLine()
+{
+	std::vector<float> emptyLines = FindEmptyLines();
+	std::vector<float> existLines = FindExistLines();
+
+	if (existLines.empty()) return;
+
+	std::vector<float>::iterator emptyLinesIter = emptyLines.begin();
+
+	for (std::size_t existLineIndex = 0; existLineIndex < existLines.size(); ++existLineIndex)
+	{
+
+	}
 }
 
 void Board::DrawBlocks(const std::vector<Block>& blocks)

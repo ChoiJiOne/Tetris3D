@@ -169,6 +169,73 @@ private:
 
 
 	/**
+	 * @brief y좌표에 해당하는 라인이 꽉 차있는지 확인합니다.
+	 * 
+	 * @param y 확인할 라인의 y좌표입니다.
+	 * 
+	 * @return 해당 라인이 꽉 차있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsFillLine(float y);
+
+
+	/**
+	 * @brief y좌표에 해당하는 라인이 비어있는지 확인합니다.
+	 * 
+	 * @param y 확인할 라인의 y좌표입니다.
+	 *
+	 * @return 해당 라인이 비어있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsEmptyLine(float y);
+
+
+	/**
+	 * @brief y좌표에 해당하는 라인을 지웁니다.
+	 * 
+	 * @param y 지울 라인의 y좌표입니다.
+	 */
+	void RemoveLine(float y);
+
+
+	/**
+	 * @brief 채워져 있는 라인의 y좌표 목록을 얻습니다.
+	 * 
+	 * @return 채워져 있는 라인의 y좌표 목록을 반환합니다.
+	 */
+	std::vector<float> FindFillLines();
+
+
+	/**
+	 * @brief 비워져있는 라인의 y좌표 목록을 얻습니다.
+	 * 
+	 * @return 비워져있는 라인의 y좌표 목록을 반환합니다.
+	 */
+	std::vector<float> FindEmptyLines();
+
+
+	/**
+	 * @brief 블럭이 적어도 하나 존재하는 라인의 y좌표 목록을 얻습니다.
+	 * 
+	 * @return 블럭이 적어도 하나 존재하는 라인의 y좌표 목록을 반환합니다.
+	 */
+	std::vector<float> FindExistLines();
+
+
+	/**
+	 * @brief 특정 라인에 있는 블럭을 다른 라인으로 이동시킵니다.
+	 * 
+	 * @param fromY 블럭들을 옮길 특정 블럭들 라인의 y좌표 입니다.
+	 * @param toY 블럭들이 이동할 라인의 y좌표 입니다.
+	 */
+	void MoveLine(float fromY, float toY);
+	
+
+	/**
+	 * @brief 외곽선 내 블럭들 중 비어있는 부분을 채웁니다.
+	 */
+	void FillEmptyLine();
+
+
+	/**
 	 * @brief 블럭들을 백버퍼에 그립니다.
 	 * 
 	 * @param blocks 백버퍼에 그릴 블럭들입니다.
@@ -225,6 +292,12 @@ private:
 	 * @brief 외곽선 블럭 내에 블럭이 추가되었는지 확인합니다.
 	 */
 	bool bIsDetectAddBlocks_ = false;
+
+
+	/**
+	 * @brief 삭제한 라인 수입니다.
+	 */
+	int32_t removeLine_ = 0;
 
 
 	/**
