@@ -191,6 +191,12 @@ void Tetromino::Update()
 {
 	Board* board = reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"));
 
+	UpdateInputState(board);
+	UpdateAccumulatedTime(board);
+}
+
+void Tetromino::UpdateInputState(const Board* board)
+{
 	for (const auto& mappingVirtualKeyToMovement : mappingVirtualKeyToMovements)
 	{
 		EVirtualKey virtualKey = mappingVirtualKeyToMovement.first;
@@ -198,41 +204,30 @@ void Tetromino::Update()
 
 		if (InputManager::Get().GetKeyPressState(virtualKey) == EPressState::PRESSED)
 		{
-			Move(movement);
-
-			if (IsCollision(board))
+			if (CanMove(board, movement))
 			{
-				Move(GetCountMovement(movement));
+				Move(movement);
 			}
 		}
 	}
+}
 
+void Tetromino::UpdateAccumulatedTime(Board* board)
+{
 	if (accumulatedTime_ > maxAccumulatedTime_)
 	{
 		accumulatedTime_ = 0.0f;
 
 		EMovement moveDown = EMovement::DOWN;
-		Move(moveDown);
-
-		if (IsCollision(board))
+		if (!CanMove(board, moveDown))
 		{
-			Move(GetCountMovement(moveDown));
+			state_ = EState::END;
+			board->AddBlocks(blocks_);
 		}
-	}
-
-	EMovement moveDown = EMovement::DOWN;
-	Move(moveDown);
-
-	if (IsCollisionBlocks(board->GetOutlineBlocks()) || IsCollisionBlocks(board->GetInnerBlocks()))
-	{
-		state_ = EState::END;
-
-		Move(GetCountMovement(moveDown));
-		board->AddBlocks(blocks_);
-	}
-	else
-	{
-		Move(GetCountMovement(moveDown));
+		else
+		{
+			Move(moveDown);
+		}
 	}
 }
 

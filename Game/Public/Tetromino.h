@@ -191,6 +191,22 @@ private:
 
 
 	/**
+	 * @brief 입력 상태에 따라 테트로미노를 움직입니다.
+	 * 
+	 * @param board 테트로미노가 위치한 보드입니다. 
+	 */
+	void UpdateInputState(const Board* board);
+
+
+	/**
+	 * @brief 테트로미노의 누적 시간에 대한 업데이트를 수행합니다.
+	 * 
+	 * @param board 테트로미노가 위치한 보드입니다. 
+	 */
+	void UpdateAccumulatedTime(Board* board);
+
+
+	/**
 	 * @brief 테트로미노의 블럭들을 백버퍼에 렌더링을 수행합니다.
 	 * 
 	 * @param blocks 백버퍼에 그릴 블럭들입니다.
