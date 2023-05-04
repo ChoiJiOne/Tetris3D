@@ -34,20 +34,20 @@ void TetrominoTracker::Tick(float deltaSeconds)
 		GenerateTetromino(currentTetrominoID_ + 1, waitPosition_);
 
 		Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
-		currentTetromino->SetState(Tetromino::EState::ACTIVE);
+		currentTetromino->SetState(Tetromino::EState::RUNNING);
 	}
 	else
 	{
 		Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
 
-		if (currentTetromino->GetState() == Tetromino::EState::DONE)
+		if (currentTetromino->GetState() == Tetromino::EState::END)
 		{
 			int32_t prevTetrominoID = currentTetrominoID_++;
 			DestroyTetromino(prevTetrominoID);
 
 			Tetromino* nextTetromino = GetTetromino(currentTetrominoID_);
 			nextTetromino->Teleport(startPosition_);
-			nextTetromino->SetState(Tetromino::EState::ACTIVE);
+			nextTetromino->SetState(Tetromino::EState::RUNNING);
 
 			GenerateTetromino(currentTetrominoID_ + 1, waitPosition_);
 		}
