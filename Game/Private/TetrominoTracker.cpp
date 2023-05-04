@@ -68,7 +68,7 @@ Block::EColor TetrominoTracker::GenerateRandomBlockColor() const
 		Block::EColor::YELLOW,
 	};
 
-	return blockColors[MathHelper::GenerateRandomInt(0, blockColors.size() - 1)];
+	return blockColors[MathHelper::GenerateRandomInt(0, static_cast<int32_t>(blockColors.size()) - 1)];
 }
 
 Tetromino::EShape TetrominoTracker::GenerateRandomTetrominoShape() const
@@ -83,7 +83,7 @@ Tetromino::EShape TetrominoTracker::GenerateRandomTetrominoShape() const
 		Tetromino::EShape::Z,
 	};
 
-	return tetrominoShapes[MathHelper::GenerateRandomInt(0, tetrominoShapes.size() - 1)];
+	return tetrominoShapes[MathHelper::GenerateRandomInt(0, static_cast<int32_t>(tetrominoShapes.size()) - 1)];
 }
 
 void TetrominoTracker::GenerateTetromino(int32_t tetrominoID, const DirectX::XMFLOAT3& position)
