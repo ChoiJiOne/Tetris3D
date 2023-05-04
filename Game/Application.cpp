@@ -230,19 +230,18 @@ private:
 			)
 		);
 
-		WorldManager::Get().AddGameObject(
-			"Board",
-			std::make_unique<Board>(
-				3,
-				true,
-				DirectX::XMFLOAT3(-11.0f, 21.0f, 0.0f),
-				2.0f,
-				Block::EColor::GRAY,
-				22,
-				12
-			)
-		);
+		Board::ConstructorParam param {
+			3,
+			true,
+			DirectX::XMFLOAT3(-11.0f, 21.0f, 0.0f),
+			2.0f,
+			Block::EColor::GRAY,
+			22,
+			12
+		};
 
+		WorldManager::Get().AddGameObject("Board", std::make_unique<Board>(param));
+	
 		WorldManager::Get().AddGameObject(
 			"TetrominoTracker",
 			std::make_unique<TetrominoTracker>(

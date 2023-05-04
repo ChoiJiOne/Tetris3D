@@ -88,18 +88,17 @@ Tetromino::EShape TetrominoTracker::GenerateRandomTetrominoShape() const
 
 void TetrominoTracker::GenerateTetromino(int32_t tetrominoID, const DirectX::XMFLOAT3& position)
 {
-	WorldManager::Get().AddGameObject(
-		StringHelper::Format("tetromino%d", tetrominoID),
-		std::make_unique<Tetromino>(
-			tetrominoUpdateOrder_,
-			true,
-			position,
-			GenerateRandomTetrominoShape(),
-			blockSize_,
-			GenerateRandomBlockColor(),
-			tetrominoMaxAccumulatedTime_
-		)
-	);
+	Tetromino::ConstructorParam param {
+		tetrominoUpdateOrder_,
+		true,
+		position,
+		GenerateRandomTetrominoShape(),
+		blockSize_,
+		GenerateRandomBlockColor(),
+		tetrominoMaxAccumulatedTime_
+	};
+
+	WorldManager::Get().AddGameObject(StringHelper::Format("tetromino%d", tetrominoID), std::make_unique<Tetromino>(param));
 }
 
 Tetromino* TetrominoTracker::GetTetromino(int32_t tetrominoID)
