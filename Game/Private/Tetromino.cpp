@@ -21,6 +21,28 @@ static std::unordered_map<EVirtualKey, Tetromino::EMovement> mappingVirtualKeyTo
 	{ EVirtualKey::CODE_DOWN,  Tetromino::EMovement::DOWN  },
 };
 
+Tetromino::Tetromino(ConstructorParam&& constructorParam)
+	: Tetromino(
+		constructorParam.updateOrder,
+		constructorParam.bIsActive,
+		constructorParam.basePosition,
+		constructorParam.shape,
+		constructorParam.blockSize,
+		constructorParam.blockColor,
+		constructorParam.maxAccumulatedTime
+	) {}
+
+Tetromino::Tetromino(const ConstructorParam& constructorParam)
+	: Tetromino(
+		constructorParam.updateOrder,
+		constructorParam.bIsActive,
+		constructorParam.basePosition,
+		constructorParam.shape,
+		constructorParam.blockSize,
+		constructorParam.blockColor,
+		constructorParam.maxAccumulatedTime
+	) {}
+
 Tetromino::Tetromino(
 	int32_t updateOrder,
 	bool bIsActive,
@@ -46,7 +68,7 @@ Tetromino::~Tetromino()
 
 void Tetromino::Tick(float deltaSeconds)
 {
-	if (state_ == EState::ACTIVE)
+	if (state_ == EState::RUNNING)
 	{
 		accumulatedTime_ += deltaSeconds;
 		Update();
@@ -203,7 +225,7 @@ void Tetromino::Update()
 
 	if (IsCollisionBlocks(board->GetOutlineBlocks()) || IsCollisionBlocks(board->GetInnerBlocks()))
 	{
-		state_ = EState::DONE;
+		state_ = EState::END;
 
 		Move(GetCountMovement(moveDown));
 		board->AddBlocks(blocks_);

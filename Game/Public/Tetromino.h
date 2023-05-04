@@ -51,13 +51,44 @@ public:
 	 */
 	enum class EState : int32_t
 	{
-		WAIT   = 0x00,
-		ACTIVE = 0x01,
-		DONE   = 0x02,
+		READY   = 0x00,
+		RUNNING = 0x01,
+		END     = 0x02,
+	};
+
+
+	/**
+	 * @brief 테트로미노 생성자 파라미터의 구조체입니다.
+	 */
+	struct ConstructorParam
+	{
+		int32_t updateOrder;
+		bool bIsActive;
+		DirectX::XMFLOAT3 basePosition;
+		EShape shape;
+		float blockSize;
+		Block::EColor blockColor;
+		float maxAccumulatedTime;
 	};
 
 
 public:
+	/**
+	 * @brief 테트로미노의 생성자입니다.
+	 *
+	 * @param constructorParam 테트로미노의 생성 파라미터입니다.
+	 */
+	Tetromino(ConstructorParam&& constructorParam);
+
+
+	/**
+	 * @brief 테트로미노의 생성자입니다.
+	 * 
+	 * @param constructorParam 테트로미노의 생성 파라미터입니다.
+	 */
+	Tetromino(const ConstructorParam& constructorParam);
+
+	
 	/**
 	 * @brief 테트로미노의 생성자입니다.
 	 * 
@@ -214,9 +245,9 @@ private:
 	/**
 	 * @brief 테트로미노의 상태입니다.
 	 * 
-	 * @note 기본 값은 대기 상태입니다.
+	 * @note 기본 값은 준비 상태입니다.
 	 */
-	EState state_ = EState::WAIT;
+	EState state_ = EState::READY;
 
 
 	/**
