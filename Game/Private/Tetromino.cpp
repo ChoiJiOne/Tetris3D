@@ -200,7 +200,7 @@ void Tetromino::Update()
 		{
 			Move(movement);
 
-			if (IsCollisionBlocks(board->GetOutlineBlocks()))
+			if (IsCollision(board))
 			{
 				Move(GetCountMovement(movement));
 			}
@@ -214,7 +214,7 @@ void Tetromino::Update()
 		EMovement moveDown = EMovement::DOWN;
 		Move(moveDown);
 
-		if (IsCollisionBlocks(board->GetOutlineBlocks()))
+		if (IsCollision(board))
 		{
 			Move(GetCountMovement(moveDown));
 		}
@@ -313,6 +313,15 @@ void Tetromino::Move(const EMovement& movement)
 		rotatePosition_.y += (biasY * blockSize);
 		rotatePosition_ = MathHelper::Round(rotatePosition_);
 	}
+}
+
+bool Tetromino::CanMove(Board* board, const EMovement& movement)
+{
+	Move(movement);
+	bool bCanMove = !IsCollision(board);
+	Move(GetCountMovement(movement));
+
+	return bCanMove;
 }
 
 bool Tetromino::IsCollision(Board* board)

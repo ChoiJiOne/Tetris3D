@@ -207,6 +207,17 @@ private:
 
 
 	/**
+	 * @brief 테트로미노를 이동시킬 수 있는지 확인합니다.
+	 * 
+	 * @param board 테트로미노가 움직일 보드입니다.
+	 * @param movement 이동시킬 수 있는지 확인할 방향입니다.
+	 * 
+	 * @return 이동시킬 수 있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool CanMove(Board* board, const EMovement& movement);
+
+
+	/**
 	 * @brief 보드와 충돌하는지 검사합니다.
 	 * 
 	 * @param board 충돌하는지 검사할 보드입니다.
