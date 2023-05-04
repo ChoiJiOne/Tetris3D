@@ -83,6 +83,8 @@ void Board::AddBlocks(const std::vector<Block>& addBlocks)
 {
 	if (!IsAddBlocks(addBlocks)) return;
 	
+	bIsDetectAddBlocks_ = true;
+
 	for (const Block& addBlock : addBlocks)
 	{
 		innerBlocks_.push_back(addBlock);
