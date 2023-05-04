@@ -18,6 +18,38 @@ class Board : public GameObject
 {
 public:
 	/**
+	 * @brief 보드 생성자 파라미터의 구조체입니다.
+	 */
+	struct ConstructorParam
+	{
+		int32_t updateOrder;
+		bool bIsActive;
+		DirectX::XMFLOAT3 basePosition;
+		float blockSize;
+		Block::EColor& blockColor;
+		int32_t countRowBlock;
+		int32_t countColBlock;
+	};
+
+
+public:
+	/**
+	 * @brief 보드의 생성자입니다.
+	 * 
+	 * @param constructorParam 보드의 생성자 파라미터입니다.
+	 */
+	Board(ConstructorParam&& constructorParam);
+
+
+	/**
+	 * @brief 보드의 생성자입니다.
+	 * 
+	 * @param constructorParam 보드의 생성자 파라미터입니다.
+	 */
+	Board(const ConstructorParam& constructorParam);
+
+
+	/**
 	 * @brief 보드의 생성자입니다.
 	 * 
 	 * @param updateOrder 보드의 업데이트 순위입니다.
@@ -187,6 +219,12 @@ private:
 	 * @brief 외곽선 블럭 내에 존재하는 블럭들입니다.
 	 */
 	std::list<Block> innerBlocks_;
+
+
+	/**
+	 * @brief 외곽선 블럭 내에 블럭이 추가되었는지 확인합니다.
+	 */
+	bool bIsDetectAddBlocks_ = false;
 
 
 	/**

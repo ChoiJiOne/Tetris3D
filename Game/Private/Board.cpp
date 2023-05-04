@@ -9,6 +9,28 @@
 #include "WorldManager.h"
 #include "Board.h"
 
+Board::Board(ConstructorParam&& constructorParam)
+	: Board(
+		constructorParam.updateOrder,
+		constructorParam.bIsActive,
+		constructorParam.basePosition,
+		constructorParam.blockSize,
+		constructorParam.blockColor,
+		constructorParam.countRowBlock,
+		constructorParam.countColBlock
+	) {}
+
+Board::Board(const ConstructorParam& constructorParam)
+	: Board(
+		constructorParam.updateOrder,
+		constructorParam.bIsActive,
+		constructorParam.basePosition,
+		constructorParam.blockSize,
+		constructorParam.blockColor,
+		constructorParam.countRowBlock,
+		constructorParam.countColBlock
+	) {}
+
 Board::Board(
 	int32_t updateOrder, 
 	bool bIsActive, 
