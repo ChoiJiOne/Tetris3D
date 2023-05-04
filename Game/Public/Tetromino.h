@@ -214,7 +214,7 @@ private:
 	 * 
 	 * @return 이동시킬 수 있다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool CanMove(Board* board, const EMovement& movement);
+	bool CanMove(const Board* board, const EMovement& movement);
 
 
 	/**
@@ -224,7 +224,7 @@ private:
 	 * 
 	 * @return 테트로미노가 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool IsCollision(Board* board);
+	bool IsCollision(const Board* board) const;
 
 
 	/**

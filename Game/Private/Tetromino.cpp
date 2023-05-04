@@ -315,7 +315,7 @@ void Tetromino::Move(const EMovement& movement)
 	}
 }
 
-bool Tetromino::CanMove(Board* board, const EMovement& movement)
+bool Tetromino::CanMove(const Board* board, const EMovement& movement)
 {
 	Move(movement);
 	bool bCanMove = !IsCollision(board);
@@ -324,7 +324,7 @@ bool Tetromino::CanMove(Board* board, const EMovement& movement)
 	return bCanMove;
 }
 
-bool Tetromino::IsCollision(Board* board)
+bool Tetromino::IsCollision(const Board* board) const
 {
 	return IsCollisionBlocks(board->GetOutlineBlocks()) || IsCollisionBlocks(board->GetInnerBlocks());
 }
