@@ -315,6 +315,11 @@ void Tetromino::Move(const EMovement& movement)
 	}
 }
 
+bool Tetromino::IsCollision(Board* board)
+{
+	return IsCollisionBlocks(board->GetOutlineBlocks()) || IsCollisionBlocks(board->GetInnerBlocks());
+}
+
 Tetromino::EMovement Tetromino::GetCountMovement(const EMovement& movement) const
 {
 	EMovement countMovement = EMovement::NONE;

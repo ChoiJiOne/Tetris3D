@@ -7,6 +7,7 @@
 
 class StaticMesh;
 class Texture2D;
+class Board;
 
 
 /**
@@ -203,6 +204,16 @@ private:
 	 * @param movement 테트로미노를 이동시킬 방향입니다.
 	 */
 	void Move(const EMovement& movement);
+
+
+	/**
+	 * @brief 보드와 충돌하는지 검사합니다.
+	 * 
+	 * @param board 충돌하는지 검사할 보드입니다.
+	 * 
+	 * @return 테트로미노가 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsCollision(Board* board);
 
 
 	/**
