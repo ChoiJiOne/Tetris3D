@@ -325,16 +325,15 @@ void Board::MoveLine(float fromY, float toY)
 
 void Board::FillEmptyLine()
 {
-	std::vector<float> emptyLines = FindEmptyLines();
+	float blockSize = outlineBlocks_.front().GetSize();
+	float yMax = +basePosition_.y - blockSize;
+	float yMin = -basePosition_.y + blockSize;
+
 	std::vector<float> existLines = FindExistLines();
+	std::vector<float> emptyLines = FindEmptyLines();
 
-	if (existLines.empty()) return;
-
-	std::vector<float>::iterator emptyLinesIter = emptyLines.begin();
-
-	for (std::size_t existLineIndex = 0; existLineIndex < existLines.size(); ++existLineIndex)
+	for (float existLine : existLines)
 	{
-
 	}
 }
 
