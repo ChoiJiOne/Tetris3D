@@ -239,16 +239,18 @@ private:
 	 * @brief 블럭들을 백버퍼에 그립니다.
 	 * 
 	 * @param blocks 백버퍼에 그릴 블럭들입니다.
+	 * @param alpha 블럭들의 투명도입니다.
 	 */
-	void DrawBlocks(const std::vector<Block>& blocks);
+	void DrawBlocks(const std::vector<Block>& blocks, float alpha);
 
 
 	/**
 	 * @brief 내부 블럭들을 백버퍼에 그립니다.
 	 * 
 	 * @param blocks 백버퍼에 그릴 블럭들입니다.
+	 * @param alpha 블럭들의 투명도입니다.
 	 */
-	void DrawInnerBlocks(const std::list<Block>& blocks);
+	void DrawInnerBlocks(const std::list<Block>& blocks, float alpha);
 
 
 private:

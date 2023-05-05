@@ -69,12 +69,12 @@ void Tetromino::Tick(float deltaSeconds)
 		accumulatedTime_ += deltaSeconds;
 		Update();
 
-		DrawBlocks(shadowBlocks_);
-		DrawBlocks(blocks_);
+		DrawBlocks(shadowBlocks_, 0.2f);
+		DrawBlocks(blocks_, 1.0f);
 	}
 	else
 	{
-		DrawBlocks(blocks_);
+		DrawBlocks(blocks_, 1.0f);
 	}
 }
 
@@ -270,7 +270,7 @@ void Tetromino::UpdateAccumulatedTime(Board* board)
 	}
 }
 
-void Tetromino::DrawBlocks(const std::vector<Block>& blocks)
+void Tetromino::DrawBlocks(const std::vector<Block>& blocks, float alpha)
 {
 	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
 	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
@@ -283,6 +283,7 @@ void Tetromino::DrawBlocks(const std::vector<Block>& blocks)
 		effectShader->SetViewMatrix(fixCamera->GetViewMatrix());
 		effectShader->SetProjectionMatrix(fixCamera->GetProjectionMatrix());
 
+		effectShader->SetAlpha(alpha);
 		effectShader->SetTexture(blockTexture_);
 		effectShader->Bind(RenderManager::Get().GetContext());
 

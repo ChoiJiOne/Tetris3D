@@ -94,9 +94,9 @@ void Board::Tick(float deltaSeconds)
 		}
 	}
 	
-	DrawBlocks(backgroundBlocks_);
-	DrawBlocks(outlineBlocks_);
-	DrawInnerBlocks(innerBlocks_);
+	DrawBlocks(backgroundBlocks_, 1.0f);
+	DrawBlocks(outlineBlocks_, 1.0f);
+	DrawInnerBlocks(innerBlocks_, 1.0f);
 }
 
 void Board::AddBlocks(const std::vector<Block>& addBlocks)
@@ -343,7 +343,7 @@ void Board::FillEmptyLine()
 	}
 }
 
-void Board::DrawBlocks(const std::vector<Block>& blocks)
+void Board::DrawBlocks(const std::vector<Block>& blocks, float alpha)
 {
 	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
 	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
@@ -356,6 +356,7 @@ void Board::DrawBlocks(const std::vector<Block>& blocks)
 		effectShader->SetViewMatrix(fixCamera->GetViewMatrix());
 		effectShader->SetProjectionMatrix(fixCamera->GetProjectionMatrix());
 
+		effectShader->SetAlpha(alpha);
 		effectShader->SetTexture(mappingBlockColorToTextures_[block.GetColor()]);
 		effectShader->Bind(RenderManager::Get().GetContext());
 
@@ -363,7 +364,7 @@ void Board::DrawBlocks(const std::vector<Block>& blocks)
 	}
 }
 
-void Board::DrawInnerBlocks(const std::list<Block>& blocks)
+void Board::DrawInnerBlocks(const std::list<Block>& blocks, float alpha)
 {
 	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
 	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
@@ -376,6 +377,7 @@ void Board::DrawInnerBlocks(const std::list<Block>& blocks)
 		effectShader->SetViewMatrix(fixCamera->GetViewMatrix());
 		effectShader->SetProjectionMatrix(fixCamera->GetProjectionMatrix());
 
+		effectShader->SetAlpha(alpha);
 		effectShader->SetTexture(mappingBlockColorToTextures_[block.GetColor()]);
 		effectShader->Bind(RenderManager::Get().GetContext());
 

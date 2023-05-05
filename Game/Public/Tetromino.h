@@ -228,8 +228,9 @@ private:
 	 * @brief 테트로미노의 블럭들을 백버퍼에 렌더링을 수행합니다.
 	 * 
 	 * @param blocks 백버퍼에 그릴 블럭들입니다.
+	 * @param alpha 테트로미노의 투명도입니다.
 	 */
-	void DrawBlocks(const std::vector<Block>& blocks);
+	void DrawBlocks(const std::vector<Block>& blocks, float alpha);
 	
 
 	/**
