@@ -79,14 +79,6 @@ public:
 
 private:
 	/**
-	 * @brief 임의의 테트로미노 모양을 생성합니다.
-	 * 
-	 * @return 임의로 생성된 테트로미노 모양을 반환합니다.
-	 */
-	Tetromino::EShape GenerateRandomTetrominoShape() const;
-
-
-	/**
 	 * @brief 테트로미노를 생성합니다.
 	 * 
 	 * @param tetrominoID 테트로미노의 ID입니다.

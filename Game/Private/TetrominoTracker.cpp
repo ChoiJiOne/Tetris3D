@@ -54,28 +54,13 @@ void TetrominoTracker::Tick(float deltaSeconds)
 	}
 }
 
-Tetromino::EShape TetrominoTracker::GenerateRandomTetrominoShape() const
-{
-	static std::array<Tetromino::EShape, 7> tetrominoShapes = {
-		Tetromino::EShape::I,
-		Tetromino::EShape::O,
-		Tetromino::EShape::T,
-		Tetromino::EShape::J,
-		Tetromino::EShape::L,
-		Tetromino::EShape::S,
-		Tetromino::EShape::Z,
-	};
-
-	return tetrominoShapes[MathHelper::GenerateRandomInt(0, static_cast<int32_t>(tetrominoShapes.size()) - 1)];
-}
-
 void TetrominoTracker::GenerateTetromino(int32_t tetrominoID, const DirectX::XMFLOAT3& position)
 {
 	Tetromino::ConstructorParam param {
 		tetrominoUpdateOrder_,
 		true,
 		position,
-		GenerateRandomTetrominoShape(),
+		Tetromino::GetRandomShape(),
 		blockSize_,
 		Block::GetRandomColor(),
 		tetrominoMaxAccumulatedTime_
