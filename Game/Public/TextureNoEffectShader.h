@@ -9,7 +9,7 @@ class Texture2D;
 
 
 /**
- * @brief 특수 효과 없이 정점의 색상만 렌더링하는 셰이더입니다.
+ * @brief 특수 효과 없이 정점의 텍스처만 렌더링하는 셰이더입니다.
  */
 class TextureNoEffectShader : public EffectShader
 {
