@@ -9,11 +9,7 @@
 #include "WorldManager.h"
 #include "Tetromino.h"
 
-
-/**
- * @brief 키 값에 대응하는 테트로미노의 이동 방향입니다.
- */
-static std::unordered_map<EVirtualKey, Tetromino::EMovement> virtualKeyToMovements_ = {
+std::unordered_map<EVirtualKey, Tetromino::EMovement> Tetromino::virtualKeyToMovements_ = {
 	{ EVirtualKey::CODE_LEFT,  Tetromino::EMovement::LEFT  },
 	{ EVirtualKey::CODE_RIGHT, Tetromino::EMovement::RIGHT },
 	{ EVirtualKey::CODE_UP,    Tetromino::EMovement::CW    },
