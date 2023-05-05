@@ -44,6 +44,7 @@ public:
 		DOWN     = 0x04,
 		CCW      = 0x05,
 		CW       = 0x06,
+		JUMP     = 0x07,
 	};
 
 
@@ -239,6 +240,14 @@ private:
 	 * @return 이동시킬 수 있다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
 	bool CanMove(const Board* board, const EMovement& movement);
+
+
+	/**
+	 * @brief 테트로미노를 보드 상의 가장 아래로 이동시킵니다.
+	 * 
+	 * @param board 테트로미노가 움직일 보드입니다.
+	 */
+	void JumpBottom(const Board* board);
 
 
 	/**

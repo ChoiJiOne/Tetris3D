@@ -19,6 +19,7 @@ static std::unordered_map<EVirtualKey, Tetromino::EMovement> mappingVirtualKeyTo
 	{ EVirtualKey::CODE_RIGHT, Tetromino::EMovement::RIGHT },
 	{ EVirtualKey::CODE_UP,    Tetromino::EMovement::CW    },
 	{ EVirtualKey::CODE_DOWN,  Tetromino::EMovement::DOWN  },
+	{ EVirtualKey::CODE_SPACE, Tetromino::EMovement::JUMP  },
 };
 
 Tetromino::Tetromino(ConstructorParam&& constructorParam)
@@ -219,9 +220,16 @@ void Tetromino::UpdateInputState(const Board* board)
 
 		if (InputManager::Get().GetKeyPressState(virtualKey) == EPressState::PRESSED)
 		{
-			if (CanMove(board, movement))
+			if (virtualKey == EVirtualKey::CODE_SPACE)
 			{
-				Move(movement);
+				JumpBottom(board);
+			}
+			else
+			{
+				if (CanMove(board, movement))
+				{
+					Move(movement);
+				}
 			}
 		}
 	}
@@ -332,6 +340,14 @@ bool Tetromino::CanMove(const Board* board, const EMovement& movement)
 	Move(GetCountMovement(movement));
 
 	return bCanMove;
+}
+
+void Tetromino::JumpBottom(const Board* board)
+{
+	while (CanMove(board, EMovement::DOWN))
+	{
+		Move(EMovement::DOWN);
+	}
 }
 
 bool Tetromino::IsCollision(const Board* board) const
