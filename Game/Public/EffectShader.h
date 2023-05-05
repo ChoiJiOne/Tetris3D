@@ -184,6 +184,17 @@ protected:
 	}
 		
 
+	/**
+	 * @brief 선형 텍스처 샘플러를 생성합니다.
+	 *
+	 * @param device 선형 샘플러를 생성할 때 사용할 디바이스입니다.
+	 * @param outLinearSampler 생성된 선형 샘플러입니다.
+	 *
+	 * @return 선형 텍스처 샘플러 생성 결과를 반환합니다. 생성에 성공하면 S_OK, 그렇지 않으면 그 이외의 값을 반환합니다.
+	 */
+	HRESULT CreateLinearTextureSampler(ID3D11Device* device, ID3D11SamplerState** outLinearTextureSampler);
+
+	
 protected:
 	/**
 	 * @brief 정점 셰이더 소스 리소스입니다.
