@@ -213,7 +213,7 @@ private:
 	 * 
 	 * @param board 테트로미노가 위치한 보드입니다. 
 	 */
-	void UpdateInputState(const Board* board);
+	void UpdateInputState(Board* board);
 
 
 	/**

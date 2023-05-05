@@ -227,7 +227,7 @@ void Tetromino::Update()
 	JumpBottom(shadowBlocks_, shadowBasePosition_, shadowRotatePosition_, board);
 }
 
-void Tetromino::UpdateInputState(const Board* board)
+void Tetromino::UpdateInputState(Board* board)
 {
 	for (const auto& virtualKeyToMovement : virtualKeyToMovements_)
 	{
@@ -239,6 +239,8 @@ void Tetromino::UpdateInputState(const Board* board)
 			if (virtualKey == EVirtualKey::CODE_SPACE)
 			{
 				JumpBottom(blocks_, basePosition_, rotatePosition_, board);
+				state_ = EState::END;
+				board->AddBlocks(blocks_);
 			}
 			else
 			{
