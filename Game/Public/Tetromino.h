@@ -142,6 +142,14 @@ public:
 
 
 	/**
+	 * @brief 테트로미노의 기준 좌표를 특정 위치로 이동시킬 수 있는지 확인합니다.
+	 *
+	 * @param basePosition 테트로미노를 이동 시킬 특정 기준 좌표입니다.
+	 */
+	bool CanTeleport(const DirectX::XMFLOAT3& basePosition);
+
+
+	/**
 	 * @brief 테트로미노의 블럭들을 얻습니다.
 	 * 
 	 * @return 테트로미노의 블럭들을 저장한 벡터의 참조자를 반환합니다.

@@ -101,6 +101,17 @@ void Tetromino::Teleport(const DirectX::XMFLOAT3& basePosition)
 	basePosition_ = basePosition;
 }
 
+bool Tetromino::CanTeleport(const DirectX::XMFLOAT3& basePosition)
+{
+	Board* board = reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"));
+
+	Teleport(basePosition);
+	bool bCanTeleport = !IsCollision(board);
+	Teleport(basePosition_);
+
+	return bCanTeleport;
+}
+
 Tetromino::EShape Tetromino::GetRandomShape()
 {
 	static std::array<Tetromino::EShape, 7> tetrominoShapes = {
