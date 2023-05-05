@@ -18,23 +18,7 @@ TextureNoEffectShader::TextureNoEffectShader(ID3D11Device* device, const std::ws
 	CHECK_HR(CreateDynamicConstantBuffer<TransparentConstantBuffer>(device, &transparentBuffer_), "failed to create constant buffer...");
 	transparentBufferBindSlot_ = 0;
 
-	D3D11_SAMPLER_DESC linearSamplerDesc;
-	linearSamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	linearSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	linearSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	linearSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	linearSamplerDesc.MipLODBias = 0.0f;
-	linearSamplerDesc.MaxAnisotropy = 1;
-	linearSamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	linearSamplerDesc.BorderColor[0] = 0;
-	linearSamplerDesc.BorderColor[1] = 0;
-	linearSamplerDesc.BorderColor[2] = 0;
-	linearSamplerDesc.BorderColor[3] = 0;
-	linearSamplerDesc.MinLOD = 0;
-	linearSamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	CHECK_HR(device->CreateSamplerState(&linearSamplerDesc, &linearSamplerState_), "failed to create texture sampler...");
-
+	CHECK_HR(CreateLinearTextureSampler(device, &linearSamplerState_), "failed to create texture sampler...");
 	samplerStateBindSlot_ = 0;
 }
 
