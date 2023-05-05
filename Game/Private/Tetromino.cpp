@@ -68,9 +68,14 @@ void Tetromino::Tick(float deltaSeconds)
 	{
 		accumulatedTime_ += deltaSeconds;
 		Update();
-	}
 
-	DrawBlocks(blocks_);
+		DrawBlocks(shadowBlocks_);
+		DrawBlocks(blocks_);
+	}
+	else
+	{
+		DrawBlocks(blocks_);
+	}
 }
 
 void Tetromino::Teleport(const DirectX::XMFLOAT3& basePosition)
@@ -106,7 +111,7 @@ bool Tetromino::CanTeleport(const DirectX::XMFLOAT3& basePosition)
 	Board* board = reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"));
 
 	Teleport(basePosition);
-	bool bCanTeleport = !IsCollision(board);
+	bool bCanTeleport = !IsCollision(blocks_, board);
 	Teleport(basePosition_);
 
 	return bCanTeleport;
@@ -215,6 +220,11 @@ void Tetromino::Update()
 
 	UpdateInputState(board);
 	UpdateAccumulatedTime(board);
+
+	shadowBasePosition_ = basePosition_;
+	shadowRotatePosition_ = rotatePosition_;
+	shadowBlocks_ = blocks_;
+	JumpBottom(shadowBlocks_, shadowBasePosition_, shadowRotatePosition_, board);
 }
 
 void Tetromino::UpdateInputState(const Board* board)
@@ -228,13 +238,13 @@ void Tetromino::UpdateInputState(const Board* board)
 		{
 			if (virtualKey == EVirtualKey::CODE_SPACE)
 			{
-				JumpBottom(board);
+				JumpBottom(blocks_, basePosition_, rotatePosition_, board);
 			}
 			else
 			{
-				if (CanMove(board, movement))
+				if (CanMove(blocks_, basePosition_, rotatePosition_, board, movement))
 				{
-					Move(movement);
+					Move(blocks_, basePosition_, rotatePosition_, movement);
 				}
 			}
 		}
@@ -248,14 +258,14 @@ void Tetromino::UpdateAccumulatedTime(Board* board)
 		accumulatedTime_ = 0.0f;
 
 		EMovement moveDown = EMovement::DOWN;
-		if (!CanMove(board, moveDown))
+		if (!CanMove(blocks_, basePosition_, rotatePosition_, board, moveDown))
 		{
 			state_ = EState::END;
 			board->AddBlocks(blocks_);
 		}
 		else
 		{
-			Move(moveDown);
+			Move(blocks_, basePosition_, rotatePosition_, moveDown);
 		}
 	}
 }
@@ -280,7 +290,7 @@ void Tetromino::DrawBlocks(const std::vector<Block>& blocks)
 	}
 }
 
-void Tetromino::Move(const EMovement& movement)
+void Tetromino::Move(std::vector<Block>& blocks, DirectX::XMFLOAT3& basePosition, DirectX::XMFLOAT3& rotatePosition, const EMovement& movement)
 {
 	if (movement == EMovement::NONE) return;
 
@@ -292,21 +302,21 @@ void Tetromino::Move(const EMovement& movement)
 		DirectX::XMMATRIX rotateZMatrix = DirectX::XMMatrixRotationZ(angle);
 		DirectX::XMVECTOR position;
 
-		for (Block& block : blocks_)
+		for (Block& block : blocks)
 		{
 			DirectX::XMFLOAT3 blockPosition = block.GetPosition();
 
-			blockPosition.x -= rotatePosition_.x;
-			blockPosition.y -= rotatePosition_.y;
-			blockPosition.z -= rotatePosition_.z;
+			blockPosition.x -= rotatePosition.x;
+			blockPosition.y -= rotatePosition.y;
+			blockPosition.z -= rotatePosition.z;
 
 			position = DirectX::XMLoadFloat3(&blockPosition);
 			position = DirectX::XMVector3Transform(position, rotateZMatrix);
 			DirectX::XMStoreFloat3(&blockPosition, position);
 
-			blockPosition.x += rotatePosition_.x;
-			blockPosition.y += rotatePosition_.y;
-			blockPosition.z += rotatePosition_.z;
+			blockPosition.x += rotatePosition.x;
+			blockPosition.y += rotatePosition.y;
+			blockPosition.z += rotatePosition.z;
 
 			blockPosition = MathHelper::Round(blockPosition);
 			block.SetPosition(blockPosition);
@@ -316,9 +326,9 @@ void Tetromino::Move(const EMovement& movement)
 	{
 		float biasX = (movement == EMovement::LEFT) ? -1.0f : (movement == EMovement::RIGHT ? 1.0f : 0.0f);
 		float biasY = (movement == EMovement::UP) ? 1.0f : (movement == EMovement::DOWN ? -1.0f : 0.0f);
-		float blockSize = blocks_.front().GetSize();
+		float blockSize = blocks.front().GetSize();
 
-		for (Block& block : blocks_)
+		for (Block& block : blocks)
 		{
 			DirectX::XMFLOAT3 position = block.GetPosition();
 
@@ -329,36 +339,47 @@ void Tetromino::Move(const EMovement& movement)
 			block.SetPosition(position);
 		}
 
-		basePosition_.x += (biasX * blockSize);
-		basePosition_.y += (biasY * blockSize);
-		basePosition_ = MathHelper::Round(basePosition_);
+		basePosition.x += (biasX * blockSize);
+		basePosition.y += (biasY * blockSize);
+		basePosition = MathHelper::Round(basePosition);
 
-		rotatePosition_.x += (biasX * blockSize);
-		rotatePosition_.y += (biasY * blockSize);
-		rotatePosition_ = MathHelper::Round(rotatePosition_);
+		rotatePosition.x += (biasX * blockSize);
+		rotatePosition.y += (biasY * blockSize);
+		rotatePosition = MathHelper::Round(rotatePosition);
 	}
 }
 
-bool Tetromino::CanMove(const Board* board, const EMovement& movement)
+bool Tetromino::CanMove(
+	std::vector<Block>& blocks, 
+	DirectX::XMFLOAT3& basePosition, 
+	DirectX::XMFLOAT3& rotatePosition,
+	const Board* board, 
+	const EMovement& movement
+)
 {
-	Move(movement);
-	bool bCanMove = !IsCollision(board);
-	Move(GetCountMovement(movement));
+	Move(blocks, basePosition, rotatePosition, movement);
+	bool bCanMove = !IsCollision(blocks, board);
+	Move(blocks, basePosition, rotatePosition, GetCountMovement(movement));
 
 	return bCanMove;
 }
 
-void Tetromino::JumpBottom(const Board* board)
+void Tetromino::JumpBottom(
+	std::vector<Block>& blocks, 
+	DirectX::XMFLOAT3& basePosition, 
+	DirectX::XMFLOAT3& rotatePosition,
+	const Board* board
+)
 {
-	while (CanMove(board, EMovement::DOWN))
+	while (CanMove(blocks, basePosition, rotatePosition, board, EMovement::DOWN))
 	{
-		Move(EMovement::DOWN);
+		Move(blocks, basePosition, rotatePosition, EMovement::DOWN);
 	}
 }
 
-bool Tetromino::IsCollision(const Board* board) const
+bool Tetromino::IsCollision(const std::vector<Block>& blocks, const Board* board) const
 {
-	return IsCollisionBlocks(board->GetOutlineBlocks()) || IsCollisionBlocks(board->GetInnerBlocks());
+	return IsCollisionBlocks(blocks, board->GetOutlineBlocks()) || IsCollisionBlocks(blocks, board->GetInnerBlocks());
 }
 
 Tetromino::EMovement Tetromino::GetCountMovement(const EMovement& movement) const
@@ -399,11 +420,11 @@ Tetromino::EMovement Tetromino::GetCountMovement(const EMovement& movement) cons
 	return countMovement;
 }
 
-bool Tetromino::IsCollisionBlocks(const std::vector<Block>& checkBlocks) const
+bool Tetromino::IsCollisionBlocks(const std::vector<Block> blocks, const std::vector<Block>& checkBlocks) const
 {
 	for (const Block& checkBlock : checkBlocks)
 	{
-		for (const Block& block : blocks_)
+		for (const Block& block : blocks)
 		{
 			if (checkBlock.IsOverlap(block))
 			{
@@ -415,11 +436,11 @@ bool Tetromino::IsCollisionBlocks(const std::vector<Block>& checkBlocks) const
 	return false;
 }
 
-bool Tetromino::IsCollisionBlocks(const std::list<Block>& checkBlocks) const
+bool Tetromino::IsCollisionBlocks(const std::vector<Block> blocks, const std::list<Block>& checkBlocks) const
 {
 	for (const Block& checkBlock : checkBlocks)
 	{
-		for (const Block& block : blocks_)
+		for (const Block& block : blocks)
 		{
 			if (checkBlock.IsOverlap(block))
 			{

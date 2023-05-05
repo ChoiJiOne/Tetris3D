@@ -235,58 +235,70 @@ private:
 	/**
 	 * @brief 테트로미노를 이동시킵니다.
 	 * 
+	 * @param blocks 테트로미노 블럭들입니다.
+	 * @param basePosition 테트로미노의 기준 좌표입니다.
+	 * @param rotatePosition 테트로미노의 회전 좌표입니다.
 	 * @param movement 테트로미노를 이동시킬 방향입니다.
 	 */
-	void Move(const EMovement& movement);
+	void Move(std::vector<Block>& blocks, DirectX::XMFLOAT3& basePosition, DirectX::XMFLOAT3& rotatePosition, const EMovement& movement);
 
 
 	/**
 	 * @brief 테트로미노를 이동시킬 수 있는지 확인합니다.
 	 * 
+	 * @param blocks 테트로미노 블럭들입니다.
+	 * @param basePosition 테트로미노의 기준 좌표입니다.
+	 * @param rotatePosition 테트로미노의 회전 좌표입니다.
 	 * @param board 테트로미노가 움직일 보드입니다.
 	 * @param movement 이동시킬 수 있는지 확인할 방향입니다.
 	 * 
 	 * @return 이동시킬 수 있다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool CanMove(const Board* board, const EMovement& movement);
+	bool CanMove(std::vector<Block>& blocks, DirectX::XMFLOAT3& basePosition, DirectX::XMFLOAT3& rotatePosition, const Board* board, const EMovement& movement);
 
 
 	/**
 	 * @brief 테트로미노를 보드 상의 가장 아래로 이동시킵니다.
 	 * 
+	 * @param blocks 테트로미노 블럭들입니다.
+	 * @param basePosition 테트로미노의 기준 좌표입니다.
+	 * @param rotatePosition 테트로미노의 회전 좌표입니다.
 	 * @param board 테트로미노가 움직일 보드입니다.
 	 */
-	void JumpBottom(const Board* board);
+	void JumpBottom(std::vector<Block>& blocks, DirectX::XMFLOAT3& basePosition, DirectX::XMFLOAT3& rotatePosition, const Board* board);
 
 
 	/**
-	 * @brief 보드와 충돌하는지 검사합니다.
+	 * @brief 테트로미노 블럭들이 보드와 충돌하는지 검사합니다.
 	 * 
+	 * @param blocks 테트로미노 블럭들입니다.
 	 * @param board 충돌하는지 검사할 보드입니다.
 	 * 
 	 * @return 테트로미노가 충돌한다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool IsCollision(const Board* board) const;
+	bool IsCollision(const std::vector<Block>& blocks, const Board* board) const;
 
 
 	/**
 	 * @brief 테트로미노가 특정 블럭들과 충돌하는지 확인합니다.
 	 * 
+	 * @param blocks 테트로미노 블럭들입니다.
 	 * @param checkBlocks 충돌하는지 확인할 블럭들입니다.
 	 * 
 	 * @return 특정 블럭들 중 하나라도 충돌이 감지된다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool IsCollisionBlocks(const std::vector<Block>& checkBlocks) const;
+	bool IsCollisionBlocks(const std::vector<Block> blocks, const std::vector<Block>& checkBlocks) const;
 
 
 	/**
 	 * @brief 테트로미노가 특정 블럭들과 충돌하는지 확인합니다.
 	 *
+	 * @param blocks 테트로미노 블럭들입니다.
 	 * @param checkBlocks 충돌하는지 확인할 블럭들입니다.
 	 *
 	 * @return 특정 블럭들 중 하나라도 충돌이 감지된다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
-	bool IsCollisionBlocks(const std::list<Block>& checkBlocks) const;
+	bool IsCollisionBlocks(const std::vector<Block> blocks, const std::list<Block>& checkBlocks) const;
 
 
 	/**
@@ -331,6 +343,24 @@ private:
 	 */
 	std::vector<Block> blocks_;
 
+
+	/**
+	 * @brief 테트로미노의 그림자 기준 좌표입니다.
+	 */
+	DirectX::XMFLOAT3 shadowBasePosition_;
+
+
+	/**
+	 * @brief 테트로미노의 그림자 회전 시 기준 좌표입니다.
+	 */
+	DirectX::XMFLOAT3 shadowRotatePosition_;
+
+
+	/**
+	 * @brief 테트로미노의 그림자 블럭입니다.
+	 */
+	std::vector<Block> shadowBlocks_;
+	
 
 	/**
 	 * @brief 테트로미노의 누적 시간입니다.
