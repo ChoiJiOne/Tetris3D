@@ -25,6 +25,15 @@ public:
 	};
 
 
+	/**
+	 * @brief 셰이더 내에 투명도를 설정하기 위한 상수 버퍼입니다.
+	 */
+	struct TransparentConstantBuffer
+	{
+		DirectX::XMFLOAT4 transparent;
+	};
+
+
 public:
 	/**
 	 * @brief 셰이더를 컴파일하고 정점 셰이더와 픽셀 셰이더를 생성합니다.
@@ -84,6 +93,20 @@ public:
 		everyFrameBufferResource_.projection = DirectX::XMMatrixTranspose(projection);
 	}
 
+	
+	/**
+	 * @brief 텍스처의 투명도를 설정합니다.
+	 * 
+	 * @param alpha 설정할 투명도 값입니다.
+	 */
+	void SetAlpha(float alpha)
+	{
+		transparentConstantBuffer.transparent.x = alpha;
+		transparentConstantBuffer.transparent.y = alpha;
+		transparentConstantBuffer.transparent.z = alpha;
+		transparentConstantBuffer.transparent.w = alpha;
+	}
+
 
 	/**
 	 * @brief 텍스처를 설정합니다.
@@ -118,6 +141,24 @@ private:
 	 * @brief 매 프레임 변경되는 셰이더 내의 상수 버퍼입니다.
 	 */
 	ID3D11Buffer* everyFrameBuffer_ = nullptr;
+
+
+	/**
+	 * @brief 투명도를 결정하는 셰이더 내 상수 버퍼의 바인딩 슬롯입니다.
+	 */
+	uint32_t transparentBufferBindSlot_ = 0;
+
+
+	/**
+	 * @brief 투명도를 결정하는 셰이더 내의 리소스입니다.
+	 */
+	TransparentConstantBuffer transparentConstantBuffer;
+
+
+	/**
+	 * @brief 투명도를 결정하는 셰이더 내의 상수 버퍼입니다.
+	 */
+	ID3D11Buffer* transparentBuffer_ = nullptr;
 
 
 	/**

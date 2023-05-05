@@ -15,6 +15,9 @@ TextureNoEffectShader::TextureNoEffectShader(ID3D11Device* device, const std::ws
 	CHECK_HR(CreateDynamicConstantBuffer<EveryFrameConstantBuffer>(device, &everyFrameBuffer_), "failed to create constant buffer...");
 	everyFrameBufferBindSlot_ = 0;
 
+	CHECK_HR(CreateDynamicConstantBuffer<TransparentConstantBuffer>(device, &transparentBuffer_), "failed to create constant buffer...");
+	transparentBufferBindSlot_ = 0;
+
 	D3D11_SAMPLER_DESC linearSamplerDesc;
 	linearSamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	linearSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -38,6 +41,7 @@ TextureNoEffectShader::TextureNoEffectShader(ID3D11Device* device, const std::ws
 TextureNoEffectShader::~TextureNoEffectShader()
 {
 	SAFE_RELEASE(linearSamplerState_);
+	SAFE_RELEASE(transparentBuffer_);
 	SAFE_RELEASE(everyFrameBuffer_);
 }
 
@@ -62,8 +66,18 @@ void TextureNoEffectShader::Bind(ID3D11DeviceContext* context)
 		context->Unmap(everyFrameBuffer_, 0);
 	}
 
+	D3D11_MAPPED_SUBRESOURCE transparentBufferMappedResource;
+	if (SUCCEEDED(context->Map(transparentBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &transparentBufferMappedResource)))
+	{
+		TransparentConstantBuffer* bufferPtr = reinterpret_cast<TransparentConstantBuffer*>(transparentBufferMappedResource.pData);
+		bufferPtr->transparent = transparentConstantBuffer.transparent;
+
+		context->Unmap(transparentBuffer_, 0);
+	}
+
 	context->VSSetConstantBuffers(everyFrameBufferBindSlot_, 1, &everyFrameBuffer_);
 
 	context->PSSetShaderResources(textureResourcebindSlot_, 1, &textureResource_);
+	context->PSSetConstantBuffers(transparentBufferBindSlot_, 1, &transparentBuffer_);
 	context->PSSetSamplers(samplerStateBindSlot_, 1, &linearSamplerState_);
 }
