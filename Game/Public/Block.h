@@ -174,6 +174,14 @@ public:
 
 
 	/**
+	 * @brief 임의의 블럭 색상 타입을 얻습니다.
+	 * 
+	 * @return 임의의 블럭 색상 타입을 반환합니다.
+	 */
+	static EColor GetRandomColor();
+
+
+	/**
 	 * @brief 블럭의 색상 타입에 대응하는 텍스처의 시그니처 값을 얻습니다.
 	 *
 	 * @param color 블럭의 색상 형식입니다.

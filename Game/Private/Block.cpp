@@ -56,6 +56,23 @@ bool Block::IsOverlap(const Block& otherBlock) const
 		&& MathHelper::IsZero(diffZ);
 }
 
+Block::EColor Block::GetRandomColor()
+{
+	static std::array<Block::EColor, 9> blockColors = {
+		Block::EColor::BLUE,
+		Block::EColor::CYAN,
+		Block::EColor::GREEN,
+		Block::EColor::MAGENTA,
+		Block::EColor::ORANGE,
+		Block::EColor::PINK,
+		Block::EColor::PURPLE,
+		Block::EColor::RED,
+		Block::EColor::YELLOW,
+	};
+
+	return blockColors[MathHelper::GenerateRandomInt(0, static_cast<int32_t>(blockColors.size()) - 1)];
+}
+
 const std::string& Block::GetColorTextureSignature(const EColor& color)
 {
 	return colorSignatureMappings[color];
