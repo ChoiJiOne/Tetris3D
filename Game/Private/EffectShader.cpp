@@ -85,3 +85,22 @@ HRESULT EffectShader::CreateInputLayout(ID3D11Device* device, ID3DBlob* vertexSh
 		inputLayout
 	);
 }
+
+HRESULT EffectShader::CreateIndexBuffer(ID3D11Device* device, const std::vector<uint32_t>& indices, ID3D11Buffer** outIndexBuffer)
+{
+	D3D11_BUFFER_DESC indexBufferDesc;
+
+	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	indexBufferDesc.ByteWidth = sizeof(uint32_t) * static_cast<uint32_t>(indices.size());
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA indexData;
+	indexData.pSysMem = reinterpret_cast<const void*>(&indices[0]);
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	return device->CreateBuffer(&indexBufferDesc, &indexData, outIndexBuffer);
+}
