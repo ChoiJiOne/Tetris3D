@@ -3,7 +3,6 @@
 #include "FixCamera.h"
 #include "MathHelper.hpp"
 #include "RenderManager.h"
-#include "InputManager.h"
 #include "StaticMesh.h"
 #include "Texture2D.h"
 #include "TextureNoEffectShader.h"
@@ -14,7 +13,7 @@
 /**
  * @brief 키 값에 대응하는 테트로미노의 이동 방향입니다.
  */
-static std::unordered_map<EVirtualKey, Tetromino::EMovement> mappingVirtualKeyToMovements = {
+static std::unordered_map<EVirtualKey, Tetromino::EMovement> virtualKeyToMovements_ = {
 	{ EVirtualKey::CODE_LEFT,  Tetromino::EMovement::LEFT  },
 	{ EVirtualKey::CODE_RIGHT, Tetromino::EMovement::RIGHT },
 	{ EVirtualKey::CODE_UP,    Tetromino::EMovement::CW    },
@@ -213,10 +212,10 @@ void Tetromino::Update()
 
 void Tetromino::UpdateInputState(const Board* board)
 {
-	for (const auto& mappingVirtualKeyToMovement : mappingVirtualKeyToMovements)
+	for (const auto& virtualKeyToMovement : virtualKeyToMovements_)
 	{
-		EVirtualKey virtualKey = mappingVirtualKeyToMovement.first;
-		EMovement movement = mappingVirtualKeyToMovement.second;
+		EVirtualKey virtualKey = virtualKeyToMovement.first;
+		EMovement movement = virtualKeyToMovement.second;
 
 		if (InputManager::Get().GetKeyPressState(virtualKey) == EPressState::PRESSED)
 		{
