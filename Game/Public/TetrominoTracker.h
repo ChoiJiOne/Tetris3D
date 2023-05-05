@@ -79,14 +79,6 @@ public:
 
 private:
 	/**
-	 * @brief 임의의 블록 컬러를 생성합니다.
-	 * 
-	 * @return 임의로 생성된 블록 컬러를 반환합니다.
-	 */
-	Block::EColor GenerateRandomBlockColor() const;
-
-
-	/**
 	 * @brief 임의의 테트로미노 모양을 생성합니다.
 	 * 
 	 * @return 임의로 생성된 테트로미노 모양을 반환합니다.

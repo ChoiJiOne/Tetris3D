@@ -54,23 +54,6 @@ void TetrominoTracker::Tick(float deltaSeconds)
 	}
 }
 
-Block::EColor TetrominoTracker::GenerateRandomBlockColor() const
-{
-	static std::array<Block::EColor, 9> blockColors = {
-		Block::EColor::BLUE,
-		Block::EColor::CYAN,
-		Block::EColor::GREEN,
-		Block::EColor::MAGENTA,
-		Block::EColor::ORANGE,
-		Block::EColor::PINK,
-		Block::EColor::PURPLE,
-		Block::EColor::RED,
-		Block::EColor::YELLOW,
-	};
-
-	return blockColors[MathHelper::GenerateRandomInt(0, static_cast<int32_t>(blockColors.size()) - 1)];
-}
-
 Tetromino::EShape TetrominoTracker::GenerateRandomTetrominoShape() const
 {
 	static std::array<Tetromino::EShape, 7> tetrominoShapes = {
@@ -94,7 +77,7 @@ void TetrominoTracker::GenerateTetromino(int32_t tetrominoID, const DirectX::XMF
 		position,
 		GenerateRandomTetrominoShape(),
 		blockSize_,
-		GenerateRandomBlockColor(),
+		Block::GetRandomColor(),
 		tetrominoMaxAccumulatedTime_
 	};
 
