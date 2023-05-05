@@ -15,12 +15,12 @@
 #include "GameTimer.h"
 #include "GeometryGenerator.h"
 #include "InputManager.h"
+#include "PlayScene.h"
 #include "RenderManager.h"
 #include "StaticMesh.h"
 #include "StringHelper.hpp"
 #include "Texture2D.h"
 #include "Tetromino.h"
-#include "TetrominoTracker.h"
 #include "TextureNoEffectShader.h"
 #include "Vertex.h"
 #include "Window.h"
@@ -230,30 +230,10 @@ private:
 			)
 		);
 
-		Board::ConstructorParam param {
-			3,
-			true,
-			DirectX::XMFLOAT3(-11.0f, 21.0f, 0.0f),
-			2.0f,
-			Block::EColor::GRAY,
-			22,
-			12
-		};
+		WorldManager::Get().AddGameObject("PlayScene", std::make_unique<PlayScene>(6, true));
 
-		WorldManager::Get().AddGameObject("Board", std::make_unique<Board>(param));
-	
-		WorldManager::Get().AddGameObject(
-			"TetrominoTracker",
-			std::make_unique<TetrominoTracker>(
-				4,
-				true,
-				2,
-				2.0f,
-				1.0f,
-				DirectX::XMFLOAT3(-1.0f, 19.0f, 0.0f),
-				DirectX::XMFLOAT3(15.0f, 11.0f, 0.0f)
-			)
-		);
+		PlayScene* playScene = reinterpret_cast<PlayScene*>(WorldManager::Get().GetGameObject("PlayScene"));
+		playScene->Entry();
 	}
 
 
