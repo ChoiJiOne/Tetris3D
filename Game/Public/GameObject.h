@@ -45,15 +45,7 @@ public:
 	 */
 	int32_t GetUpdateOrder() const { return updateOrder_; }
 
-
-	/**
-	 * @brief 게임 오브젝트의 순위를 설정합니다.
-	 * 
-	 * @param updateOrder 설정할 게임 오브젝트의 순위입니다.
-	 */
-	void SetUpdateOrder(int32_t updateOrder) { updateOrder_ = updateOrder; }
-
-
+	
 	/**
 	 * @brief 게임 오브젝트가 활성화 되었는지 확인합니다.
 	 * 
