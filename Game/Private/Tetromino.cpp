@@ -105,6 +105,21 @@ void Tetromino::Teleport(const DirectX::XMFLOAT3& basePosition)
 	basePosition_ = basePosition;
 }
 
+Tetromino::EShape Tetromino::GetRandomShape()
+{
+	static std::array<Tetromino::EShape, 7> tetrominoShapes = {
+		Tetromino::EShape::I,
+		Tetromino::EShape::O,
+		Tetromino::EShape::T,
+		Tetromino::EShape::J,
+		Tetromino::EShape::L,
+		Tetromino::EShape::S,
+		Tetromino::EShape::Z,
+	};
+
+	return tetrominoShapes[MathHelper::GenerateRandomInt(0, static_cast<int32_t>(tetrominoShapes.size()) - 1)];
+}
+
 void Tetromino::GenerateShapeBlocks(
 	const EShape& shape, 
 	const DirectX::XMFLOAT3& basePosition, 

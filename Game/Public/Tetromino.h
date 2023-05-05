@@ -163,6 +163,14 @@ public:
 	void SetState(const EState& state) { state_ = state; }
 
 
+	/**
+	 * @brief 임의의 테트로미노 모양 타입을 얻습니다.
+	 * 
+	 * @return 임의의 테트로미노 모양 타입을 반환합니다.
+	 */
+	static EShape GetRandomShape();
+
+
 private:
 	/**
 	 * @brief 테트로미노 모양에 대응하는 블럭들을 생성합니다.
