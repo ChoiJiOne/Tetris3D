@@ -326,14 +326,20 @@ void Board::MoveLine(float fromY, float toY)
 void Board::FillEmptyLine()
 {
 	float blockSize = outlineBlocks_.front().GetSize();
-	float yMax = +basePosition_.y - blockSize;
 	float yMin = -basePosition_.y + blockSize;
 
 	std::vector<float> existLines = FindExistLines();
-	std::vector<float> emptyLines = FindEmptyLines();
 
 	for (float existLine : existLines)
 	{
+		for (float y = yMin; y < existLine; y += blockSize)
+		{
+			if (IsEmptyLine(y))
+			{
+				MoveLine(existLine, y);
+				break;
+			}
+		}
 	}
 }
 
