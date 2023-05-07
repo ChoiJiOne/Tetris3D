@@ -73,6 +73,7 @@ public:
 
 		LoadShader();
 		LoadTexture();
+		LoadTTFont();
 		LoadStaticMesh();
 		LoadGameObject();
 
@@ -198,6 +199,30 @@ private:
 					RenderManager::Get().GetDevice(),
 					StringHelper::Format("%s%s%s", texturePath.c_str(), texture.c_str(), ".png")
 				)
+			);
+		}
+	}
+
+
+	/**
+	 * @brief 트루 타입 폰트를 로딩합니다.
+	 * 
+	 * @throws 트루 타입 폰트 로딩에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadTTFont()
+	{
+		std::string fontName = "SeoulNamsanEB";
+		std::array<int32_t, 4> fontSizes = { 16, 32, 64, 128 };
+
+		int32_t beginCodePoint = 32;
+		int32_t endCodePoint = 127;
+		
+		std::string fontPath = CommandLine::GetValue("Content") + fontName + ".ttf";
+		for (const int32_t& fontSize : fontSizes)
+		{
+			ContentManager::Get().AddTTFont(
+				StringHelper::Format("%s%d", fontName.c_str(), fontSize),
+				std::make_unique<TTFont>(RenderManager::Get().GetDevice(), fontPath, beginCodePoint, endCodePoint, static_cast<float>(fontSize))
 			);
 		}
 	}
