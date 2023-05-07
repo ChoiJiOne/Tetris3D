@@ -42,7 +42,7 @@ void FixCamera::SetAspectRatio(float aspectRatio)
 
 	float backBufferWidth = 0.0f;
 	float backBufferHeight = 0.0f;
-	RenderManager::Get().GetBackbufferSize(backBufferWidth, backBufferWidth);
+	RenderManager::Get().GetBackbufferSize(backBufferWidth, backBufferHeight);
 
 	orthoMatrix_ = DirectX::XMMatrixOrthographicLH(backBufferWidth, backBufferHeight, nearZ_, farZ_);
 }
