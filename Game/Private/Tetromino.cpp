@@ -69,8 +69,8 @@ void Tetromino::Tick(float deltaSeconds)
 		accumulatedTime_ += deltaSeconds;
 		Update();
 
-		DrawBlocks(shadowBlocks_, 0.2f);
 		DrawBlocks(blocks_, 1.0f);
+		DrawBlocks(shadowBlocks_, 0.2f);
 	}
 	else
 	{
