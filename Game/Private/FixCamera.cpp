@@ -1,3 +1,4 @@
+#include "RenderManager.h"
 #include "FixCamera.h"
 
 FixCamera::FixCamera(
@@ -22,6 +23,12 @@ FixCamera::FixCamera(
 
 	viewMatrix_ = DirectX::XMMatrixLookAtLH(eyePosition_, focusPosition_, upDirection_);
 	projectionMatrix_ = DirectX::XMMatrixPerspectiveFovLH(fovAngleY_, aspectRatio_, nearZ_, farZ_);
+
+	float backBufferWidth = 0.0f;
+	float backBufferHeight = 0.0f;
+	RenderManager::Get().GetBackbufferSize(backBufferWidth, backBufferWidth);
+
+	orthoMatrix_ = DirectX::XMMatrixOrthographicLH(backBufferWidth, backBufferHeight, nearZ_, farZ_);
 }
 
 void FixCamera::Tick(float deltaSeconds)
@@ -32,4 +39,10 @@ void FixCamera::SetAspectRatio(float aspectRatio)
 {
 	aspectRatio_ = aspectRatio;
 	projectionMatrix_ = DirectX::XMMatrixPerspectiveFovLH(fovAngleY_, aspectRatio_, nearZ_, farZ_);
+
+	float backBufferWidth = 0.0f;
+	float backBufferHeight = 0.0f;
+	RenderManager::Get().GetBackbufferSize(backBufferWidth, backBufferWidth);
+
+	orthoMatrix_ = DirectX::XMMatrixOrthographicLH(backBufferWidth, backBufferHeight, nearZ_, farZ_);
 }

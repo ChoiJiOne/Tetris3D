@@ -81,6 +81,14 @@ public:
 	DirectX::XMMATRIX GetProjectionMatrix() const { return projectionMatrix_; }
 
 
+	/**
+	 * @brief 고정 카메라의 직교 투영 행렬을 얻습니다.
+	 * 
+	 * @return 직교 투영 행렬을 반환합니다.
+	 */
+	DirectX::XMMATRIX GetOrthoMatrix() const { return orthoMatrix_; }
+
+
 private:
 	/**
 	 * @brief 고정 카메라의 월드 상 위치입니다.
@@ -138,4 +146,10 @@ private:
 	 * @brief 원근 투영 행렬입니다.
 	 */
 	DirectX::XMMATRIX projectionMatrix_;
+
+
+	/**
+	 * @brief 직교 투영 행렬입니다.
+	 */
+	DirectX::XMMATRIX orthoMatrix_;
 };
