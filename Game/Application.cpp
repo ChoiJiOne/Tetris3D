@@ -98,10 +98,7 @@ public:
 	void Run()
 	{
 		gameTimer_.Reset();
-
-		std::string path = CommandLine::GetValue("Content");
-		TTFont font(RenderManager::Get().GetDevice(), path + "SeoulNamsanEB.ttf", 32, 127, 32.0f);
-		
+				
 		while (!bIsDone_)
 		{
 			InputManager::Get().Tick();
@@ -110,21 +107,7 @@ public:
 			RenderManager::Get().BeginFrame(0.5294f, 0.8078f, 0.9216f, 1.0f);
 			RenderManager::Get().SetWindowViewport();
 
-			//WorldManager::Get().Tick(gameTimer_.GetDeltaSeconds());
-
-			float width = 0.0f;
-			float height = 0.0f;
-			RenderManager::Get().GetBackbufferSize(width, height);
-
-			TextNoEffectShader* effectShader = reinterpret_cast<TextNoEffectShader*>(ContentManager::Get().GetEffectShader("TextNoEffectShader"));
-			effectShader->SetProjectionMatrix(DirectX::XMMatrixOrthographicLH(width, height, 0.001f, 1000.0f));
-			effectShader->DrawText2D(
-				RenderManager::Get().GetContext(),
-				font,
-				L"abcdefghijklmnopqrstuvwxyz",
-				DirectX::XMFLOAT2(0.0f, 0.0f),
-				DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-			);
+			WorldManager::Get().Tick(gameTimer_.GetDeltaSeconds());
 
 			RenderManager::Get().EndFrame();
 		}
