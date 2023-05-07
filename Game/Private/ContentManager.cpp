@@ -1,6 +1,7 @@
 #include "EffectShader.h"
 #include "StaticMesh.h"
 #include "Texture2D.h"
+#include "TTFont.h"
 #include "ContentManager.h"
 
 void ContentManager::Setup()
@@ -13,6 +14,11 @@ void ContentManager::Setup()
 void ContentManager::Cleanup()
 {
 	if (!bIsSetup_) return;
+
+	for (auto& font : fonts_)
+	{
+		font.second.reset();
+	}
 
 	for (auto& texture : textures_)
 	{
@@ -29,6 +35,7 @@ void ContentManager::Cleanup()
 		effectShader.second.reset();
 	}
 
+	fonts_.clear();
 	textures_.clear();
 	staticMeshs_.clear();
 	effectShaders_.clear();
@@ -117,6 +124,34 @@ void ContentManager::RemoveStaticMesh(const std::string& signature)
 	if (staticMeshs_.find(signature) != staticMeshs_.end())
 	{
 		staticMeshs_.erase(signature);
+	}
+}
+
+TTFont* ContentManager::AddTTFont(const std::string& signature, std::unique_ptr<TTFont> font)
+{
+	CHECK((fonts_.find(signature) == fonts_.end()), "collision true type font signature key...");
+
+	fonts_[signature] = std::move(font);
+	return fonts_[signature].get();
+}
+
+TTFont* ContentManager::GetTTFont(const std::string& signature)
+{
+	TTFont* font = nullptr;
+
+	if (fonts_.find(signature) != fonts_.end())
+	{
+		font = fonts_[signature].get();
+	}
+
+	return font;
+}
+
+void ContentManager::RemoveTTFont(const std::string& signature)
+{
+	if (fonts_.find(signature) != fonts_.end())
+	{
+		fonts_.erase(signature);
 	}
 }
 

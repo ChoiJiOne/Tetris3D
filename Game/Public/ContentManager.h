@@ -8,6 +8,7 @@
 class EffectShader;
 class Texture2D;
 class StaticMesh;
+class TTFont;
 
 
 /**
@@ -144,6 +145,36 @@ public:
 	 */
 	void RemoveStaticMesh(const std::string& signature);
 
+
+	/**
+	 * @brief 컨텐츠 관리자에 트루 타입 폰트를 추가합니다.
+	 * 
+	 * @param signature 트루 타입 폰트의 시그니처 값입니다.
+	 * @param font 관리자에 추가할 트루 타입 폰트입니다.
+	 * 
+	 * @throws 시그니처 값에 대응하는 트루 타입 폰트가 이미 존재하면 C++ 표준 예외를 던집니다.
+	 */
+	TTFont* AddTTFont(const std::string& signature, std::unique_ptr<TTFont> font);
+
+
+	/**
+	 * @brief 관리 중인 트루 타입 폰트를 얻습니다.
+	 *
+	 * @param signature 트루 타입 폰트의 시그니처 값입니다.
+	 *
+	 * @return 시그니처 값에 대응하는 트루 타입 폰트가 존재하면 포인터를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
+	 */
+	TTFont* GetTTFont(const std::string& signature);
+
+
+	/**
+	 * @brief 관리 중인 트루 타입 폰트를 삭제합니다.
+	 *
+	 * @note 시그니처 값에 대응하는 트루 타입 폰트가 존재하지 않으면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param signature 트루 타입 폰트의 시그니처 값입니다.
+	 */
+	void RemoveTTFont(const std::string& signature);
 	
 private:
 	/**
@@ -183,4 +214,10 @@ private:
 	 * @brief 컨텐츠 매니저가 관리 중인 텍스처입니다.
 	 */
 	std::unordered_map<std::string, std::unique_ptr<Texture2D>> textures_;
+
+
+	/**
+	 * @brief 컨텐츠 매니저가 관리 중인 트루 타입 폰트입니다.
+	 */
+	std::unordered_map<std::string, std::unique_ptr<TTFont>> fonts_;
 };
