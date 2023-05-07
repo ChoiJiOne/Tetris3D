@@ -182,7 +182,7 @@ private:
 	 * 
 	 * @note 이 생성자는 아무 동작도 수행하지 않습니다.
 	 */
-	ContentManager() = default;
+	ContentManager();
 
 
 	/**

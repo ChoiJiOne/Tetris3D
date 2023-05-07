@@ -155,6 +155,10 @@ void ContentManager::RemoveTTFont(const std::string& signature)
 	}
 }
 
+ContentManager::ContentManager()
+{
+}
+
 ContentManager::~ContentManager()
 {
 	Cleanup();
