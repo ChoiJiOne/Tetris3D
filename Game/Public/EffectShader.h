@@ -144,7 +144,7 @@ protected:
 		vertexData.SysMemPitch = 0;
 		vertexData.SysMemSlicePitch = 0;
 
-		return Device->CreateBuffer(&vertexBufferDesc, &vertexData, outVertexBuffer);
+		return device->CreateBuffer(&vertexBufferDesc, &vertexData, outVertexBuffer);
 	}
 
 
