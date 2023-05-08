@@ -57,6 +57,7 @@ void SpriteNoEffectShader::DrawSprite2D(ID3D11DeviceContext* context, Texture2D*
 	{
 		TransparentConstantBuffer* constantBuffer = reinterpret_cast<TransparentConstantBuffer*>(constantBufferMappedResource.pData);
 
+		transparentConstantBuffer.transparent = DirectX::XMFLOAT4(alpha, alpha, alpha, alpha);
 		constantBuffer->transparent = transparentConstantBuffer.transparent;
 
 		context->Unmap(transparentBuffer_, 0);
