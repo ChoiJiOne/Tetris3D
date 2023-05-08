@@ -50,16 +50,6 @@ void TextNoEffectShader::DrawText2D(ID3D11DeviceContext* context, TTFont* font, 
 	{
 		EffectShader::Bind(context);
 
-		const Glyph& glyph = font->GetGlyph(static_cast<int32_t>(unicode));
-		UpdateVertexBuffer(context, glyph, atlasSize, position);
-
-		uint32_t stride = sizeof(Vertex::PositionUV);
-		uint32_t offset = 0;
-
-		context->IASetVertexBuffers(0, 1, &characterVertexBuffer_, &stride, &offset);
-		context->IASetIndexBuffer(characterIndexBuffer_, DXGI_FORMAT_R32_UINT, 0);
-		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 		D3D11_MAPPED_SUBRESOURCE constantBufferMappedResource;
 
 		if (SUCCEEDED(context->Map(everyFrameBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &constantBufferMappedResource)))
@@ -86,6 +76,16 @@ void TextNoEffectShader::DrawText2D(ID3D11DeviceContext* context, TTFont* font, 
 		context->PSSetShaderResources(textureAtlasResourcebindSlot_, 1, &textureAtlasView);
 		context->PSSetConstantBuffers(textColorBufferBindSlot_, 1, &textColorBuffer_);
 		context->PSSetSamplers(samplerStateBindSlot_, 1, &linearSamplerState_);
+		
+		const Glyph& glyph = font->GetGlyph(static_cast<int32_t>(unicode));
+		UpdateVertexBuffer(context, glyph, atlasSize, position);
+
+		uint32_t stride = sizeof(Vertex::PositionUV);
+		uint32_t offset = 0;
+
+		context->IASetVertexBuffers(0, 1, &characterVertexBuffer_, &stride, &offset);
+		context->IASetIndexBuffer(characterIndexBuffer_, DXGI_FORMAT_R32_UINT, 0);
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		context->DrawIndexed(static_cast<uint32_t>(characterIndex_.size()), 0, 0);
 
