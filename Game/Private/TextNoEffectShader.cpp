@@ -81,13 +81,11 @@ void TextNoEffectShader::DrawText2D(ID3D11DeviceContext* context, TTFont* font, 
 		}
 
 		context->VSSetConstantBuffers(everyFrameBufferBindSlot_, 1, &everyFrameBuffer_);
-
-		context->PSSetSamplers(samplerStateBindSlot_, 1, &linearSamplerState_);
-
+		
 		ID3D11ShaderResourceView* textureAtlasView = font->GetTextureAtlasView();
 		context->PSSetShaderResources(textureAtlasResourcebindSlot_, 1, &textureAtlasView);
-
 		context->PSSetConstantBuffers(textColorBufferBindSlot_, 1, &textColorBuffer_);
+		context->PSSetSamplers(samplerStateBindSlot_, 1, &linearSamplerState_);
 
 		context->DrawIndexed(static_cast<uint32_t>(characterIndex_.size()), 0, 0);
 
