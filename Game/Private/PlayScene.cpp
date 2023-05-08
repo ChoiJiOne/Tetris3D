@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "UIWidget.h"
 #include "StringHelper.hpp"
 #include "Tetromino.h"
 #include "WorldManager.h"
@@ -64,10 +65,26 @@ void PlayScene::Entry()
 
 	Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
 	currentTetromino->SetState(Tetromino::EState::RUNNING);
+
+	UIWidget::ConstructorParam uiParam {
+		5,
+		true,
+		DirectX::XMFLOAT2(200.0f, 200.0f),
+		100.0f,
+		100.0f,
+		"GrayBlock",
+		0.5f,
+		L"Hello World",
+		"SeoulNamsanEB32",
+		DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)
+	};
+
+	WorldManager::Get().AddGameObject("UIWidget", std::make_unique<UIWidget>(uiParam));
 }
 
 void PlayScene::Leave()
 {
+	WorldManager::Get().RemoveGameObject("UIWidget");
 	WorldManager::Get().RemoveGameObject("Board");
 	DestroyTetromino(currentTetrominoID_);
 }
