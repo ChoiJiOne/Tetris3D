@@ -15,13 +15,13 @@ cbuffer cbTextColor : register(b0)
 };
 
 Texture2D<float> fontTextureAltas : register(t0);
-SamplerState linearSampler : register(s0);
+SamplerState linearSamplerState : register(s0);
 
 PS_OUTPUT main(PS_INPUT input)
 {
     PS_OUTPUT output;
     
-    float textAlpha = fontTextureAltas.Sample(linearSampler, input.uv);
+    float textAlpha = fontTextureAltas.Sample(linearSamplerState, input.uv);
     
     output.color = float4(textColor.r, textColor.g, textColor.b, textAlpha);
     
