@@ -17,6 +17,7 @@
 #include "InputManager.h"
 #include "PlayScene.h"
 #include "RenderManager.h"
+#include "SpriteNoEffectShader.h"
 #include "StaticMesh.h"
 #include "StringHelper.hpp"
 #include "Texture2D.h"
@@ -46,7 +47,10 @@ public:
 	/**
 	 * @brief 3D 테트리스 게임의 가상 소멸자입니다.
 	 */
-	virtual ~Tetris3D() {}
+	virtual ~Tetris3D() 
+	{
+		Cleanup();
+	}
 
 
 	/**
@@ -165,6 +169,15 @@ private:
 				RenderManager::Get().GetDevice(),
 				shaderSourcePath + L"TextNoEffectVS.hlsl",
 				shaderSourcePath + L"TextNoEffectPS.hlsl"
+			)
+		);
+
+		ContentManager::Get().AddEffectShader(
+			"SpriteNoEffectShader",
+			std::make_unique<SpriteNoEffectShader>(
+				RenderManager::Get().GetDevice(),
+				shaderSourcePath + L"SpriteNoEffectVS.hlsl",
+				shaderSourcePath + L"SpriteNoEffectPS.hlsl"
 			)
 		);
 	}
@@ -312,7 +325,6 @@ void RunApplication(int32_t argc, char** argv)
 	std::unique_ptr<Tetris3D> game = std::make_unique<Tetris3D>();
 	game->Setup();
 	game->Run();
-	game->Cleanup();
 }
 
 
