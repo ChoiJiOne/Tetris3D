@@ -38,19 +38,19 @@ TextNoEffectShader::~TextNoEffectShader()
 	SAFE_RELEASE(everyFrameBuffer_);
 }
 
-void TextNoEffectShader::DrawText2D(ID3D11DeviceContext* context, TTFont& font, const std::wstring& text, const DirectX::XMFLOAT2& center, const DirectX::XMFLOAT4& color)
+void TextNoEffectShader::DrawText2D(ID3D11DeviceContext* context, TTFont* font, const std::wstring& text, const DirectX::XMFLOAT2& center, const DirectX::XMFLOAT4& color)
 {
 	float textWidth = 0.0f, textHeight = 0.0f;
-	font.MeasureText<float>(text, textWidth, textHeight);
+	font->MeasureText<float>(text, textWidth, textHeight);
 
-	float atlasSize = static_cast<float>(font.GetAtlasSize());
+	float atlasSize = static_cast<float>(font->GetAtlasSize());
 	DirectX::XMFLOAT2 position(center.x - textWidth / 2.0f, center.y - textHeight / 2.0f);
 	
 	for (const auto& unicode : text)
 	{
 		EffectShader::Bind(context);
 
-		const Glyph& glyph = font.GetGlyph(static_cast<int32_t>(unicode));
+		const Glyph& glyph = font->GetGlyph(static_cast<int32_t>(unicode));
 		UpdateVertexBuffer(context, glyph, atlasSize, position);
 
 		uint32_t stride = sizeof(Vertex::PositionUV);
@@ -84,7 +84,7 @@ void TextNoEffectShader::DrawText2D(ID3D11DeviceContext* context, TTFont& font, 
 
 		context->PSSetSamplers(samplerStateBindSlot_, 1, &linearSamplerState_);
 
-		ID3D11ShaderResourceView* textureAtlasView = font.GetTextureAtlasView();
+		ID3D11ShaderResourceView* textureAtlasView = font->GetTextureAtlasView();
 		context->PSSetShaderResources(textureAtlasResourcebindSlot_, 1, &textureAtlasView);
 
 		context->PSSetConstantBuffers(textColorBufferBindSlot_, 1, &textColorBuffer_);

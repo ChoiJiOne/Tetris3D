@@ -83,7 +83,7 @@ public:
 	 */
 	void DrawText2D(
 		ID3D11DeviceContext* context, 
-		TTFont& font, 
+		TTFont* font, 
 		const std::wstring& text, 
 		const DirectX::XMFLOAT2& center,
 		const DirectX::XMFLOAT4& color
