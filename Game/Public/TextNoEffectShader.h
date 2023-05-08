@@ -78,7 +78,7 @@ public:
 	 * @param context 렌더링을 수행할 컨텍스트입니다.
 	 * @param font 텍스트를 렌더링할 때 참조할 폰트 리소스입니다.
 	 * @param text 렌더링할 텍스트입니다.
-	 * @param center 텍스처의 중심 좌표입니다.
+	 * @param center 스크린 상의 텍스처 중심 좌표입니다.
 	 * @param color 텍스의 색상입니다.
 	 */
 	void DrawText2D(
