@@ -231,6 +231,12 @@ private:
 	 * @param alpha 테트로미노의 투명도입니다.
 	 */
 	void DrawBlocks(const std::vector<Block>& blocks, float alpha);
+
+
+	/**
+	 * @brief 테트로미노 위에 다음 테트로미노임을 표시하는 쿼드를 렌더링합니다.
+	 */
+	void DrawNextQuad();
 	
 
 	/**
@@ -382,9 +388,21 @@ private:
 
 
 	/**
+	 * @brief 다음 테트로미노를 나타내는 쿼드 메시입니다.
+	 */
+	StaticMesh* nextQuadMesh_ = nullptr;
+
+
+	/**
 	 * @brief 블럭의 텍스처입니다.
 	 */
 	Texture2D* blockTexture_ = nullptr;
+
+
+	/**
+	 * @brief 다음 테트로미노를 나타내는 쿼드 텍스처입니다.
+	 */
+	Texture2D* nextQuadTexture_ = nullptr;
 
 
 	/**
