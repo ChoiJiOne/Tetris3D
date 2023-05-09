@@ -191,7 +191,7 @@ private:
 	 */
 	void LoadTexture()
 	{
-		std::array<std::string, 10> textures = {
+		std::array<std::string, 11> textures = {
 			"BlueBlock",
 			"CyanBlock",
 			"GrayBlock",
@@ -202,6 +202,7 @@ private:
 			"PurpleBlock",
 			"RedBlock",
 			"YellowBlock",
+			"SpeechBubble",
 		};
 
 		std::string texturePath = CommandLine::GetValue("Content");
@@ -251,10 +252,28 @@ private:
 	{
 		std::vector<Vertex::PositionUV> vertices;
 		std::vector<uint32_t> indices;
-		GeometryGenerator::CreateBox(2.0f, 2.0f, 2.0f, vertices, indices);
 
+		GeometryGenerator::CreateBox(2.0f, 2.0f, 2.0f, vertices, indices);
 		ContentManager::Get().AddStaticMesh(
 			"Block",
+			std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices)
+		);
+
+		GeometryGenerator::CreateQuadXY(10.0f, 10.0f, vertices, indices);
+		ContentManager::Get().AddStaticMesh(
+			"QuadXY",
+			std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices)
+		);
+
+		GeometryGenerator::CreateQuadYZ(10.0f, 10.0f, vertices, indices);
+		ContentManager::Get().AddStaticMesh(
+			"QuadYZ",
+			std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices)
+		);
+
+		GeometryGenerator::CreateQuadXZ(10.0f, 10.0f, vertices, indices);
+		ContentManager::Get().AddStaticMesh(
+			"QuadXZ",
 			std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices)
 		);
 	}
