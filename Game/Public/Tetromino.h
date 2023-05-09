@@ -6,9 +6,11 @@
 #include "InputManager.h"
 #include "GameObject.h"
 
+class Board;
+class FixCamera;
 class StaticMesh;
 class Texture2D;
-class Board;
+class TextureNoEffectShader;
 
 
 /**
@@ -227,16 +229,21 @@ private:
 	/**
 	 * @brief 테트로미노의 블럭들을 백버퍼에 렌더링을 수행합니다.
 	 * 
+	 * @param fixCamera 고정 카메라입니다.
+	 * @param effectShader 렌더링에 사용할 이펙트 셰이더입니다.
 	 * @param blocks 백버퍼에 그릴 블럭들입니다.
 	 * @param alpha 테트로미노의 투명도입니다.
 	 */
-	void DrawBlocks(const std::vector<Block>& blocks, float alpha);
+	void DrawBlocks(FixCamera* fixCamera, TextureNoEffectShader* effectShader, const std::vector<Block>& blocks, float alpha);
 
 
 	/**
 	 * @brief 테트로미노 위에 다음 테트로미노임을 표시하는 쿼드를 렌더링합니다.
+	 * 
+	 * @param fixCamera 고정 카메라입니다.
+	 * @param effectShader 렌더링에 사용할 이펙트 셰이더입니다.
 	 */
-	void DrawNextQuad();
+	void DrawNextQuad(FixCamera* fixCamera, TextureNoEffectShader* effectShader);
 	
 
 	/**

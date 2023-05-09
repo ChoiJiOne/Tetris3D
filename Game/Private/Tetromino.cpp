@@ -67,18 +67,21 @@ Tetromino::~Tetromino()
 
 void Tetromino::Tick(float deltaSeconds)
 {
+	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
+	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
+
 	if (state_ == EState::RUNNING)
 	{
 		accumulatedTime_ += deltaSeconds;
 		Update();
 
-		DrawBlocks(blocks_, 1.0f);
-		DrawBlocks(shadowBlocks_, 0.2f);
+		DrawBlocks(fixCamera, effectShader, blocks_, 1.0f);
+		DrawBlocks(fixCamera, effectShader, shadowBlocks_, 0.2f);
 	}
 	else
 	{
-		DrawBlocks(blocks_, 1.0f);
-		DrawNextQuad();
+		DrawBlocks(fixCamera, effectShader, blocks_, 1.0f);
+		DrawNextQuad(fixCamera, effectShader);
 	}
 }
 
@@ -276,11 +279,13 @@ void Tetromino::UpdateAccumulatedTime(Board* board)
 	}
 }
 
-void Tetromino::DrawBlocks(const std::vector<Block>& blocks, float alpha)
+void Tetromino::DrawBlocks(
+	FixCamera* fixCamera, 
+	TextureNoEffectShader* effectShader, 
+	const std::vector<Block>& blocks, 
+	float alpha
+)
 {
-	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
-	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
-
 	for (const Block& block : blocks)
 	{
 		DirectX::XMFLOAT3 position = block.GetPosition();
@@ -297,14 +302,13 @@ void Tetromino::DrawBlocks(const std::vector<Block>& blocks, float alpha)
 	}
 }
 
-void Tetromino::DrawNextQuad()
+void Tetromino::DrawNextQuad(FixCamera* fixCamera, TextureNoEffectShader* effectShader)
 {
-	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
-	TextureNoEffectShader* effectShader = reinterpret_cast<TextureNoEffectShader*>(ContentManager::Get().GetEffectShader("TextureNoEffectShader"));
-
 	DirectX::XMFLOAT3 position = basePosition_;
-
-	effectShader->SetWorldMatrix(DirectX::XMMatrixTranslation(position.x + 4.0f, position.y + 6.0f, position.z));
+	position.x += blocks_.front().GetSize() * 3.0f;
+	position.y += blocks_.front().GetSize() * 3.0f;
+	
+	effectShader->SetWorldMatrix(DirectX::XMMatrixTranslation(position.x, position.y, position.z));
 	effectShader->SetViewMatrix(fixCamera->GetViewMatrix());
 	effectShader->SetProjectionMatrix(fixCamera->GetProjectionMatrix());
 
