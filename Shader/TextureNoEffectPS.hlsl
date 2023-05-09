@@ -22,7 +22,7 @@ PS_OUTPUT main(PS_INPUT input)
     PS_OUTPUT output;
     
     output.color = textureResource.Sample(linearSamplerState, input.uv);
-    output.color.a = transparent.a;
+    output.color *= transparent;
     
     return output;
 }
