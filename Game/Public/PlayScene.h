@@ -80,6 +80,14 @@ private:
 	 */
 	void DestroyTetromino(int32_t tetrominoID);
 
+
+	/**
+	 * @brief 플레이 씬의 테트리스 보드를 얻습니다.
+	 * 
+	 * @return 플레이 씬 테트리스 보드의 포인터를 반환합니다.
+	 */
+	Board* GetBoard();
+
 	
 private:
 	/**

@@ -102,3 +102,8 @@ void PlayScene::DestroyTetromino(int32_t tetrominoID)
 
 	WorldManager::Get().RemoveGameObject(signature);
 }
+
+Board* PlayScene::GetBoard()
+{
+	return reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"));;
+}
