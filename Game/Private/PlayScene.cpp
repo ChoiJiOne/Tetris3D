@@ -20,7 +20,7 @@ void PlayScene::Tick(float deltaSeconds)
 			SetActive(false);
 			currentTetromino->SetActive(false);
 
-			Board* board = reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"));
+			Board* board = GetBoard();
 			board->SetActive(false);
 			// 임시 코드. 게임 플레이가 종료되면 오브젝트 비활성화
 		}
