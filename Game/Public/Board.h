@@ -127,6 +127,14 @@ public:
 	const std::list<Block>& GetInnerBlocks() const { return innerBlocks_; }
 
 
+	/**
+	 * @brief 보드가 삭제한 라인 수를 얻습니다.
+	 * 
+	 * @return 보드가 삭제한 라인 수를 반환합니다.
+	 */
+	int32_t GetRemoveLine() const { return removeLine_; }
+
+
 private:
 	/**
 	 * @brief 보드의 외곽선 블럭들을 생성합니다.
