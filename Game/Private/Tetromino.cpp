@@ -53,10 +53,7 @@ Tetromino::Tetromino(
 , maxAccumulatedTime_(maxAccumulatedTime)
 {
 	blockStaticMesh_ = ContentManager::Get().GetStaticMesh("Block");
-	nextQuadMesh_ = ContentManager::Get().GetStaticMesh("QuadXY");
-
 	blockTexture_ = ContentManager::Get().GetTexture2D(Block::GetColorTextureSignature(blockColor));
-	nextQuadTexture_ = ContentManager::Get().GetTexture2D("SpeechBubble");
 
 	GenerateShapeBlocks(shape_, basePosition_, blockSize, blockColor, rotatePosition_, blocks_);
 }
@@ -81,7 +78,6 @@ void Tetromino::Tick(float deltaSeconds)
 	else
 	{
 		DrawBlocks(fixCamera, effectShader, blocks_, 1.0f);
-		DrawNextQuad(fixCamera, effectShader);
 	}
 }
 
@@ -300,23 +296,6 @@ void Tetromino::DrawBlocks(
 
 		blockStaticMesh_->Draw(RenderManager::Get().GetContext());
 	}
-}
-
-void Tetromino::DrawNextQuad(FixCamera* fixCamera, TextureNoEffectShader* effectShader)
-{
-	DirectX::XMFLOAT3 position = basePosition_;
-	position.x += blocks_.front().GetSize() * 3.0f;
-	position.y += blocks_.front().GetSize() * 3.0f;
-	
-	effectShader->SetWorldMatrix(DirectX::XMMatrixTranslation(position.x, position.y, position.z));
-	effectShader->SetViewMatrix(fixCamera->GetViewMatrix());
-	effectShader->SetProjectionMatrix(fixCamera->GetProjectionMatrix());
-
-	effectShader->SetAlpha(1.0f);
-	effectShader->SetTexture(nextQuadTexture_);
-	effectShader->Bind(RenderManager::Get().GetContext());
-
-	nextQuadMesh_->Draw(RenderManager::Get().GetContext());
 }
 
 void Tetromino::Move(std::vector<Block>& blocks, DirectX::XMFLOAT3& basePosition, DirectX::XMFLOAT3& rotatePosition, const EMovement& movement)

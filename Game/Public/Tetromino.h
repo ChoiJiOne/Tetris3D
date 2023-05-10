@@ -238,15 +238,6 @@ private:
 
 
 	/**
-	 * @brief 테트로미노 위에 다음 테트로미노임을 표시하는 쿼드를 렌더링합니다.
-	 * 
-	 * @param fixCamera 고정 카메라입니다.
-	 * @param effectShader 렌더링에 사용할 이펙트 셰이더입니다.
-	 */
-	void DrawNextQuad(FixCamera* fixCamera, TextureNoEffectShader* effectShader);
-	
-
-	/**
 	 * @brief 테트로미노를 이동시킵니다.
 	 * 
 	 * @param blocks 테트로미노 블럭들입니다.
@@ -395,21 +386,9 @@ private:
 
 
 	/**
-	 * @brief 다음 테트로미노를 나타내는 쿼드 메시입니다.
-	 */
-	StaticMesh* nextQuadMesh_ = nullptr;
-
-
-	/**
 	 * @brief 블럭의 텍스처입니다.
 	 */
 	Texture2D* blockTexture_ = nullptr;
-
-
-	/**
-	 * @brief 다음 테트로미노를 나타내는 쿼드 텍스처입니다.
-	 */
-	Texture2D* nextQuadTexture_ = nullptr;
 
 
 	/**
