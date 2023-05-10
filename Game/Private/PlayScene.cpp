@@ -1,5 +1,5 @@
 #include "Board.h"
-#include "UIWidget.h"
+#include "Widget.h"
 #include "StringHelper.hpp"
 #include "Tetromino.h"
 #include "WorldManager.h"

@@ -17,7 +17,7 @@
 #include "InputManager.h"
 #include "PlayScene.h"
 #include "RenderManager.h"
-#include "UIWidget.h"
+#include "Widget.h"
 #include "SpriteNoEffectShader.h"
 #include "StaticMesh.h"
 #include "StringHelper.hpp"
