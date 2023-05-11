@@ -88,6 +88,36 @@ EPressState InputManager::GetKeyPressState(const EVirtualKey& keyCode) const
 	return pressState;
 }
 
+EPressState InputManager::GetMousePressState(const EMouseButton& mouseButton) const
+{
+	EPressState pressState = EPressState::NONE;
+
+	if (IsPressMouseButton(prevMouseState_, mouseButton))
+	{
+		if (IsPressMouseButton(currMouseState_, mouseButton))
+		{
+			pressState = EPressState::HELD;
+		}
+		else
+		{
+			pressState = EPressState::RELEASED;
+		}
+	}
+	else
+	{
+		if (IsPressMouseButton(currMouseState_, mouseButton))
+		{
+			pressState = EPressState::PRESSED;
+		}
+		else
+		{
+			pressState = EPressState::NONE;
+		}
+	}
+
+	return pressState;
+}
+
 void InputManager::BindWindowEventAction(const EWindowEvent& windowEvent, const std::function<void()>& eventAction)
 {
 	CHECK((windowEventActions_.find(windowEvent) == windowEventActions_.end()), "collision window event key...");
@@ -111,4 +141,25 @@ InputManager::~InputManager()
 bool InputManager::IsPressKey(const std::vector<uint8_t>& keyboardState, const EVirtualKey& keyCode) const
 {
 	return keyboardState[static_cast<int32_t>(keyCode)] == 0 ? false : true;
+}
+
+bool InputManager::IsPressMouseButton(uint32_t buttonState, const EMouseButton& mouseButton) const
+{
+	uint32_t mask = 0;
+
+	switch (mouseButton)
+	{
+	case EMouseButton::LEFT:
+		mask = SDL_BUTTON_LMASK;
+		break;
+
+	case EMouseButton::RIGHT:
+		mask = SDL_BUTTON_RMASK;
+		break;
+
+	default:
+		ENFORCE_THROW_EXCEPTION("undefined mouse button...");
+	}
+
+	return (buttonState & mask) == 0 ? false : true;
 }

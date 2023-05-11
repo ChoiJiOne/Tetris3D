@@ -388,6 +388,16 @@ public:
 	 */
 	EPressState GetKeyPressState(const EVirtualKey& keyCode) const;
 
+
+	/**
+	 * @brief 마우스의 입력 상태를 확인합니다.
+	 * 
+	 * @param mouseButton 입력 상태를 확인할 마우스 버튼입니다.
+	 * 
+	 * @return 마우스의 입력 상태를 반환합니다.
+	 */
+	EPressState GetMousePressState(const EMouseButton& mouseButton) const;
+
 	
 	/**
 	 * @brief 윈도우 이벤트에 동작할 액션을 바인딩합니다.
@@ -430,6 +440,17 @@ private:
 	 * @return 키가 눌렸다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
 	bool IsPressKey(const std::vector<uint8_t>& keyboardState, const EVirtualKey& keyCode) const;
+
+
+	/**
+	 * @brief 마우스 버튼이 눌렸는지 확인합니다.
+	 * 
+	 * @param buttonState 눌렸는지 확인할 마우스 버튼의 상태입니다.
+	 * @param mouseButton 눌렸는지 확인할 마우스 버튼입니다.
+	 * 
+	 * @return 마우스 버튼이 눌렸다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsPressMouseButton(uint32_t buttonState, const EMouseButton& mouseButton) const;
 
 
 private:
