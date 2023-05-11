@@ -1,5 +1,6 @@
 #pragma once
 
+#include <directxmath.h>
 #include <unordered_map>
 #include <functional>
 #include <vector>
@@ -448,6 +449,34 @@ private:
 	 * @brief Tick 호출 이후의 키보드 상태입니다.
 	 */
 	std::vector<uint8_t> currKeyboardState_;
+
+
+	/**
+	 * @brief Tick 호출 이전의 마우스 위치입니다.
+	 * 
+	 * @note 마우스 위치는 윈도우 좌표계 기준입니다.
+	 */
+	DirectX::XMINT2 prevCursorPosition_;
+
+
+	/**
+	 * @brief Tick 호출 이전의 마우스 상태입니다.
+	 */
+	uint32_t prevMouseState_ = 0;
+
+
+	/**
+	 * @brief Tick 호출 이후의 마우스 위치입니다.
+	 * 
+	 * @note 마우스 위치는 윈도우 좌표계 기준입니다.
+	 */
+	DirectX::XMINT2 currCursorPosition_;
+
+
+	/**
+	 * @brief Tick 호출 이후의 마우스 상태입니다.
+	 */
+	uint32_t currMouseState_ = 0;
 
 
 	/**

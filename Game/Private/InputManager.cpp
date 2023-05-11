@@ -51,6 +51,11 @@ void InputManager::Tick()
 		reinterpret_cast<const void*>(&keyboardState[0]),
 		static_cast<int32_t>(EVirtualKey::CODE_NUM_SCANCODES)
 	);
+
+	prevCursorPosition_ = currCursorPosition_;
+	prevMouseState_ = currMouseState_;
+
+	currMouseState_ = SDL_GetMouseState(&currCursorPosition_.x, &currCursorPosition_.y);
 }
 
 EPressState InputManager::GetKeyPressState(const EVirtualKey& keyCode) const
