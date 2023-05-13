@@ -99,7 +99,7 @@ public:
 	virtual void Tick(float deltaSeconds) override;
 
 
-protected:
+private:
 	/**
 	 * @brief UI 버튼의 상대 위치를 스크린 위치로 변환합니다.
 	 * 
@@ -144,7 +144,7 @@ protected:
 	void DrawUITexture(Texture2D* texture, const DirectX::XMFLOAT2& center, float width, float height, float transparency);
 
 
-protected:
+private:
 	/**  
 	 * @brief UI 버튼의 스크린 상의 정규화된 중심 좌표입니다.
 	 * 
