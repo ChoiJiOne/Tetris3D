@@ -1,8 +1,11 @@
 #include "Board.h"
+#include "Button.h"
 #include "StringHelper.hpp"
 #include "Tetromino.h"
 #include "WorldManager.h"
 #include "PlayScene.h"
+
+#include <SDL2/SDL.h>
 
 void PlayScene::Tick(float deltaSeconds)
 {
@@ -64,6 +67,25 @@ void PlayScene::Entry()
 
 	Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
 	currentTetromino->SetState(Tetromino::EState::RUNNING);
+
+	uiUpdateOrder_ = 4;
+
+	Button::ConstructorParam buttonParam{
+		uiUpdateOrder_,
+		true,
+		DirectX::XMFLOAT2(-0.7f, 0.7f),
+		100.0f, 
+		100.0f,
+		"BlueBlock",
+		1.0f,
+		0.5f,
+		0.95f,
+		[&]() {
+			SDL_Log("Press Button");
+		}
+	};
+
+	WorldManager::Get().AddGameObject("Button", std::make_unique<Button>(buttonParam));
 }
 
 void PlayScene::Leave()
