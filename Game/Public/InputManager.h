@@ -398,6 +398,22 @@ public:
 	 */
 	EPressState GetMousePressState(const EMouseButton& mouseButton) const;
 
+
+	/**
+	 * @brief 마우스의 이전 위치를 얻습니다.
+	 *
+	 * @return 마우스의 이전 위치값을 반환합니다.
+	 */
+	DirectX::XMINT2 GetPrevMousePosition() const { return prevCursorPosition_; }
+
+
+	/**
+	 * @brief 마우스의 현재 위치를 얻습니다.
+	 * 
+	 * @return 마우스의 현재 위치값을 반환합니다.
+	 */
+	DirectX::XMINT2 GetCurrMousePosition() const { return currCursorPosition_; }
+
 	
 	/**
 	 * @brief 윈도우 이벤트에 동작할 액션을 바인딩합니다.
