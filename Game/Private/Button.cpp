@@ -1,8 +1,10 @@
 #include "ContentManager.h"
+#include "FixCamera.h"
 #include "InputManager.h"
 #include "RenderManager.h"
 #include "Texture2D.h"
 #include "SpriteNoEffectShader.h"
+#include "WorldManager.h"
 #include "Button.h"
 
 Button::Button(ConstructorParam&& constructorParam)
@@ -53,7 +55,6 @@ Button::Button(
 , pressReduceRatio_(pressReduceRatio)
 , eventAction_(eventAction)
 {
-	centerInScreen_ = GetScreenPositionFromRelative(relativeCenter_);
 	texture_ = ContentManager::Get().GetTexture2D(textureSignature);
 }
 
@@ -63,36 +64,58 @@ Button::~Button()
 
 void Button::Tick(float deltaSeconds)
 {
-	centerInScreen_ = GetScreenPositionFromRelative(relativeCenter_);
-	bIsMouseOverButton_ = IsMouseOverButton();
-}
-
-DirectX::XMFLOAT2 Button::GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition) const
-{
 	float screenWidth = 0.0f;
 	float screenHeight = 0.0f;
 	RenderManager::Get().GetBackbufferSize(screenWidth, screenHeight);
 
-	DirectX::XMFLOAT2 screenPosition = relativePosition;
-	screenPosition.x *= screenWidth / 2.0f;
-	screenPosition.y *= screenHeight / 2.0f;
+	centerInScreen_ = ConvertRelativeToScreenPosition(relativeCenter_, screenWidth, screenHeight);
+	centerInWindow_ = ConvertScreenToWindowPosition(centerInScreen_, screenWidth, screenHeight);
+	bIsMouseOverButton_ = IsMouseOverButton();
 
-	screenPosition.x = screenWidth / 2.0f + screenPosition.x;
-	screenPosition.y = screenHeight / 2.0f - screenPosition.y;
+	float transparency = bIsMouseOverButton_ ? mouseOverTransparency_ : mouseNotOverTransparency_;
+	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
+	SpriteNoEffectShader* spriteNoEffectShader = reinterpret_cast<SpriteNoEffectShader*>(ContentManager::Get().GetEffectShader("SpriteNoEffectShader"));
 
-	return screenPosition;
+	DrawUITexture(fixCamera, spriteNoEffectShader, texture_, centerInScreen_, width_, height_, transparency);
+}
+
+DirectX::XMFLOAT2 Button::ConvertRelativeToScreenPosition(const DirectX::XMFLOAT2& relativePosition, float screenWidth, float screenHeight) const
+{
+	return DirectX::XMFLOAT2(
+		(relativePosition.x * screenWidth) / 2.0f,
+		(relativePosition.y * screenHeight) / 2.0f
+	);
+}
+
+DirectX::XMFLOAT2 Button::ConvertScreenToWindowPosition(const DirectX::XMFLOAT2& screenPosition, float windowWidth, float windowHeight) const
+{
+	return DirectX::XMFLOAT2(
+		windowWidth / 2.0f + screenPosition.x,
+		windowHeight / 2.0f - screenPosition.y
+	);
 }
 
 bool Button::IsMouseOverButton() const
 {
 	DirectX::XMINT2 mousePosition = InputManager::Get().GetCurrMousePosition();
 
-	float minX = centerInScreen_.x - width_ / 2.0f;
-	float maxX = centerInScreen_.x + width_ / 2.0f;
-	float minY = centerInScreen_.y - height_ / 2.0f;
-	float maxY = centerInScreen_.y + height_ / 2.0f;
+	float minX = centerInWindow_.x - width_ / 2.0f;
+	float maxX = centerInWindow_.x + width_ / 2.0f;
+	float minY = centerInWindow_.y - height_ / 2.0f;
+	float maxY = centerInWindow_.y + height_ / 2.0f;
 	float x = static_cast<float>(mousePosition.x);
 	float y = static_cast<float>(mousePosition.y);
 	
 	return (minX <= x && x <= maxX) && (minY <= y && y <= maxY);
+}
+
+void Button::DrawUITexture(FixCamera* fixCamera, SpriteNoEffectShader* effectShader, Texture2D* texture, const DirectX::XMFLOAT2& center, float width, float height, float transparency)
+{
+	RenderManager::Get().SetDepthBuffer(false);
+	DirectX::XMMATRIX orthoMatrix = fixCamera->GetOrthoMatrix();
+
+	effectShader->SetProjectionMatrix(orthoMatrix);
+	effectShader->DrawSprite2D(RenderManager::Get().GetContext(), texture, center, width, height, transparency);
+
+	RenderManager::Get().SetDepthBuffer(true);
 }

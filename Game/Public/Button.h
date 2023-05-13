@@ -5,6 +5,8 @@
 
 #include "GameObject.h"
 
+class FixCamera;
+class SpriteNoEffectShader;
 class Texture2D;
 
 
@@ -99,13 +101,27 @@ public:
 
 private:
 	/**
-	 * @brief UI 버튼의 정규화된 좌표로부터 스크린 상의 좌표를 얻습니다.
+	 * @brief UI 버튼의 상대 위치를 스크린 위치로 변환합니다.
 	 * 
 	 * @param relativePosition -1.0 ~ 1.0 사이의 정규화된 좌표입니다.
+	 * @param screenWidth 스크린의 가로 크기입니다.
+	 * @param screenHeight 스크린의 세로 크기입니다.
+	 * 
+	 * @return 스크린 좌표계 기준의 좌표를 반환합니다.
+	 */
+	DirectX::XMFLOAT2 ConvertRelativeToScreenPosition(const DirectX::XMFLOAT2& relativePosition, float screenWidth, float screenHeight) const;
+
+
+	/**
+	 * @brief UI 버튼의 스크린 위치를 윈도우 위치로 변환합니다.
+	 * 
+	 * @param screenPosition UI 버튼의 스크린 좌표입니다.
+	 * @param windowWidth 윈도우의 가로 크기입니다.
+	 * @param windowHeight 윈도우의 세로 크기입니다.
 	 * 
 	 * @return 윈도우 좌표계 기준의 좌표를 반환합니다.
 	 */
-	DirectX::XMFLOAT2 GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition) const;
+	DirectX::XMFLOAT2 ConvertScreenToWindowPosition(const DirectX::XMFLOAT2& screenPosition, float windowWidth, float windowHeight) const;
 	
 
 	/**
@@ -114,6 +130,20 @@ private:
 	 * @return 마우스가 UI 버튼 위에 있다면 true, 그렇지 않으면 false를 반환합니다.
 	 */
 	bool IsMouseOverButton() const;
+
+
+	/**
+	 * @brief UI 버튼을 화면에 그립니다.
+	 * 
+	 * @param fixCamera UI 버튼을 그릴 때 참조할 고정 카메라입니다.
+	 * @param effectShader UI 버튼을 그릴 때 파이프라인에 바인딩할 셰이더입니다.
+	 * @param texture UI 버튼의 텍스처입니다.
+	 * @param center UI 버튼의 스크린 상의 좌표입니다.
+	 * @param width UI 버튼의 가로 크기입니다.
+	 * @param height UI 버튼의 세로 크기입니다.
+	 * @param transparency UI 버튼의 투명도입니다.
+	 */
+	void DrawUITexture(FixCamera* fixCamera, SpriteNoEffectShader* effectShader, Texture2D* texture, const DirectX::XMFLOAT2& center, float width, float height, float transparency);
 
 
 private:
@@ -129,6 +159,12 @@ private:
 	 * @brief UI 버튼의 스크린 상의 중심 좌표입니다.
 	 */
 	DirectX::XMFLOAT2 centerInScreen_;
+
+
+	/**
+	 * @brief UI 버튼의 윈도우 상의 중심 좌표입니다.
+	 */
+	DirectX::XMFLOAT2 centerInWindow_;
 
 
 	/**
