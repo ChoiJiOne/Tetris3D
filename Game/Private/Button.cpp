@@ -72,23 +72,22 @@ void Button::Tick(float deltaSeconds)
 	centerInWindow_ = ConvertScreenToWindowPosition(centerInScreen_, screenWidth, screenHeight);
 	bIsMouseOverButton_ = IsMouseOverButton();
 
-	float pressReduceRatio = 1.0f;
+	float width = width_;
+	float height = height_;
+	float transparency = bIsMouseOverButton_ ? mouseOverTransparency_ : mouseNotOverTransparency_;
 
 	EPressState pressState = InputManager::Get().GetMousePressState(EMouseButton::LEFT);
-	if ((pressState == EPressState::HELD || pressState == EPressState::PRESSED) && bIsMouseOverButton_)
+	if (bIsMouseOverButton_ && (pressState == EPressState::HELD || pressState == EPressState::PRESSED))
 	{
-		pressReduceRatio = pressReduceRatio_;
+		width *= pressReduceRatio_;
+		height *= pressReduceRatio_;
 	}
 
-	if (pressState == EPressState::RELEASED && bIsMouseOverButton_)
+	if (bIsMouseOverButton_ && pressState == EPressState::RELEASED)
 	{
 		eventAction_();
 	}
 
-	float transparency = bIsMouseOverButton_ ? mouseOverTransparency_ : mouseNotOverTransparency_;
-
-	float width = pressReduceRatio * width_;
-	float height = pressReduceRatio * height_;
 	DrawUITexture(texture_, centerInScreen_, width, height, transparency);
 }
 
