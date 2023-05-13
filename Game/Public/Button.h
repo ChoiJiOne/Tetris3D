@@ -37,7 +37,7 @@ public:
 public:
 	/**
 	 * @brief 게임 내 UI 버튼의 생성자입니다.
-	 * 
+	 *
 	 * @param constructorParam UI 버튼의 생성자 파라미터입니다.
 	 */
 	Button(ConstructorParam&& constructorParam);
@@ -53,7 +53,7 @@ public:
 
 	/**
 	 * @brief 게임 내 UI 버튼의 생성자입니다.
-	 * 
+	 *
 	 * @param updateOrder UI 버튼의 업데이트 순위입니다.
 	 * @param bIsActive UI 버튼의 활성화 여부입니다.
 	 * @param relativeCenter -1.0 ~ 1.0 범위의 UI 버튼의 중심 좌표입니다.
@@ -66,7 +66,7 @@ public:
 	 * @param eventAction UI 버튼을 클릭했을 때 실행할 이벤트입니다.
 	 */
 	Button(
-		int32_t updateOrder, 
+		int32_t updateOrder,
 		bool bIsActive,
 		const DirectX::XMFLOAT2& relativeCenter,
 		float width,
@@ -78,7 +78,7 @@ public:
 		const std::function<void()>& eventAction
 	);
 
-	
+
 	/**
 	 * @brief 게임 내 UI 버튼의 가상 소멸자입니다.
 	 */
@@ -93,7 +93,7 @@ public:
 
 	/**
 	 * @brief UI 버튼을 업데이트합니다.
-	 * 
+	 *
 	 * @param deltaSeconds 초단위 델타 시간값입니다.
 	 */
 	virtual void Tick(float deltaSeconds) override;
