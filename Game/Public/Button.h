@@ -154,13 +154,7 @@ private:
 	 */
 	bool bIsMouseOverButton_ = false;
 
-
-	/**
-	 * @brief 마우스로 UI 버튼을 클릭했는지 확인합니다.
-	 */
-	bool bIsPressButton_ = false;
-
-
+	
 	/**
 	 * @brief 마우스가 UI 버튼 위에 없을 때의 투명도입니다.
 	 */
