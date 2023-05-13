@@ -105,8 +105,8 @@ private:
 	 * 
 	 * @return 윈도우 좌표계 기준의 좌표를 반환합니다.
 	 */
-	DirectX::XMINT2 GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition);
-
+	DirectX::XMFLOAT2 GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition);
+	
 
 private:
 	/**  
@@ -120,7 +120,7 @@ private:
 	/**
 	 * @brief UI 버튼의 스크린 상의 중심 좌표입니다.
 	 */
-	DirectX::XMINT2 centerInScreen_;
+	DirectX::XMFLOAT2 centerInScreen_;
 
 
 	/**

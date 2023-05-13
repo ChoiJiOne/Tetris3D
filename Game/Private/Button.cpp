@@ -65,7 +65,7 @@ void Button::Tick(float deltaSeconds)
 	centerInScreen_ = GetScreenPositionFromRelative(relativeCenter_);
 }
 
-DirectX::XMINT2 Button::GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition)
+DirectX::XMFLOAT2 Button::GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition)
 {
 	float screenWidth = 0.0f;
 	float screenHeight = 0.0f;
@@ -74,9 +74,9 @@ DirectX::XMINT2 Button::GetScreenPositionFromRelative(const DirectX::XMFLOAT2& r
 	DirectX::XMFLOAT2 screenPosition = relativePosition;
 	screenPosition.x *= screenWidth / 2.0f;
 	screenPosition.y *= screenHeight / 2.0f;
-	
-	return DirectX::XMINT2(
-		static_cast<int32_t>(screenWidth / 2.0f + screenPosition.x),
-		static_cast<int32_t>(screenHeight / 2.0f - screenPosition.y)
-	);
+
+	screenPosition.x = screenWidth / 2.0f + screenPosition.x;
+	screenPosition.y = screenHeight / 2.0f - screenPosition.y;
+
+	return screenPosition;
 }
