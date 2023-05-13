@@ -1,4 +1,5 @@
 #include "ContentManager.h"
+#include "InputManager.h"
 #include "RenderManager.h"
 #include "Texture2D.h"
 #include "SpriteNoEffectShader.h"
@@ -63,9 +64,10 @@ Button::~Button()
 void Button::Tick(float deltaSeconds)
 {
 	centerInScreen_ = GetScreenPositionFromRelative(relativeCenter_);
+	bIsMouseOverButton_ = IsMouseOverButton();
 }
 
-DirectX::XMFLOAT2 Button::GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition)
+DirectX::XMFLOAT2 Button::GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition) const
 {
 	float screenWidth = 0.0f;
 	float screenHeight = 0.0f;
@@ -79,4 +81,18 @@ DirectX::XMFLOAT2 Button::GetScreenPositionFromRelative(const DirectX::XMFLOAT2&
 	screenPosition.y = screenHeight / 2.0f - screenPosition.y;
 
 	return screenPosition;
+}
+
+bool Button::IsMouseOverButton() const
+{
+	DirectX::XMINT2 mousePosition = InputManager::Get().GetCurrMousePosition();
+
+	float minX = centerInScreen_.x - width_ / 2.0f;
+	float maxX = centerInScreen_.x + width_ / 2.0f;
+	float minY = centerInScreen_.y - height_ / 2.0f;
+	float maxY = centerInScreen_.y + height_ / 2.0f;
+	float x = static_cast<float>(mousePosition.x);
+	float y = static_cast<float>(mousePosition.y);
+	
+	return (minX <= x && x <= maxX) && (minY <= y && y <= maxY);
 }

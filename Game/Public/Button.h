@@ -105,8 +105,16 @@ private:
 	 * 
 	 * @return 윈도우 좌표계 기준의 좌표를 반환합니다.
 	 */
-	DirectX::XMFLOAT2 GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition);
+	DirectX::XMFLOAT2 GetScreenPositionFromRelative(const DirectX::XMFLOAT2& relativePosition) const;
 	
+
+	/**
+	 * @brief 마우스가 UI 버튼 위에 있는지 확인합니다.
+	 * 
+	 * @return 마우스가 UI 버튼 위에 있다면 true, 그렇지 않으면 false를 반환합니다.
+	 */
+	bool IsMouseOverButton() const;
+
 
 private:
 	/**  
