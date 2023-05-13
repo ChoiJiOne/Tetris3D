@@ -86,12 +86,10 @@ void Button::Tick(float deltaSeconds)
 	}
 
 	float transparency = bIsMouseOverButton_ ? mouseOverTransparency_ : mouseNotOverTransparency_;
-	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
-	SpriteNoEffectShader* spriteNoEffectShader = reinterpret_cast<SpriteNoEffectShader*>(ContentManager::Get().GetEffectShader("SpriteNoEffectShader"));
 
 	float width = pressReduceRatio * width_;
 	float height = pressReduceRatio * height_;
-	DrawUITexture(fixCamera, spriteNoEffectShader, texture_, centerInScreen_, width, height, transparency);
+	DrawUITexture(texture_, centerInScreen_, width, height, transparency);
 }
 
 DirectX::XMFLOAT2 Button::ConvertRelativeToScreenPosition(const DirectX::XMFLOAT2& relativePosition, float screenWidth, float screenHeight) const
@@ -124,13 +122,17 @@ bool Button::IsMouseOverButton() const
 	return (minX <= x && x <= maxX) && (minY <= y && y <= maxY);
 }
 
-void Button::DrawUITexture(FixCamera* fixCamera, SpriteNoEffectShader* effectShader, Texture2D* texture, const DirectX::XMFLOAT2& center, float width, float height, float transparency)
+void Button::DrawUITexture(Texture2D* texture, const DirectX::XMFLOAT2& center, float width, float height, float transparency)
 {
 	RenderManager::Get().SetDepthBuffer(false);
+
+	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
+	SpriteNoEffectShader* spriteNoEffectShader = reinterpret_cast<SpriteNoEffectShader*>(ContentManager::Get().GetEffectShader("SpriteNoEffectShader"));
+
 	DirectX::XMMATRIX orthoMatrix = fixCamera->GetOrthoMatrix();
 
-	effectShader->SetProjectionMatrix(orthoMatrix);
-	effectShader->DrawSprite2D(RenderManager::Get().GetContext(), texture, center, width, height, transparency);
+	spriteNoEffectShader->SetProjectionMatrix(orthoMatrix);
+	spriteNoEffectShader->DrawSprite2D(RenderManager::Get().GetContext(), texture, center, width, height, transparency);
 
 	RenderManager::Get().SetDepthBuffer(true);
 }

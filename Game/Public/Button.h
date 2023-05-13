@@ -135,15 +135,13 @@ protected:
 	/**
 	 * @brief UI 버튼을 화면에 그립니다.
 	 * 
-	 * @param fixCamera UI 버튼을 그릴 때 참조할 고정 카메라입니다.
-	 * @param effectShader UI 버튼을 그릴 때 파이프라인에 바인딩할 셰이더입니다.
 	 * @param texture UI 버튼의 텍스처입니다.
 	 * @param center UI 버튼의 스크린 상의 좌표입니다.
 	 * @param width UI 버튼의 가로 크기입니다.
 	 * @param height UI 버튼의 세로 크기입니다.
 	 * @param transparency UI 버튼의 투명도입니다.
 	 */
-	void DrawUITexture(FixCamera* fixCamera, SpriteNoEffectShader* effectShader, Texture2D* texture, const DirectX::XMFLOAT2& center, float width, float height, float transparency);
+	void DrawUITexture(Texture2D* texture, const DirectX::XMFLOAT2& center, float width, float height, float transparency);
 
 
 protected:
