@@ -72,11 +72,26 @@ void Button::Tick(float deltaSeconds)
 	centerInWindow_ = ConvertScreenToWindowPosition(centerInScreen_, screenWidth, screenHeight);
 	bIsMouseOverButton_ = IsMouseOverButton();
 
+	float pressReduceRatio = 1.0f;
+
+	EPressState pressState = InputManager::Get().GetMousePressState(EMouseButton::LEFT);
+	if ((pressState == EPressState::HELD || pressState == EPressState::PRESSED) && bIsMouseOverButton_)
+	{
+		pressReduceRatio = pressReduceRatio_;
+	}
+
+	if (pressState == EPressState::RELEASED && bIsMouseOverButton_)
+	{
+		eventAction_();
+	}
+
 	float transparency = bIsMouseOverButton_ ? mouseOverTransparency_ : mouseNotOverTransparency_;
 	FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
 	SpriteNoEffectShader* spriteNoEffectShader = reinterpret_cast<SpriteNoEffectShader*>(ContentManager::Get().GetEffectShader("SpriteNoEffectShader"));
 
-	DrawUITexture(fixCamera, spriteNoEffectShader, texture_, centerInScreen_, width_, height_, transparency);
+	float width = pressReduceRatio * width_;
+	float height = pressReduceRatio * height_;
+	DrawUITexture(fixCamera, spriteNoEffectShader, texture_, centerInScreen_, width, height, transparency);
 }
 
 DirectX::XMFLOAT2 Button::ConvertRelativeToScreenPosition(const DirectX::XMFLOAT2& relativePosition, float screenWidth, float screenHeight) const
