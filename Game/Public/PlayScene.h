@@ -148,4 +148,10 @@ private:
 	 * @brief 현재 테트로미노 추적 객체가 추적 중인 테트로미노의 ID입니다.
 	 */
 	int32_t currentTetrominoID_ = 0;
+
+
+	/**
+	 * @brief 게임 내 UI의 업데이트 순위입니다.
+	 */
+	int32_t uiUpdateOrder_ = 0;
 };
