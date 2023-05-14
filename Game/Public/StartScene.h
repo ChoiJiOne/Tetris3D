@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "Scene.h"
 
 
@@ -51,9 +53,23 @@ public:
 	virtual void Leave() override;
 
 
+	/**
+	 * @brief 게임 루프를 종료하는 이벤트를 설정합니다.
+	 * 
+	 * @param quitEvent 설정할 게임 루프를 종료하는 이벤트입니다.
+	 */
+	void SetQuitEvent(const std::function<void()>& quitEvent) { quitEvent_ = quitEvent; }
+
+
 private:
 	/**
 	 * @brief 시작 씬 내의 UI 업데이트 순위입니다.
 	 */
 	int32_t uiUpdateOrder_ = 0;
+
+
+	/**
+	 * @brief 게임 종료 이벤트입니다.
+	 */
+	std::function<void()> quitEvent_ = nullptr;
 };
