@@ -5,8 +5,6 @@
 
 #include "GameObject.h"
 
-class FixCamera;
-class SpriteNoEffectShader;
 class Texture2D;
 
 
