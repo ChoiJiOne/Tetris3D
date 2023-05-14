@@ -98,6 +98,14 @@ public:
 	 */
 	virtual void Tick(float deltaSeconds) override;
 
+	
+	/**
+	 * @brief UI 버튼의 텍스처를 설정합니다.
+	 * 
+	 * @param texture 설정할 UI 버튼 입니다.
+	 */
+	void SetTexture(Texture2D* texture) { texture_ = texture; }
+
 
 private:
 	/**
