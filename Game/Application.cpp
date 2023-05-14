@@ -190,7 +190,7 @@ private:
 	 */
 	void LoadTexture()
 	{
-		std::array<std::string, 14> textures = {
+		std::array<std::string, 17> textures = {
 			"BlueBlock",
 			"CyanBlock",
 			"GrayBlock",
@@ -205,6 +205,9 @@ private:
 			"Stop",
 			"Voluble",
 			"Mute",
+			"Ok",
+			"Quit",
+			"Start",
 		};
 
 		std::string texturePath = CommandLine::GetValue("Content");
