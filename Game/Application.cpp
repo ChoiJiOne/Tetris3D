@@ -11,6 +11,7 @@
 #include "CommandLine.h"
 #include "ContentManager.h"
 #include "CrashHandler.h"
+#include "EndScene.h"
 #include "FixCamera.h"
 #include "GameTimer.h"
 #include "GeometryGenerator.h"
@@ -311,12 +312,19 @@ private:
 
 		WorldManager::Get().AddGameObject("StartScene", std::make_unique<StartScene>(6, false));
 		WorldManager::Get().AddGameObject("PlayScene", std::make_unique<PlayScene>(6, false));
+		WorldManager::Get().AddGameObject("EndScene", std::make_unique<EndScene>(6, false));
 
 		StartScene* startScene = reinterpret_cast<StartScene*>(WorldManager::Get().GetGameObject("StartScene"));
 		PlayScene* playScene = reinterpret_cast<PlayScene*>(WorldManager::Get().GetGameObject("PlayScene"));
+		EndScene* endScene = reinterpret_cast<EndScene*>(WorldManager::Get().GetGameObject("EndScene"));
 
 		startScene->SetQuitEvent(quitEvent);
+		endScene->SetQuitEvent(quitEvent);
+
 		startScene->LinkNextScene(playScene);
+		playScene->LinkNextScene(endScene);
+		endScene->LinkNextScene(startScene);
+
 		startScene->Entry();
 	}
 
