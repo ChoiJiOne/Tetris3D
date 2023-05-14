@@ -21,7 +21,7 @@ void StartScene::Entry()
 		Label::ConstructorParam startTitleParam {
 			uiUpdateOrder_,
 			true,
-			DirectX::XMFLOAT2(0.0f, 0.4f),
+			DirectX::XMFLOAT2(0.0f, 0.6f),
 			"SeoulNamsanEB128",
 			L"TETRIS 3D",
 			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
