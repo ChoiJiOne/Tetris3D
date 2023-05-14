@@ -23,6 +23,38 @@ void StartScene::Entry()
 	};
 
 	WorldManager::Get().AddGameObject("TitleLabel", std::make_unique<Label>(titleParam));
+
+	Button::ConstructorParam startButtonParam {
+		uiUpdateOrder_,
+		true,
+		DirectX::XMFLOAT2(0.0f, 0.0f),
+		200.0f, 
+		200.0f,
+		"Start",
+		1.0f,
+		0.5f,
+		0.95f,
+		[&]() {
+		}
+	};
+
+	WorldManager::Get().AddGameObject("StartButton", std::make_unique<Button>(startButtonParam));
+
+	Button::ConstructorParam quitButtonParam{
+		uiUpdateOrder_,
+		true,
+		DirectX::XMFLOAT2(0.0f, -0.6f),
+		200.0f,
+		200.0f,
+		"Quit",
+		1.0f,
+		0.5f,
+		0.95f,
+		[&]() {
+		}
+	};
+
+	WorldManager::Get().AddGameObject("QuitButton", std::make_unique<Button>(quitButtonParam));
 }
 
 void StartScene::Leave()
