@@ -149,6 +149,9 @@ void PlayScene::Entry()
 
 void PlayScene::Leave()
 {
+	WorldManager::Get().RemoveGameObject("LineLabel");
+	WorldManager::Get().RemoveGameObject("TimeLabel");
+	WorldManager::Get().RemoveGameObject("SoundButton");
 	WorldManager::Get().RemoveGameObject("PlayButton");
 	WorldManager::Get().RemoveGameObject("Board");
 	DestroyTetromino(currentTetrominoID_);
