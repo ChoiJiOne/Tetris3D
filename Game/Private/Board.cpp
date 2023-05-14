@@ -97,7 +97,7 @@ void Board::Tick(float deltaSeconds)
 			removeLine_ += static_cast<int32_t>(fillLines.size());
 
 			Label* lineLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("LineLabel"));
-			lineLabel->SetText(StringHelper::Format(L"LINE : %d", removeLine_));
+			lineLabel->SetText(StringHelper::Format(L"LINE : %3d", removeLine_));
 		}
 	}
 	
