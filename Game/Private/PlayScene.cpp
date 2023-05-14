@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Button.h"
+#include "ContentManager.h"
 #include "StringHelper.hpp"
 #include "Tetromino.h"
 #include "WorldManager.h"
@@ -70,22 +71,34 @@ void PlayScene::Entry()
 
 	uiUpdateOrder_ = 4;
 
-	Button::ConstructorParam buttonParam{
+	Button::ConstructorParam playButtonParam{
 		uiUpdateOrder_,
 		true,
-		DirectX::XMFLOAT2(-0.7f, 0.7f),
-		100.0f, 
-		100.0f,
-		"BlueBlock",
+		DirectX::XMFLOAT2(-0.8f, 0.8f),
+		50.0f, 
+		50.0f,
+		"Stop",
 		1.0f,
 		0.5f,
 		0.95f,
 		[&]() {
-			SDL_Log("Press Button");
+			Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
+			Button* button = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("PlayButton"));
+
+			if (currentTetromino->GetState() == Tetromino::EState::READY)
+			{
+				currentTetromino->SetState(Tetromino::EState::RUNNING);
+				button->SetTexture(ContentManager::Get().GetTexture2D("Stop"));
+			}
+			else if (currentTetromino->GetState() == Tetromino::EState::RUNNING)
+			{
+				currentTetromino->SetState(Tetromino::EState::READY);
+				button->SetTexture(ContentManager::Get().GetTexture2D("Play"));
+			}
 		}
 	};
 
-	WorldManager::Get().AddGameObject("Button", std::make_unique<Button>(buttonParam));
+	WorldManager::Get().AddGameObject("PlayButton", std::make_unique<Button>(playButtonParam));
 }
 
 void PlayScene::Leave()
