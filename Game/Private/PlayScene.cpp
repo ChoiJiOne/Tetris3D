@@ -1,3 +1,5 @@
+#include <array>
+
 #include "Board.h"
 #include "Button.h"
 #include "ContentManager.h"
@@ -19,13 +21,7 @@ void PlayScene::Tick(float deltaSeconds)
 
 		if (!nextTetromino->CanTeleport(tetrominoStartPosition_))
 		{
-			// 임시 코드. 게임 플레이가 종료되면 오브젝트 비활성화
-			SetActive(false);
-			nextTetromino->SetActive(false);
-
-			Board* board = GetBoard();
-			board->SetActive(false);
-			// 임시 코드. 게임 플레이가 종료되면 오브젝트 비활성화
+			Leave();
 		}
 		else
 		{
@@ -42,119 +38,36 @@ void PlayScene::Tick(float deltaSeconds)
 
 void PlayScene::Entry()
 {
-	tetrominoUpdateOrder_ = 2;
-	boardUpdateOrder_ = 3;
-	blockSize_ = 2.0f;
-	tetrominoMaxAccumulatedTime_ = 1.0f;
-	currentTetrominoID_ = 0;
+	SetActive(true);
 
-	boardBasePosition_ = DirectX::XMFLOAT3(-11.0f, 21.0f, 0.0f);
-	tetrominoStartPosition_ = DirectX::XMFLOAT3(-1.0f, 19.0f, 0.0f);
-	tetrominoWaitPosition_ = DirectX::XMFLOAT3(15.0f, 11.0f, 0.0f);
-
-	boardRowCount_ = 22;
-	boardColCount_ = 12;
-	
-	Board::ConstructorParam boardParam {
-		boardUpdateOrder_,
-		true,
-		boardBasePosition_,
-		blockSize_,
-		Block::EColor::GRAY,
-		boardRowCount_,
-		boardColCount_
-	};
-
-	WorldManager::Get().AddGameObject("Board", std::make_unique<Board>(boardParam));
-
-	GenerateTetromino(currentTetrominoID_, tetrominoStartPosition_);
-	GenerateTetromino(currentTetrominoID_ + 1, tetrominoWaitPosition_);
-
-	Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
-	currentTetromino->SetState(Tetromino::EState::RUNNING);
-
-	uiUpdateOrder_ = 4;
-
-	Button::ConstructorParam playButtonParam{
-		uiUpdateOrder_,
-		true,
-		DirectX::XMFLOAT2(-0.8f, 0.8f),
-		50.0f,
-		50.0f,
-		"Stop",
-		1.0f,
-		0.5f,
-		0.95f,
-		[&]() {
-			Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
-			Button* button = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("PlayButton"));
-
-			if (currentTetromino->GetState() == Tetromino::EState::READY)
-			{
-				timer_.Start();
-				currentTetromino->SetState(Tetromino::EState::RUNNING);
-				button->SetTexture(ContentManager::Get().GetTexture2D("Stop"));
-			}
-			else if (currentTetromino->GetState() == Tetromino::EState::RUNNING)
-			{
-				timer_.Stop();
-				currentTetromino->SetState(Tetromino::EState::READY);
-				button->SetTexture(ContentManager::Get().GetTexture2D("Play"));
-			}
-		}
-	};
-
-	WorldManager::Get().AddGameObject("PlayButton", std::make_unique<Button>(playButtonParam));
-
-	Button::ConstructorParam soundButtonParam{
-		uiUpdateOrder_,
-		true,
-		DirectX::XMFLOAT2(-0.8f, 0.6f),
-		50.0f,
-		50.0f,
-		"Mute",
-		1.0f,
-		0.5f,
-		0.95f,
-		[&]() {
-		}
-	};
-
-	WorldManager::Get().AddGameObject("SoundButton", std::make_unique<Button>(soundButtonParam));
-
-	Label::ConstructorParam timeLabelParam {
-		uiUpdateOrder_,
-		true,
-		DirectX::XMFLOAT2(0.6f, -0.0f),
-		"SeoulNamsanEB32",
-		StringHelper::Format(L"TIME : %3d", 0),
-		DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	};
-
-	WorldManager::Get().AddGameObject("TimeLabel", std::make_unique<Label>(timeLabelParam));
-
-	Label::ConstructorParam lineLabelParam {
-		uiUpdateOrder_,
-		true,
-		DirectX::XMFLOAT2(0.6f, -0.2f),
-		"SeoulNamsanEB32",
-		StringHelper::Format(L"LINE : %3d", 0),
-		DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
-	};
-
-	WorldManager::Get().AddGameObject("LineLabel", std::make_unique<Label>(lineLabelParam));
+	CleanupTetrisResource();
+	SetupTetrisProperties();
+	SetupTetrisObject();
+	SetupTetrisUI();
 
 	timer_.Reset();
 }
 
 void PlayScene::Leave()
 {
-	WorldManager::Get().RemoveGameObject("LineLabel");
-	WorldManager::Get().RemoveGameObject("TimeLabel");
-	WorldManager::Get().RemoveGameObject("SoundButton");
-	WorldManager::Get().RemoveGameObject("PlayButton");
-	WorldManager::Get().RemoveGameObject("Board");
-	DestroyTetromino(currentTetrominoID_);
+	std::array<std::string, 5> signatures = {
+		"LineLabel",
+		"TimeLabel",
+		"SoundButton",
+		"PlayButton",
+		"Board",
+	};
+
+	for (const auto& signature : signatures)
+	{
+		GameObject* object = WorldManager::Get().GetGameObject(signature);
+		object->SetActive(false);
+	}
+
+	GetTetromino(currentTetrominoID_)->SetActive(false);
+
+	SetActive(false);
+	nextScene_->Entry();
 }
 
 void PlayScene::GenerateTetromino(int32_t tetrominoID, const DirectX::XMFLOAT3& position)
@@ -189,4 +102,159 @@ void PlayScene::DestroyTetromino(int32_t tetrominoID)
 Board* PlayScene::GetBoard()
 {
 	return reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"));;
+}
+
+void PlayScene::SetupTetrisProperties()
+{
+	tetrominoUpdateOrder_ = 2;
+	boardUpdateOrder_ = 3;
+	blockSize_ = 2.0f;
+	tetrominoMaxAccumulatedTime_ = 1.0f;
+	currentTetrominoID_ = 0;
+
+	boardBasePosition_ = DirectX::XMFLOAT3(-11.0f, 21.0f, 0.0f);
+	tetrominoStartPosition_ = DirectX::XMFLOAT3(-1.0f, 19.0f, 0.0f);
+	tetrominoWaitPosition_ = DirectX::XMFLOAT3(15.0f, 11.0f, 0.0f);
+
+	boardRowCount_ = 22;
+	boardColCount_ = 12;
+
+	uiUpdateOrder_ = 4;
+}
+
+void PlayScene::SetupTetrisObject()
+{
+	Board::ConstructorParam boardParam {
+		boardUpdateOrder_,
+		true,
+		boardBasePosition_,
+		blockSize_,
+		Block::EColor::GRAY,
+		boardRowCount_,
+		boardColCount_
+	};
+
+	WorldManager::Get().AddGameObject("Board", std::make_unique<Board>(boardParam));
+
+	GenerateTetromino(currentTetrominoID_, tetrominoStartPosition_);
+	GenerateTetromino(currentTetrominoID_ + 1, tetrominoWaitPosition_);
+
+	Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
+	currentTetromino->SetState(Tetromino::EState::RUNNING);
+}
+
+void PlayScene::SetupTetrisUI()
+{
+	Button* playButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("PlayButton"));
+	if (!playButton)
+	{
+		Button::ConstructorParam playButtonParam {
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(-0.8f, 0.8f),
+			50.0f,
+			50.0f,
+			"Stop",
+			1.0f,
+			0.5f,
+			0.95f,
+			[&]() {
+				Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
+				Button* button = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("PlayButton"));
+
+				if (currentTetromino->GetState() == Tetromino::EState::READY)
+				{
+					timer_.Start();
+					currentTetromino->SetState(Tetromino::EState::RUNNING);
+					button->SetTexture(ContentManager::Get().GetTexture2D("Stop"));
+				}
+				else if (currentTetromino->GetState() == Tetromino::EState::RUNNING)
+				{
+					timer_.Stop();
+					currentTetromino->SetState(Tetromino::EState::READY);
+					button->SetTexture(ContentManager::Get().GetTexture2D("Play"));
+				}
+			}
+		};
+
+		WorldManager::Get().AddGameObject("PlayButton", std::make_unique<Button>(playButtonParam));
+	}
+	else
+	{
+		playButton->SetActive(true);
+	}
+
+	
+	Button* soundButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("SoundButton"));
+	if (!soundButton)
+	{
+		Button::ConstructorParam soundButtonParam {
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(-0.8f, 0.6f),
+			50.0f,
+			50.0f,
+			"Mute",
+			1.0f,
+			0.5f,
+			0.95f,
+			[&]() {
+			}
+		};
+
+		WorldManager::Get().AddGameObject("SoundButton", std::make_unique<Button>(soundButtonParam));
+	}
+	else
+	{
+		soundButton->SetActive(true);
+	}
+	
+	Label* timeLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("TimeLabel"));
+	if (!timeLabel)
+	{
+		Label::ConstructorParam timeLabelParam {
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(0.6f, -0.0f),
+			"SeoulNamsanEB32",
+			StringHelper::Format(L"TIME : %3d", 0),
+			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		};
+
+		WorldManager::Get().AddGameObject("TimeLabel", std::make_unique<Label>(timeLabelParam));
+	}
+	else
+	{
+		timeLabel->SetText(StringHelper::Format(L"TIME : %3d", 0));
+		timeLabel->SetActive(true);
+	}
+
+	Label* lineLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("LineLabel"));
+	if (!lineLabel)
+	{
+		Label::ConstructorParam lineLabelParam {
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(0.6f, -0.2f),
+			"SeoulNamsanEB32",
+			StringHelper::Format(L"LINE : %3d", 0),
+			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		};
+
+		WorldManager::Get().AddGameObject("LineLabel", std::make_unique<Label>(lineLabelParam));
+	}
+	else
+	{
+		lineLabel->SetText(StringHelper::Format(L"LINE : %3d", 0));
+		lineLabel->SetActive(true);
+	}
+}
+
+void PlayScene::CleanupTetrisResource()
+{
+	if (GetBoard())
+	{
+		WorldManager::Get().RemoveGameObject("Board");
+		DestroyTetromino(currentTetrominoID_);
+	}
 }

@@ -92,6 +92,30 @@ private:
 	 */
 	Board* GetBoard();
 
+
+	/**
+	 * @brief 테트리스 게임 요소를 초기화합니다.
+	 */
+	void SetupTetrisProperties();
+
+
+	/**
+	 * @brief 테트리스 게임 오브젝트를 초기화합니다.
+	 */
+	void SetupTetrisObject();
+
+
+	/**
+	 * @brief 테트리스 게임 UI를 초기화합니다.
+	 */
+	void SetupTetrisUI();
+
+
+	/**
+	 * @brief 테트리스 게임 요소의 초기화를 수행합니다.
+	 */
+	void CleanupTetrisResource();
+
 	
 private:
 	/**
