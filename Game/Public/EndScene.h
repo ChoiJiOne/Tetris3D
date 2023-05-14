@@ -60,12 +60,24 @@ public:
 	 */
 	void SetQuitEvent(const std::function<void()>& quitEvent) { quitEvent_ = quitEvent; }
 
-
+	
 private:
 	/**
 	 * @brief 시작 씬 내의 UI 업데이트 순위입니다.
 	 */
 	int32_t uiUpdateOrder_ = 0;
+
+
+	/**
+	 * @brief 유저의 플레이 시간입니다.
+	 */
+	float playTime_ = 0.0f;
+
+
+	/**
+	 * @brief 유저가 삭제한 라인 수입니다.
+	 */
+	int32_t removeLine_ = 0;
 
 
 	/**

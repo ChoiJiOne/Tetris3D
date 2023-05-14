@@ -1,7 +1,10 @@
 #include <array>
 
+#include "Board.h"
 #include "Button.h"
 #include "Label.h"
+#include "StringHelper.hpp"
+#include "PlayScene.h"
 #include "WorldManager.h"
 #include "EndScene.h"
 
@@ -14,6 +17,8 @@ void EndScene::Entry()
 	SetActive(true);
 
 	uiUpdateOrder_ = 4;
+	removeLine_ = reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"))->GetRemoveLine();
+	playTime_ = reinterpret_cast<PlayScene*>(WorldManager::Get().GetGameObject("PlayScene"))->GetPlayTime();
 
 	Label* endTitle = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("EndTitle"));
 	if (!endTitle)
@@ -21,7 +26,7 @@ void EndScene::Entry()
 		Label::ConstructorParam endTitleParam{
 			uiUpdateOrder_,
 			true,
-			DirectX::XMFLOAT2(0.0f, 0.4f),
+			DirectX::XMFLOAT2(0.0f, 0.8f),
 			"SeoulNamsanEB128",
 			L"TETRIS 3D",
 			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
@@ -32,6 +37,26 @@ void EndScene::Entry()
 	else
 	{
 		endTitle->SetActive(true);
+	}
+
+	Label* showResult = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("ShowResult"));
+	if (!showResult)
+	{
+		Label::ConstructorParam showResultParam{
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(0.0f, 0.4f),
+			"SeoulNamsanEB32",
+			StringHelper::Format(L"TIME : %3d LINE : %3d", static_cast<int32_t>(playTime_), removeLine_),
+			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		};
+
+		WorldManager::Get().AddGameObject("ShowResult", std::make_unique<Label>(showResultParam));
+	}
+	else
+	{
+		showResult->SetText(StringHelper::Format(L"TIME : %3d LINE : %3d", static_cast<int32_t>(playTime_), removeLine_));
+		showResult->SetActive(true);
 	}
 
 	Button* okButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("OkButton"));
@@ -59,7 +84,7 @@ void EndScene::Entry()
 		okButton->SetActive(true);
 	}
 
-	Button* quitButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("QuitButton"));
+	Button* quitButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("EndQuitButton"));
 	if (!quitButton)
 	{
 		Button::ConstructorParam quitButtonParam{
@@ -80,7 +105,7 @@ void EndScene::Entry()
 			}
 		};
 
-		WorldManager::Get().AddGameObject("QuitButton", std::make_unique<Button>(quitButtonParam));
+		WorldManager::Get().AddGameObject("EndQuitButton", std::make_unique<Button>(quitButtonParam));
 	}
 	else
 	{
@@ -90,10 +115,11 @@ void EndScene::Entry()
 
 void EndScene::Leave()
 {
-	std::array<std::string, 4> signatures = {
+	std::array<std::string, 5> signatures = {
 		"EndTitle",
+		"ShowResult",
 		"OkButton",
-		"QuitButton",
+		"EndQuitButton",
 		"EndScene",
 	};
 
