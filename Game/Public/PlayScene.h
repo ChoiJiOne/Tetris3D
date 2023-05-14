@@ -2,6 +2,7 @@
 
 #include <directxmath.h>
 
+#include "GameTimer.h"
 #include "Scene.h"
 
 class Tetromino;
@@ -154,4 +155,10 @@ private:
 	 * @brief 게임 내 UI의 업데이트 순위입니다.
 	 */
 	int32_t uiUpdateOrder_ = 0;
+
+
+	/**
+	 * @brief 게임 플레이 타이머입니다.
+	 */
+	GameTimer timer_;
 };
