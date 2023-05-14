@@ -57,6 +57,14 @@ public:
 	virtual void Leave() override;
 
 
+	/**
+	 * @brief 게임 플레이 시간을 얻습니다.
+	 * 
+	 * @return 초단위 게임 플레이 시간 값을 반환합니다.
+	 */
+	float GetPlayTime() const { return timer_.GetTotalSeconds(); }
+
+
 private:
 	/**
 	 * @brief 테트로미노를 생성합니다.
