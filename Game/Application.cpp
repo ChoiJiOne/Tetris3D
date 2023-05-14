@@ -305,12 +305,17 @@ private:
 			)
 		);
 
+		std::function<void()> quitEvent = [&]() {
+			bIsDone_ = true;
+		};
+
 		WorldManager::Get().AddGameObject("StartScene", std::make_unique<StartScene>(6, false));
 		WorldManager::Get().AddGameObject("PlayScene", std::make_unique<PlayScene>(6, false));
 
 		StartScene* startScene = reinterpret_cast<StartScene*>(WorldManager::Get().GetGameObject("StartScene"));
 		PlayScene* playScene = reinterpret_cast<PlayScene*>(WorldManager::Get().GetGameObject("PlayScene"));
 
+		startScene->SetQuitEvent(quitEvent);
 		startScene->LinkNextScene(playScene);
 		startScene->Entry();
 	}
