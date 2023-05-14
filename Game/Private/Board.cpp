@@ -5,7 +5,9 @@
 #include "MathHelper.hpp"
 #include "RenderManager.h"
 #include "InputManager.h"
+#include "Label.h"
 #include "StaticMesh.h"
+#include "StringHelper.hpp"
 #include "Texture2D.h"
 #include "TextureNoEffectShader.h"
 #include "WorldManager.h"
@@ -91,6 +93,11 @@ void Board::Tick(float deltaSeconds)
 			{
 				RemoveLine(fileLine);
 			}
+
+			removeLine_ += static_cast<int32_t>(fillLines.size());
+
+			Label* lineLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("LineLabel"));
+			lineLabel->SetText(StringHelper::Format(L"LINE : %d", removeLine_));
 		}
 	}
 	
