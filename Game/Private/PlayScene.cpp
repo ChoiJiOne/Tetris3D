@@ -2,24 +2,26 @@
 #include "Button.h"
 #include "ContentManager.h"
 #include "StringHelper.hpp"
+#include "Label.h"
 #include "Tetromino.h"
 #include "WorldManager.h"
 #include "PlayScene.h"
 
 void PlayScene::Tick(float deltaSeconds)
 {
-	if (GetTetromino(currentTetrominoID_)->GetState() == Tetromino::EState::END)
+	Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
+	if (currentTetromino->GetState() == Tetromino::EState::END)
 	{
 		int32_t prevTetrominoID = currentTetrominoID_++;
 		DestroyTetromino(prevTetrominoID);
 
-		Tetromino* currentTetromino = GetTetromino(currentTetrominoID_);
+		Tetromino* nextTetromino = GetTetromino(currentTetrominoID_);
 
-		if (!currentTetromino->CanTeleport(tetrominoStartPosition_))
+		if (!nextTetromino->CanTeleport(tetrominoStartPosition_))
 		{
 			// 임시 코드. 게임 플레이가 종료되면 오브젝트 비활성화
 			SetActive(false);
-			currentTetromino->SetActive(false);
+			nextTetromino->SetActive(false);
 
 			Board* board = GetBoard();
 			board->SetActive(false);
@@ -27,11 +29,15 @@ void PlayScene::Tick(float deltaSeconds)
 		}
 		else
 		{
-			currentTetromino->Teleport(tetrominoStartPosition_);
-			currentTetromino->SetState(Tetromino::EState::RUNNING);
+			nextTetromino->Teleport(tetrominoStartPosition_);
+			nextTetromino->SetState(Tetromino::EState::RUNNING);
 			GenerateTetromino(currentTetrominoID_ + 1, tetrominoWaitPosition_);
 		}
 	}
+
+	timer_.Tick();
+	Label* timeLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("TimeLabel"));
+	timeLabel->SetText(StringHelper::Format(L"TIME : %3d", static_cast<int32_t>(timer_.GetTotalSeconds())));
 }
 
 void PlayScene::Entry()
@@ -85,11 +91,13 @@ void PlayScene::Entry()
 
 			if (currentTetromino->GetState() == Tetromino::EState::READY)
 			{
+				timer_.Start();
 				currentTetromino->SetState(Tetromino::EState::RUNNING);
 				button->SetTexture(ContentManager::Get().GetTexture2D("Stop"));
 			}
 			else if (currentTetromino->GetState() == Tetromino::EState::RUNNING)
 			{
+				timer_.Stop();
 				currentTetromino->SetState(Tetromino::EState::READY);
 				button->SetTexture(ContentManager::Get().GetTexture2D("Play"));
 			}
@@ -97,6 +105,46 @@ void PlayScene::Entry()
 	};
 
 	WorldManager::Get().AddGameObject("PlayButton", std::make_unique<Button>(playButtonParam));
+
+	Button::ConstructorParam soundButtonParam{
+		uiUpdateOrder_,
+		true,
+		DirectX::XMFLOAT2(-0.8f, 0.6f),
+		50.0f,
+		50.0f,
+		"Mute",
+		1.0f,
+		0.5f,
+		0.95f,
+		[&]() {
+		}
+	};
+
+	WorldManager::Get().AddGameObject("SoundButton", std::make_unique<Button>(soundButtonParam));
+
+	Label::ConstructorParam timeLabelParam {
+		uiUpdateOrder_,
+		true,
+		DirectX::XMFLOAT2(0.6f, -0.0f),
+		"SeoulNamsanEB32",
+		StringHelper::Format(L"TIME : %3d", 0),
+		DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+	};
+
+	WorldManager::Get().AddGameObject("TimeLabel", std::make_unique<Label>(timeLabelParam));
+
+	Label::ConstructorParam lineLabelParam {
+		uiUpdateOrder_,
+		true,
+		DirectX::XMFLOAT2(0.6f, -0.2f),
+		"SeoulNamsanEB32",
+		StringHelper::Format(L"LINE : %3d", 0),
+		DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+	};
+
+	WorldManager::Get().AddGameObject("LineLabel", std::make_unique<Label>(lineLabelParam));
+
+	timer_.Reset();
 }
 
 void PlayScene::Leave()
