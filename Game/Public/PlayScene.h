@@ -17,6 +17,9 @@ class PlayScene : public Scene
 public:
 	/**
 	 * @brief 게임 플레이 씬의 생성자입니다.
+	 * 
+	 * @param updateOrder 게임 플레이 씬의 업데이트 순위입니다.
+	 * @param bIsActive 게임 플레이 씬의 활성화 여부입니다.
 	 */
 	PlayScene(int32_t updateOrder, bool bIsActive)
 		: Scene(updateOrder, bIsActive) {}
