@@ -15,10 +15,10 @@ void StartScene::Entry()
 
 	uiUpdateOrder_ = 4;
 
-	Label* titleLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("TitleLabel"));
-	if (!titleLabel)
+	Label* startTitle = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("StartTitle"));
+	if (!startTitle)
 	{
-		Label::ConstructorParam titleParam{
+		Label::ConstructorParam startTitleParam {
 			uiUpdateOrder_,
 			true,
 			DirectX::XMFLOAT2(0.0f, 0.4f),
@@ -27,11 +27,11 @@ void StartScene::Entry()
 			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
 		};
 
-		WorldManager::Get().AddGameObject("TitleLabel", std::make_unique<Label>(titleParam));
+		WorldManager::Get().AddGameObject("StartTitle", std::make_unique<Label>(startTitleParam));
 	}
 	else
 	{
-		titleLabel->SetActive(true);
+		startTitle->SetActive(true);
 	}
 
 	Button* startButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("StartButton"));
@@ -91,7 +91,7 @@ void StartScene::Entry()
 void StartScene::Leave()
 {
 	std::array<std::string, 4> signatures = {
-		"TitleLabel",
+		"StartTitle",
 		"StartButton",
 		"QuitButton",
 		"StartScene",
@@ -103,6 +103,6 @@ void StartScene::Leave()
 		object->SetActive(false);
 	}
 
-	nextScene_->SetActive(true);
+	SetActive(false);
 	nextScene_->Entry();
 }
