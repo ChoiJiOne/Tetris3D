@@ -87,8 +87,11 @@ void Button::Tick(float deltaSeconds)
 	{
 		eventAction_();
 	}
-
-	DrawUITexture(texture_, centerInScreen_, width, height, transparency);
+	
+	if (texture_)
+	{
+		DrawUITexture(texture_, centerInScreen_, width, height, transparency);
+	}
 }
 
 DirectX::XMFLOAT2 Button::ConvertRelativeToScreenPosition(const DirectX::XMFLOAT2& relativePosition, float screenWidth, float screenHeight) const
