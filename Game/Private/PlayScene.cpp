@@ -6,8 +6,6 @@
 #include "WorldManager.h"
 #include "PlayScene.h"
 
-#include <SDL2/SDL.h>
-
 void PlayScene::Tick(float deltaSeconds)
 {
 	if (GetTetromino(currentTetrominoID_)->GetState() == Tetromino::EState::END)
@@ -75,7 +73,7 @@ void PlayScene::Entry()
 		uiUpdateOrder_,
 		true,
 		DirectX::XMFLOAT2(-0.8f, 0.8f),
-		50.0f, 
+		50.0f,
 		50.0f,
 		"Stop",
 		1.0f,
@@ -103,7 +101,7 @@ void PlayScene::Entry()
 
 void PlayScene::Leave()
 {
-	WorldManager::Get().RemoveGameObject("UIWidget");
+	WorldManager::Get().RemoveGameObject("PlayButton");
 	WorldManager::Get().RemoveGameObject("Board");
 	DestroyTetromino(currentTetrominoID_);
 }
