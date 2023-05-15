@@ -5,6 +5,7 @@
 #include <crtdbg.h>
 #include <memory>
 
+#include "AudioManager.h"
 #include "Block.h"
 #include "Board.h"
 #include "ColorNoEffectShader.h"
@@ -74,6 +75,7 @@ public:
 
 		InputManager::Get().Setup();
 		RenderManager::Get().Setup(window_.get());
+		AudioManager::Get().Setup();
 		ContentManager::Get().Setup();
 		WorldManager::Get().Setup();
 
@@ -128,6 +130,7 @@ public:
 	{
 		WorldManager::Get().Cleanup();
 		ContentManager::Get().Cleanup();
+		AudioManager::Get().Cleanup();
 		RenderManager::Get().Cleanup();
 		InputManager::Get().Cleanup();
 
