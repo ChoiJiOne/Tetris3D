@@ -10,10 +10,16 @@
 
 void AudioManager::Setup()
 {
+	if (bIsSetup_) return;
+
+	bIsSetup_ = true;
 }
 
 void AudioManager::Cleanup()
 {
+	if (!bIsSetup_) return;
+	
+	bIsSetup_ = false;
 }
 
 AudioManager::AudioManager()
