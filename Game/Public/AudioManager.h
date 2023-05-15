@@ -63,4 +63,10 @@ private:
 	 * @brief 초기화된 적이 있는지 확인합니다.
 	 */
 	bool bIsSetup_ = false;
+
+
+	/**
+	 * @brief 생성된 사운드 리소스의 수입니다.
+	 */
+	int32_t countSoundResource_ = 0;
 };

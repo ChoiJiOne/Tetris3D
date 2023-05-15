@@ -18,7 +18,8 @@ void AudioManager::Setup()
 void AudioManager::Cleanup()
 {
 	if (!bIsSetup_) return;
-	
+
+	countSoundResource_ = 0;
 	bIsSetup_ = false;
 }
 
