@@ -4,6 +4,7 @@
 #include "MathHelper.hpp"
 #include "RenderManager.h"
 #include "StaticMesh.h"
+#include "Sound.h"
 #include "Texture2D.h"
 #include "TextureNoEffectShader.h"
 #include "WorldManager.h"
@@ -244,6 +245,10 @@ void Tetromino::UpdateInputState(Board* board)
 				JumpBottom(blocks_, basePosition_, rotatePosition_, board);
 				state_ = EState::END;
 				board->AddBlocks(blocks_);
+
+				Sound* downSound = ContentManager::Get().GetSound("Down");
+				downSound->Reset();
+				downSound->Play();
 			}
 			else
 			{
