@@ -55,9 +55,25 @@ void PlayScene::Entry()
 
 			FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
 			fixCamera->SetAspectRatio(bufferWidth / bufferHeight);
+
+			StopTetrisAllObject();
 		}
 	);
 
+	auto stopEvent = [&]() { StopTetrisAllObject(); };
+
+	std::array<EWindowEvent, 4> windowEvents = {
+		EWindowEvent::MAXIMIZED,
+		EWindowEvent::MINIMIZED,
+		EWindowEvent::FOCUS_LOST,
+		EWindowEvent::MOVED,
+	};
+
+	for (const auto& windowEvent : windowEvents)
+	{
+		InputManager::Get().BindWindowEventAction(windowEvent, stopEvent);
+	}
+	
 	CleanupTetrisResource();
 	SetupTetrisProperties();
 	SetupTetrisObject();
@@ -88,6 +104,19 @@ void PlayScene::Leave()
 	titleSound->Stop();
 
 	InputManager::Get().UnbindWindowEventAction(EWindowEvent::RESIZED);
+
+	std::array<EWindowEvent, 4> windowEvents = {
+		EWindowEvent::MAXIMIZED,
+		EWindowEvent::MINIMIZED,
+		EWindowEvent::FOCUS_LOST,
+		EWindowEvent::MOVED,
+	};
+
+	for (const auto& windowEvent : windowEvents)
+	{
+		InputManager::Get().UnbindWindowEventAction(windowEvent);
+
+	}
 
 	SetActive(false);
 	nextScene_->Entry();
@@ -304,4 +333,19 @@ void PlayScene::CleanupTetrisResource()
 		WorldManager::Get().RemoveGameObject("Board");
 		DestroyTetromino(currentTetrominoID_);
 	}
+}
+
+void PlayScene::StopTetrisAllObject()
+{
+	timer_.Stop();
+	GetTetromino(currentTetrominoID_)->SetState(Tetromino::EState::READY);
+
+	Button* soundButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("SoundButton"));
+	soundButton->SetTexture(ContentManager::Get().GetTexture2D("Voluble"));
+
+	ContentManager::Get().GetSound("Down")->SetVolume(0.0f);
+	ContentManager::Get().GetSound("Title")->Stop();
+
+	Button* playButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("PlayButton"));
+	playButton->SetTexture(ContentManager::Get().GetTexture2D("Play"));
 }

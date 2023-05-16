@@ -124,6 +124,12 @@ private:
 	 */
 	void CleanupTetrisResource();
 
+
+	/**
+	 * @brief 전체 게임 요소들을 중지합니다.
+	 */
+	void StopTetrisAllObject();
+
 	
 private:
 	/**
