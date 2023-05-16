@@ -3,10 +3,13 @@
 #include "Board.h"
 #include "Button.h"
 #include "ContentManager.h"
+#include "FixCamera.h"
 #include "Label.h"
 #include "StringHelper.hpp"
 #include "Sound.h"
+#include "InputManager.h"
 #include "PlayScene.h"
+#include "RenderManager.h"
 #include "WorldManager.h"
 #include "EndScene.h"
 
@@ -17,6 +20,20 @@ void EndScene::Tick(float deltaSeconds)
 void EndScene::Entry()
 {
 	SetActive(true);
+
+	InputManager::Get().BindWindowEventAction(
+		EWindowEvent::RESIZED,
+		[&]() {
+			RenderManager::Get().Resize();
+
+			float bufferWidth = 0.0f;
+			float bufferHeight = 0.0f;
+			RenderManager::Get().GetBackbufferSize(bufferWidth, bufferHeight);
+
+			FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
+			fixCamera->SetAspectRatio(bufferWidth / bufferHeight);
+		}
+	);
 
 	uiUpdateOrder_ = 4;
 	removeLine_ = reinterpret_cast<Board*>(WorldManager::Get().GetGameObject("Board"))->GetRemoveLine();
@@ -145,6 +162,8 @@ void EndScene::Leave()
 
 	Sound* gameOverSound = ContentManager::Get().GetSound("GameOver");
 	gameOverSound->Stop();
+
+	InputManager::Get().UnbindWindowEventAction(EWindowEvent::RESIZED);
 
 	SetActive(false);
 	nextScene_->Entry();

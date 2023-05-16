@@ -3,10 +3,13 @@
 #include "Board.h"
 #include "Button.h"
 #include "ContentManager.h"
+#include "FixCamera.h"
 #include "StringHelper.hpp"
 #include "Label.h"
 #include "Sound.h"
+#include "InputManager.h"
 #include "Tetromino.h"
+#include "RenderManager.h"
 #include "WorldManager.h"
 #include "PlayScene.h"
 
@@ -41,6 +44,20 @@ void PlayScene::Entry()
 {
 	SetActive(true);
 
+	InputManager::Get().BindWindowEventAction(
+		EWindowEvent::RESIZED,
+		[&]() {
+			RenderManager::Get().Resize();
+
+			float bufferWidth = 0.0f;
+			float bufferHeight = 0.0f;
+			RenderManager::Get().GetBackbufferSize(bufferWidth, bufferHeight);
+
+			FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
+			fixCamera->SetAspectRatio(bufferWidth / bufferHeight);
+		}
+	);
+
 	CleanupTetrisResource();
 	SetupTetrisProperties();
 	SetupTetrisObject();
@@ -69,6 +86,8 @@ void PlayScene::Leave()
 
 	Sound* titleSound = ContentManager::Get().GetSound("Title");
 	titleSound->Stop();
+
+	InputManager::Get().UnbindWindowEventAction(EWindowEvent::RESIZED);
 
 	SetActive(false);
 	nextScene_->Entry();
