@@ -9,6 +9,7 @@ Sound::Sound(const std::string& path)
 
 Sound::~Sound()
 {
+	Stop();
 }
 
 void Sound::SetVolume(float volume)
