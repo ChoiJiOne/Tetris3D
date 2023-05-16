@@ -19,6 +19,7 @@
 #include "InputManager.h"
 #include "PlayScene.h"
 #include "RenderManager.h"
+#include "Sound.h"
 #include "SpriteNoEffectShader.h"
 #include "StaticMesh.h"
 #include "StringHelper.hpp"
@@ -82,6 +83,7 @@ public:
 		LoadShader();
 		LoadTexture();
 		LoadTTFont();
+		LoadSound();
 		LoadStaticMesh();
 		LoadGameObject();
 
@@ -286,6 +288,33 @@ private:
 			"QuadXZ",
 			std::make_unique<StaticMesh>(RenderManager::Get().GetDevice(), vertices, indices)
 		);
+	}
+
+
+	/**
+	 * @brief 사운드를 로딩합니다.
+	 * 
+	 * @throws 사운드 로딩에 실패하면 C++ 표준 예외를 던집니다.
+	 */
+	void LoadSound()
+	{
+		std::array<std::string, 4> sounds = {
+			"Click",
+			"Down",
+			"GameOver",
+			"Title",
+		};
+
+		std::string soundPath = CommandLine::GetValue("Content");
+		for (const auto& sound : sounds)
+		{
+			ContentManager::Get().AddSound(
+				sound,
+				std::make_unique<Sound>(
+					StringHelper::Format("%s%s%s", soundPath.c_str(), sound.c_str(), ".mp3")
+				)
+			);
+		}
 	}
 
 
