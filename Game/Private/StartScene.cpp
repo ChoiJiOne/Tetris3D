@@ -2,8 +2,11 @@
 
 #include "Button.h"
 #include "ContentManager.h"
+#include "FixCamera.h"
 #include "Sound.h"
+#include "InputManager.h"
 #include "Label.h"
+#include "RenderManager.h"
 #include "WorldManager.h"
 #include "StartScene.h"
 
@@ -14,6 +17,22 @@ void StartScene::Tick(float deltaSeconds)
 void StartScene::Entry()
 {
 	SetActive(true);
+
+	accumulateTime_ = 0.0f;
+
+	InputManager::Get().BindWindowEventAction(
+		EWindowEvent::RESIZED, 
+		[&]() {
+			RenderManager::Get().Resize();
+
+			float bufferWidth = 0.0f;
+			float bufferHeight = 0.0f;
+			RenderManager::Get().GetBackbufferSize(bufferWidth, bufferHeight);
+
+			FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
+			fixCamera->SetAspectRatio(bufferWidth / bufferHeight);
+		}
+	);
 
 	uiUpdateOrder_ = 4;
 

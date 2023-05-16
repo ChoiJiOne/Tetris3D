@@ -88,12 +88,6 @@ public:
 		LoadGameObject();
 
 		InputManager::Get().BindWindowEventAction(EWindowEvent::CLOSE, [&]() { bIsDone_ = true; });
-		InputManager::Get().BindWindowEventAction(EWindowEvent::RESIZED, [&]() {
-			RenderManager::Get().Resize();
-
-			FixCamera* fixCamera = reinterpret_cast<FixCamera*>(WorldManager::Get().GetGameObject("FixCamera"));
-			fixCamera->SetAspectRatio(window_->GetAspectRatio());
-		});
 
 		RenderManager::Get().SetAlphaBlend(true);
 		RenderManager::Get().SetDepthBuffer(true);
