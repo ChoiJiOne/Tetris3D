@@ -85,4 +85,22 @@ private:
 	 * @brief 시작 씬의 누적 시간값입니다.
 	 */
 	float accumulateTime_ = 0.0f;
+
+
+	/**
+	 * @brief 테트로미노의 최대 속도 값입니다.
+	 */
+	float maxTetrominoSpeed_ = 0.1f;
+
+
+	/**
+	 * @brief 테트로미노의 최소 속도 값입니다.
+	 */
+	float minTetrominoSpeed_ = 1.5f;
+
+
+	/**
+	 * @brief 테트로미노의 속도값입니다.
+	 */
+	float tetrominoSpeed_ = 1.0f;
 };

@@ -1,12 +1,15 @@
 #include <array>
+#include <algorithm>
 
 #include "Button.h"
 #include "ContentManager.h"
 #include "FixCamera.h"
 #include "Sound.h"
+#include "StringHelper.hpp"
 #include "InputManager.h"
 #include "Label.h"
 #include "RenderManager.h"
+#include "PlayScene.h"
 #include "WorldManager.h"
 #include "StartScene.h"
 
@@ -21,6 +24,10 @@ void StartScene::Entry()
 	SetActive(true);
 
 	accumulateTime_ = 0.0f;
+
+	maxTetrominoSpeed_ = 0.1f;
+	minTetrominoSpeed_ = 1.5f;
+	tetrominoSpeed_ = 1.0f;
 
 	InputManager::Get().BindWindowEventAction(
 		EWindowEvent::RESIZED, 
@@ -64,8 +71,8 @@ void StartScene::Entry()
 			uiUpdateOrder_,
 			true,
 			DirectX::XMFLOAT2(0.0f, 0.0f),
-			200.0f,
-			200.0f,
+			150.0f,
+			150.0f,
 			"Start",
 			1.0f,
 			0.5f,
@@ -92,9 +99,9 @@ void StartScene::Entry()
 		Button::ConstructorParam quitButtonParam{
 			uiUpdateOrder_,
 			true,
-			DirectX::XMFLOAT2(0.0f, -0.6f),
-			200.0f,
-			200.0f,
+			DirectX::XMFLOAT2(0.0f, -0.4f),
+			150.0f,
+			150.0f,
 			"Quit",
 			1.0f,
 			0.5f,
@@ -118,6 +125,86 @@ void StartScene::Entry()
 		quitButton->SetActive(true);
 	}
 
+	Button* upButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("UpButton"));
+	if (!upButton)
+	{
+		Button::ConstructorParam upButtonParam{
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(-0.3f, -0.8f),
+			50.0f,
+			50.0f,
+			"Up",
+			1.0f,
+			0.5f,
+			0.95f,
+			[&]() {
+				Sound* clickSound = ContentManager::Get().GetSound("Click");
+				clickSound->Reset();
+				clickSound->Play();
+
+				tetrominoSpeed_ += 0.1f;
+				tetrominoSpeed_ = std::clamp<float>(tetrominoSpeed_, maxTetrominoSpeed_, minTetrominoSpeed_);
+			}
+		};
+
+		WorldManager::Get().AddGameObject("UpButton", std::make_unique<Button>(upButtonParam));
+	}
+	else
+	{
+		upButton->SetActive(true);
+	}
+
+	Button* downButton = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("DownButton"));
+	if (!downButton)
+	{
+		Button::ConstructorParam downButtonParam{
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(+0.3f, -0.8f),
+			50.0f,
+			50.0f,
+			"Down",
+			1.0f,
+			0.5f,
+			0.95f,
+			[&]() {
+				Sound* clickSound = ContentManager::Get().GetSound("Click");
+				clickSound->Reset();
+				clickSound->Play();
+
+				tetrominoSpeed_ -= 0.1f;
+				tetrominoSpeed_ = std::clamp<float>(tetrominoSpeed_, maxTetrominoSpeed_, minTetrominoSpeed_);
+			}
+		};
+
+		WorldManager::Get().AddGameObject("DownButton", std::make_unique<Button>(downButtonParam));
+	}
+	else
+	{
+		downButton->SetActive(true);
+	}
+
+	Label* speedLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("SpeedLabel"));
+	if (!speedLabel)
+	{
+		Label::ConstructorParam speedLabelParam{
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(0.0f, -0.8f),
+			"SeoulNamsanEB32",
+			StringHelper::Format(L"SPEED : %.1f", tetrominoSpeed_),
+			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		};
+
+		WorldManager::Get().AddGameObject("SpeedLabel", std::make_unique<Label>(speedLabelParam));
+	}
+	else
+	{
+		speedLabel->SetText(StringHelper::Format(L"SPEED : %.1f", tetrominoSpeed_));
+		speedLabel->SetActive(true);
+	}
+
 	Sound* titleSound = ContentManager::Get().GetSound("Title");
 	titleSound->Reset();
 	titleSound->SetLooping(true);
@@ -126,10 +213,13 @@ void StartScene::Entry()
 
 void StartScene::Leave()
 {
-	std::array<std::string, 4> signatures = {
+	std::array<std::string, 7> signatures = {
 		"StartTitle",
 		"StartButton",
 		"QuitButton",
+		"UpButton",
+		"DownButton",
+		"SpeedLabel",
 		"StartScene",
 	};
 
@@ -141,6 +231,9 @@ void StartScene::Leave()
 
 	InputManager::Get().UnbindWindowEventAction(EWindowEvent::RESIZED);
 
+	PlayScene* playScene = reinterpret_cast<PlayScene*>(WorldManager::Get().GetGameObject("PlayScene"));
+	playScene->SetTetrominoMaxAccumulatedTime(tetrominoSpeed_);
+	
 	SetActive(false);
 	nextScene_->Entry();
 }
@@ -158,4 +251,7 @@ void StartScene::UpdateTitleTextColor()
 
 	Label* startTitle = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("StartTitle"));
 	startTitle->SetColor(color);
+	
+	Label* speedLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("SpeedLabel"));
+	speedLabel->SetText(StringHelper::Format(L"SPEED : %.1f", tetrominoSpeed_));
 }
