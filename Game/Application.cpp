@@ -218,7 +218,7 @@ private:
 				texture,
 				std::make_unique<Texture2D>(
 					RenderManager::Get().GetDevice(),
-					StringHelper::Format("%s%s%s", texturePath.c_str(), texture.c_str(), ".png")
+					StringHelper::Format("%stexture\\%s%s", texturePath.c_str(), texture.c_str(), ".png")
 				)
 			);
 		}
@@ -238,7 +238,7 @@ private:
 		int32_t beginCodePoint = 32;
 		int32_t endCodePoint = 127;
 		
-		std::string fontPath = CommandLine::GetValue("Content") + fontName + ".ttf";
+		std::string fontPath = CommandLine::GetValue("Content") + "font\\" + fontName + ".ttf";
 		for (const int32_t& fontSize : fontSizes)
 		{
 			ContentManager::Get().AddTTFont(
@@ -305,7 +305,7 @@ private:
 			ContentManager::Get().AddSound(
 				sound,
 				std::make_unique<Sound>(
-					StringHelper::Format("%s%s%s", soundPath.c_str(), sound.c_str(), ".mp3")
+					StringHelper::Format("%saudio\\%s%s", soundPath.c_str(), sound.c_str(), ".mp3")
 				)
 			);
 		}
