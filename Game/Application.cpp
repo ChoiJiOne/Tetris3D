@@ -72,6 +72,12 @@ public:
 	{
 		CHECK(SDL_Init(SDL_INIT_EVERYTHING) == 0, "failed to initialize SDL2...");
 
+#if defined(SHIPPING)
+		int32_t cmdShow = SW_HIDE;
+		HWND consoleHandle = GetConsoleWindow();
+		CHECK((ShowWindow(consoleHandle, cmdShow) == 0), "failed to hide console window...");
+#endif
+
 		window_ = std::make_unique<Window>("Tetris3D", 200, 200, 1000, 800, EWindowFlags::SHOWN | EWindowFlags::RESIZABLE);
 
 		InputManager::Get().Setup();
