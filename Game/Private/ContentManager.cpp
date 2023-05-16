@@ -1,4 +1,5 @@
 #include "EffectShader.h"
+#include "Sound.h"
 #include "StaticMesh.h"
 #include "Texture2D.h"
 #include "TTFont.h"
@@ -14,6 +15,11 @@ void ContentManager::Setup()
 void ContentManager::Cleanup()
 {
 	if (!bIsSetup_) return;
+
+	for (auto& sound : sounds_)
+	{
+		sound.second.reset();
+	}
 
 	for (auto& font : fonts_)
 	{
@@ -35,6 +41,7 @@ void ContentManager::Cleanup()
 		effectShader.second.reset();
 	}
 
+	sounds_.clear();
 	fonts_.clear();
 	textures_.clear();
 	staticMeshs_.clear();
@@ -152,6 +159,34 @@ void ContentManager::RemoveTTFont(const std::string& signature)
 	if (fonts_.find(signature) != fonts_.end())
 	{
 		fonts_.erase(signature);
+	}
+}
+
+Sound* ContentManager::AddSound(const std::string& signature, std::unique_ptr<Sound> sound)
+{
+	CHECK((sounds_.find(signature) == sounds_.end()), "collision true type sound signature key...");
+
+	sounds_[signature] = std::move(sound);
+	return sounds_[signature].get();
+}
+
+Sound* ContentManager::GetSound(const std::string& signature)
+{
+	Sound* sound = nullptr;
+
+	if (sounds_.find(signature) != sounds_.end())
+	{
+		sound = sounds_[signature].get();
+	}
+
+	return sound;
+}
+
+void ContentManager::RemoveSound(const std::string& signature)
+{
+	if (sounds_.find(signature) != sounds_.end())
+	{
+		sounds_.erase(signature);
 	}
 }
 

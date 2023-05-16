@@ -9,6 +9,7 @@ class EffectShader;
 class Texture2D;
 class StaticMesh;
 class TTFont;
+class Sound;
 
 
 /**
@@ -175,7 +176,39 @@ public:
 	 * @param signature 트루 타입 폰트의 시그니처 값입니다.
 	 */
 	void RemoveTTFont(const std::string& signature);
+
+
+	/**
+	 * @brief 컨텐츠 관리자에 사운드를 추가합니다.
+	 *
+	 * @param signature 사운드의 시그니처 값입니다.
+	 * @param sound 관리자에 추가할 사운드입니다.
+	 *
+	 * @throws 시그니처 값에 대응하는 사운드가 이미 존재하면 C++ 표준 예외를 던집니다.
+	 */
+	Sound* AddSound(const std::string& signature, std::unique_ptr<Sound> sound);
+
+
+	/**
+	 * @brief 관리 중인 사운드를 얻습니다.
+	 *
+	 * @param signature 사운드의 시그니처 값입니다.
+	 *
+	 * @return 시그니처 값에 대응하는 사운드가 존재하면 포인터를 반환, 그렇지 않으면 nullptr 값을 반환합니다.
+	 */
+	Sound* GetSound(const std::string& signature);
+
+
+	/**
+	 * @brief 관리 중인 사운드를 삭제합니다.
+	 *
+	 * @note 시그니처 값에 대응하는 사운드가 존재하지 않으면 아무 동작도 수행하지 않습니다.
+	 *
+	 * @param signature 사운드의 시그니처 값입니다.
+	 */
+	void RemoveSound(const std::string& signature);
 	
+
 private:
 	/**
 	 * @brief 게임 내의 컨텐츠를 관리하는 클래스의 생성자입니다.
@@ -220,4 +253,10 @@ private:
 	 * @brief 컨텐츠 매니저가 관리 중인 트루 타입 폰트입니다.
 	 */
 	std::unordered_map<std::string, std::unique_ptr<TTFont>> fonts_;
+
+
+	/**
+	 * @brief 컨텐츠 매니저가 관리 중인 사운드 리소스입니다.
+	 */
+	std::unordered_map<std::string, std::unique_ptr<Sound>> sounds_;
 };
