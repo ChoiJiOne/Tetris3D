@@ -2,8 +2,10 @@
 
 #include "Board.h"
 #include "Button.h"
+#include "ContentManager.h"
 #include "Label.h"
 #include "StringHelper.hpp"
+#include "Sound.h"
 #include "PlayScene.h"
 #include "WorldManager.h"
 #include "EndScene.h"
@@ -111,6 +113,10 @@ void EndScene::Entry()
 	{
 		quitButton->SetActive(true);
 	}
+
+	Sound* gameOverSound = ContentManager::Get().GetSound("GameOver");
+	gameOverSound->Reset();
+	gameOverSound->Play();
 }
 
 void EndScene::Leave()
@@ -128,6 +134,9 @@ void EndScene::Leave()
 		GameObject* object = WorldManager::Get().GetGameObject(signature);
 		object->SetActive(false);
 	}
+
+	Sound* gameOverSound = ContentManager::Get().GetSound("GameOver");
+	gameOverSound->Stop();
 
 	SetActive(false);
 	nextScene_->Entry();
