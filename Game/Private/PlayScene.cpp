@@ -67,6 +67,9 @@ void PlayScene::Leave()
 
 	GetTetromino(currentTetrominoID_)->SetActive(false);
 
+	Sound* titleSound = ContentManager::Get().GetSound("Title");
+	titleSound->Stop();
+
 	SetActive(false);
 	nextScene_->Entry();
 }
