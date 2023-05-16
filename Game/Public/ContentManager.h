@@ -3,6 +3,10 @@
 #include <memory>
 #include <unordered_map>
 
+// @third party code - BEGIN
+#include <json/json.hpp>
+// @third party code - END
+
 #include "Macro.h"
 
 class EffectShader;
@@ -10,6 +14,12 @@ class Texture2D;
 class StaticMesh;
 class TTFont;
 class Sound;
+
+
+/**
+ * @brief nlohmann 네임스페이스를 무시하기 위한 선언문입니다.
+ */
+using json = nlohmann::json;
 
 
 /**
@@ -207,6 +217,16 @@ public:
 	 * @param signature 사운드의 시그니처 값입니다.
 	 */
 	void RemoveSound(const std::string& signature);
+
+
+	/**
+	 * @brief json 파일의 객체를 얻습니다.
+	 * 
+	 * @param path json 파일의 경로입니다.
+	 * 
+	 * @return json 파일 내의 객체를 반환합니다.
+	 */
+	json LoadJsonFromFile(const std::string& path);
 	
 
 private:

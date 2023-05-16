@@ -1,4 +1,5 @@
 #include "EffectShader.h"
+#include "FileHelper.hpp"
 #include "Sound.h"
 #include "StaticMesh.h"
 #include "Texture2D.h"
@@ -188,6 +189,14 @@ void ContentManager::RemoveSound(const std::string& signature)
 	{
 		sounds_.erase(signature);
 	}
+}
+
+json ContentManager::LoadJsonFromFile(const std::string& path)
+{
+	std::vector<uint8_t> jsonBuffer;
+	FileHelper::ReadBufferFromFile(path, jsonBuffer);
+
+	return json::parse(jsonBuffer);
 }
 
 ContentManager::ContentManager()
