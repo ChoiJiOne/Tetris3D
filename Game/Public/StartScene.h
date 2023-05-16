@@ -72,4 +72,10 @@ private:
 	 * @brief 게임 종료 이벤트입니다.
 	 */
 	std::function<void()> quitEvent_ = nullptr;
+
+
+	/**
+	 * @brief 시작 씬의 누적 시간값입니다.
+	 */
+	float accumulateTime_ = 0.0f;
 };
