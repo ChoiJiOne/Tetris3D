@@ -96,6 +96,14 @@ public:
 	 */
 	virtual void Tick(float deltaSeconds) override;
 
+
+	/**
+	 * @brief UI 버튼의 텍스처를 얻습니다.
+	 * 
+	 * @return UI 버튼 텍스터의 포인터를 반환합니다.
+	 */
+	Texture2D* GetTexture() const { return texture_; }
+
 	
 	/**
 	 * @brief UI 버튼의 텍스처를 설정합니다.
