@@ -1,6 +1,8 @@
 #include <array>
 
 #include "Button.h"
+#include "ContentManager.h"
+#include "Sound.h"
 #include "Label.h"
 #include "WorldManager.h"
 #include "StartScene.h"
@@ -48,6 +50,10 @@ void StartScene::Entry()
 			0.5f,
 			0.95f,
 			[&]() {
+				Sound* clickSound = ContentManager::Get().GetSound("Click");
+				clickSound->Reset();
+				clickSound->Play();
+
 				Leave();
 			}
 		};
@@ -73,6 +79,10 @@ void StartScene::Entry()
 			0.5f,
 			0.95f,
 			[&]() {
+				Sound* clickSound = ContentManager::Get().GetSound("Click");
+				clickSound->Reset();
+				clickSound->Play();
+
 				if (quitEvent_)
 				{
 					quitEvent_();
