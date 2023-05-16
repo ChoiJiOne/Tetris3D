@@ -1,0 +1,49 @@
+{
+    "audio": {
+        "format": "mp3",
+        "resource": [
+            "Click",
+            "Down",
+            "GameOver",
+            "Title"
+        ]
+    },
+
+    "font":{
+        "format":"ttf",
+        "resource":"SeoulNamsanEB",
+        "size":[
+            16, 
+            32, 
+            64,
+            128
+        ],
+        "beginCodepoint":32,
+        "endCodepoint":127
+    },
+
+    "texture" : {
+        "format": "png",
+        "resource": [
+            "BlueBlock",
+			"CyanBlock",
+			"GrayBlock",
+			"GreenBlock",
+			"MagentaBlock",
+			"OrangeBlock",
+			"PinkBlock",
+			"PurpleBlock",
+			"RedBlock",
+			"YellowBlock",
+			"Play",
+			"Stop",
+			"Voluble",
+			"Mute",
+			"Ok",
+			"Quit",
+			"Start",
+			"Down",
+			"Up"
+        ]
+    }
+}
