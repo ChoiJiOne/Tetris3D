@@ -85,9 +85,10 @@ void PlayScene::Entry()
 
 void PlayScene::Leave()
 {
-	std::array<std::string, 5> signatures = {
+	std::array<std::string, 6> signatures = {
 		"LineLabel",
 		"TimeLabel",
+		"TetrominoSpeedLabel",
 		"SoundButton",
 		"PlayButton",
 		"Board",
@@ -297,7 +298,7 @@ void PlayScene::SetupTetrisUI()
 		Label::ConstructorParam timeLabelParam {
 			uiUpdateOrder_,
 			true,
-			DirectX::XMFLOAT2(0.6f, -0.0f),
+			DirectX::XMFLOAT2(0.6f, 0.0f),
 			"SeoulNamsanEB32",
 			StringHelper::Format(L"TIME : %3d", 0),
 			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
@@ -329,6 +330,26 @@ void PlayScene::SetupTetrisUI()
 	{
 		lineLabel->SetText(StringHelper::Format(L"LINE : %3d", 0));
 		lineLabel->SetActive(true);
+	}
+
+	Label* tetrominoSpeedLabel = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("TetrominoSpeedLabel"));
+	if (!tetrominoSpeedLabel)
+	{
+		Label::ConstructorParam tetrominoSpeedLabelParam{
+			uiUpdateOrder_,
+			true,
+			DirectX::XMFLOAT2(0.6f, -0.4f),
+			"SeoulNamsanEB32",
+			StringHelper::Format(L"SPEED : %.1f", tetrominoMaxAccumulatedTime_),
+			DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)
+		};
+
+		WorldManager::Get().AddGameObject("TetrominoSpeedLabel", std::make_unique<Label>(tetrominoSpeedLabelParam));
+	}
+	else
+	{
+		tetrominoSpeedLabel->SetText(StringHelper::Format(L"SPEED : %.1f", tetrominoMaxAccumulatedTime_));
+		tetrominoSpeedLabel->SetActive(true);
 	}
 }
 
