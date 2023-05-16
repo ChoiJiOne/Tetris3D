@@ -80,10 +80,12 @@ public:
 		ContentManager::Get().Setup();
 		WorldManager::Get().Setup();
 
+		json config = ContentManager::Get().LoadJsonFromFile(CommandLine::GetValue("Content") + "config.json");
+
 		LoadShader();
-		LoadTexture();
-		LoadTTFont();
-		LoadSound();
+		LoadTexture(config);
+		LoadTTFont(config);
+		LoadSound(config);
 		LoadStaticMesh();
 		LoadGameObject();
 
@@ -186,41 +188,24 @@ private:
 
 	/**
 	 * @brief 텍스처 파일을 로딩합니다.
+	 * 
+	 * @param config 컨텐츠의 설정 파일입니다.
 	 *
 	 * @throws 텍스처 파일 로딩에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	void LoadTexture()
+	void LoadTexture(const json& config)
 	{
-		std::array<std::string, 19> textures = {
-			"BlueBlock",
-			"CyanBlock",
-			"GrayBlock",
-			"GreenBlock",
-			"MagentaBlock",
-			"OrangeBlock",
-			"PinkBlock",
-			"PurpleBlock",
-			"RedBlock",
-			"YellowBlock",
-			"Play",
-			"Stop",
-			"Voluble",
-			"Mute",
-			"Ok",
-			"Quit",
-			"Start",
-			"Down",
-			"Up",
-		};
+		std::string format = config["texture"]["format"];
+		std::vector<std::string> textures = config["texture"]["resource"];
+		std::string contentPath = CommandLine::GetValue("Content");
 
-		std::string texturePath = CommandLine::GetValue("Content");
 		for (const auto& texture : textures)
 		{
 			ContentManager::Get().AddTexture2D(
 				texture,
 				std::make_unique<Texture2D>(
 					RenderManager::Get().GetDevice(),
-					StringHelper::Format("%stexture\\%s%s", texturePath.c_str(), texture.c_str(), ".png")
+					StringHelper::Format("%stexture\\%s.%s", contentPath.c_str(), texture.c_str(), format.c_str())
 				)
 			);
 		}
@@ -230,22 +215,32 @@ private:
 	/**
 	 * @brief 트루 타입 폰트를 로딩합니다.
 	 * 
+	 * @param config 컨텐츠의 설정 파일입니다.
+	 * 
 	 * @throws 트루 타입 폰트 로딩에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	void LoadTTFont()
+	void LoadTTFont(const json& config)
 	{
-		std::string fontName = "SeoulNamsanEB";
-		std::array<int32_t, 4> fontSizes = { 16, 32, 64, 128 };
+		std::string format = config["font"]["format"];
+		std::string fontName = config["font"]["resource"];
+		std::vector<int32_t> fontSizes = config["font"]["size"];
+		int32_t beginCodePoint = config["font"]["beginCodepoint"];
+		int32_t endCodePoint = config["font"]["endCodepoint"];
+		std::string fontPath = StringHelper::Format(
+			"%sfont\\%s.%s", CommandLine::GetValue("Content").c_str(), fontName.c_str(), format.c_str()
+		);
 
-		int32_t beginCodePoint = 32;
-		int32_t endCodePoint = 127;
-		
-		std::string fontPath = CommandLine::GetValue("Content") + "font\\" + fontName + ".ttf";
 		for (const int32_t& fontSize : fontSizes)
 		{
 			ContentManager::Get().AddTTFont(
 				StringHelper::Format("%s%d", fontName.c_str(), fontSize),
-				std::make_unique<TTFont>(RenderManager::Get().GetDevice(), fontPath, beginCodePoint, endCodePoint, static_cast<float>(fontSize))
+				std::make_unique<TTFont>(
+					RenderManager::Get().GetDevice(), 
+					fontPath, 
+					beginCodePoint, 
+					endCodePoint, 
+					static_cast<float>(fontSize)
+				)
 			);
 		}
 	}
@@ -290,24 +285,22 @@ private:
 	/**
 	 * @brief 사운드를 로딩합니다.
 	 * 
+	 * @param config 컨텐츠의 설정 파일입니다.
+	 * 
 	 * @throws 사운드 로딩에 실패하면 C++ 표준 예외를 던집니다.
 	 */
-	void LoadSound()
+	void LoadSound(const json& config)
 	{
-		std::array<std::string, 4> sounds = {
-			"Click",
-			"Down",
-			"GameOver",
-			"Title",
-		};
+		std::string format = config["audio"]["format"];
+		std::vector<std::string> sounds = config["audio"]["resource"];
+		std::string contentPath = CommandLine::GetValue("Content");
 
-		std::string soundPath = CommandLine::GetValue("Content");
 		for (const auto& sound : sounds)
 		{
 			ContentManager::Get().AddSound(
 				sound,
 				std::make_unique<Sound>(
-					StringHelper::Format("%saudio\\%s%s", soundPath.c_str(), sound.c_str(), ".mp3")
+					StringHelper::Format("%saudio\\%s.%s", contentPath.c_str(), sound.c_str(), format.c_str())
 				)
 			);
 		}
