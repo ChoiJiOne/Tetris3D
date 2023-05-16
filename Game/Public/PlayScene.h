@@ -65,6 +65,19 @@ public:
 	float GetPlayTime() const { return timer_.GetTotalSeconds(); }
 
 
+	/**
+	 * @brief 테트로미노의 최대 누적 시간을 설정합니다.
+	 * 
+	 * @note 이때, 시간 단위는 초단위입니다.
+	 * 
+	 * @param tetrominoMaxAccumulatedTime 설정할 테트로미노의 최대 누적 시간입니다.
+	 */
+	void SetTetrominoMaxAccumulatedTime(float tetrominoMaxAccumulatedTime)
+	{
+		tetrominoMaxAccumulatedTime_ = tetrominoMaxAccumulatedTime;
+	}
+
+
 private:
 	/**
 	 * @brief 테트로미노를 생성합니다.

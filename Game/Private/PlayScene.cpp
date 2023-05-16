@@ -5,6 +5,7 @@
 #include "ContentManager.h"
 #include "FixCamera.h"
 #include "StringHelper.hpp"
+#include "MathHelper.hpp"
 #include "Label.h"
 #include "Sound.h"
 #include "InputManager.h"
@@ -158,10 +159,15 @@ Board* PlayScene::GetBoard()
 
 void PlayScene::SetupTetrisProperties()
 {
+	if (MathHelper::IsZero(tetrominoMaxAccumulatedTime_))
+	{
+		tetrominoMaxAccumulatedTime_ = 1.0f;
+	}
+
 	tetrominoUpdateOrder_ = 2;
 	boardUpdateOrder_ = 3;
 	blockSize_ = 2.0f;
-	tetrominoMaxAccumulatedTime_ = 1.0f;
+	
 	currentTetrominoID_ = 0;
 
 	boardBasePosition_ = DirectX::XMFLOAT3(-11.0f, 21.0f, 0.0f);
