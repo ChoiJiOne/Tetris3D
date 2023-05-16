@@ -75,6 +75,10 @@ void EndScene::Entry()
 			0.5f,
 			0.95f,
 			[&]() {
+				Sound* clickSound = ContentManager::Get().GetSound("Click");
+				clickSound->Reset();
+				clickSound->Play();
+
 				Leave();
 			}
 		};
@@ -100,6 +104,10 @@ void EndScene::Entry()
 			0.5f,
 			0.95f,
 			[&]() {
+				Sound* clickSound = ContentManager::Get().GetSound("Click");
+				clickSound->Reset();
+				clickSound->Play();
+
 				if (quitEvent_)
 				{
 					quitEvent_();
