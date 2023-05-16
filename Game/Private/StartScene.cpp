@@ -12,6 +12,8 @@
 
 void StartScene::Tick(float deltaSeconds)
 {
+	accumulateTime_ += deltaSeconds;
+	UpdateTitleTextColor();
 }
 
 void StartScene::Entry()
@@ -139,4 +141,19 @@ void StartScene::Leave()
 
 	SetActive(false);
 	nextScene_->Entry();
+}
+
+void StartScene::UpdateTitleTextColor()
+{
+	DirectX::XMFLOAT4 color;
+	float bias = 0.5f;
+	float speed = 5.0f;
+
+	color.x = std::abs(std::sin(speed * accumulateTime_));
+	color.y = std::abs(std::cos(speed * accumulateTime_ + bias));
+	color.z = std::abs(std::sin(speed * accumulateTime_ + 2.0f * bias));
+	color.w = 1.0f;
+
+	Label* startTitle = reinterpret_cast<Label*>(WorldManager::Get().GetGameObject("StartTitle"));
+	startTitle->SetColor(color);
 }

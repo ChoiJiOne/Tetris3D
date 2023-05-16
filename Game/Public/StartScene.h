@@ -63,6 +63,13 @@ public:
 
 private:
 	/**
+	 * @brief 타이틀 텍스트의 색상을 업데이트합니다.
+	 */
+	void UpdateTitleTextColor();
+
+
+private:
+	/**
 	 * @brief 시작 씬 내의 UI 업데이트 순위입니다.
 	 */
 	int32_t uiUpdateOrder_ = 0;
