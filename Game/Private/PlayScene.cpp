@@ -5,6 +5,7 @@
 #include "ContentManager.h"
 #include "StringHelper.hpp"
 #include "Label.h"
+#include "Sound.h"
 #include "Tetromino.h"
 #include "WorldManager.h"
 #include "PlayScene.h"
@@ -199,6 +200,30 @@ void PlayScene::SetupTetrisUI()
 			0.5f,
 			0.95f,
 			[&]() {
+				Button* button = reinterpret_cast<Button*>(WorldManager::Get().GetGameObject("SoundButton"));
+				Texture2D* mute = ContentManager::Get().GetTexture2D("Mute");
+				Texture2D* voluble = ContentManager::Get().GetTexture2D("Voluble");
+
+				if (button->GetTexture() == mute)
+				{
+					button->SetTexture(voluble);
+
+					Sound* downSound = ContentManager::Get().GetSound("Down");
+					downSound->SetVolume(0.0f);
+
+					Sound* titleSound = ContentManager::Get().GetSound("Title");
+					titleSound->Stop();
+				}
+				else // button->GetTexture() == voluble
+				{
+					button->SetTexture(mute);
+
+					Sound* downSound = ContentManager::Get().GetSound("Down");
+					downSound->SetVolume(1.0f);
+
+					Sound* titleSound = ContentManager::Get().GetSound("Title");
+					titleSound->Play();
+				}
 			}
 		};
 
