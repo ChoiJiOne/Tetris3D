@@ -96,6 +96,11 @@ void StartScene::Entry()
 	{
 		quitButton->SetActive(true);
 	}
+
+	Sound* titleSound = ContentManager::Get().GetSound("Title");
+	titleSound->Reset();
+	titleSound->SetLooping(true);
+	titleSound->Play();
 }
 
 void StartScene::Leave()
