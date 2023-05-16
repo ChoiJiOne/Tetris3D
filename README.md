@@ -1,5 +1,12 @@
-# [Tetris3D](ChoiJiOne.github.io/Tetris3D/)
+# Tetris3D
 - 3D 테트리스 구현 프로젝트입니다.
+<br><br>
+
+
+## 프로젝트 문서
+- 프로젝트 문서는 [여기](https://choijione.github.io/Tetris3D/)에서 확인할 수 있습니다.
+<br><br>
+
 
 ## [v0.0](https://github.com/ChoiJiOne/Tetris3D/tree/v0.0)
 - `Windows Platform`에서 플레이 가능한 3D 테트리스 게임 `v0.0` 버전입니다.
