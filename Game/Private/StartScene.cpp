@@ -139,6 +139,8 @@ void StartScene::Leave()
 		object->SetActive(false);
 	}
 
+	InputManager::Get().UnbindWindowEventAction(EWindowEvent::RESIZED);
+
 	SetActive(false);
 	nextScene_->Entry();
 }
