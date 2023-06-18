@@ -85,6 +85,8 @@ HotReload.bat vs2022
 
 ## `Build.bat` 사용 방법
 
+> ※ `Build.bat`를 사용하기 위해서는 `msbuild.exe` 경로가 환경 변수에 등록되어 있어야 합니다.
+
 `Build.bat`를 사용하기 위해서는 `Tetris3D` 폴더에서 `CMD`를 실행하고 다음 명령어를 입력합니다.
 ```
 Build.bat <visual-studio-version> <mode>
