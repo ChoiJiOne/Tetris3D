@@ -1,0 +1,7 @@
+@ECHO OFF
+
+SET MODE=RelWithDebInfo
+SET SCRIPT_PATH=MiniGame\Script
+SET SCRIPT=%SCRIPT_PATH%\BuildSolution.bat
+
+%SCRIPT% %MODE%
